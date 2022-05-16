@@ -1,3 +1,4 @@
+using Notadesigner.Pomodour.App.Properties;
 using Notadesigner.Pomodour.Core;
 
 namespace Notadesigner.Pomodour.App
@@ -32,14 +33,33 @@ namespace Notadesigner.Pomodour.App
 
         private void EngineStateChangeHandler(object sender, StateChangeEventArgs e)
         {
-            if (e.State == EngineState.AppReady || e.State == EngineState.BreakCompleted)
+            if (e.State == EngineState.AppReady)
             {
                 StartPomodoro.Invoke(() => StartPomodoro.Enabled = true);
             }
 
             if (e.State == EngineState.PomodoroCompleted)
             {
-                StartBreak.Invoke(() => StartBreak.Enabled = true);
+                if (GuiRunnerSettings.Default.AutoAdvance)
+                {
+                    _engine.MoveNext();
+                }
+                else
+                {
+                    StartBreak.Invoke(() => StartBreak.Enabled = true);
+                }
+            }
+
+            if (e.State == EngineState.BreakCompleted)
+            {
+                if (GuiRunnerSettings.Default.AutoAdvance)
+                {
+                    _engine.MoveNext();
+                }
+                else
+                {
+                    StartPomodoro.Invoke(() => StartPomodoro.Enabled = true);
+                }
             }
 
             Invoke(() => Text = $"Round {e.RoundCounter + 1} of 4");

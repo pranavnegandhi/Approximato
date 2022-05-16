@@ -35,8 +35,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\GuiRunnerSettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GuiRunnerSettings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\GuiRunnerSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>GuiRunnerSettings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 </Project>
