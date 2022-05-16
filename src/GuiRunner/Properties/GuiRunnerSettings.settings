@@ -1,9 +1,18 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Notadesigner.Pomodour.App.Properties" GeneratedClassName="Runtime">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Notadesigner.Pomodour.App.Properties" GeneratedClassName="GuiRunnerSettings">
   <Profiles />
   <Settings>
     <Setting Name="AutoAdvance" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PomodoroDuration" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">00:25:00</Value>
+    </Setting>
+    <Setting Name="ShortBreakDuration" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">00:05:00</Value>
+    </Setting>
+    <Setting Name="LongBreakDuration" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">00:15:00</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -6,14 +6,17 @@ namespace Notadesigner.Pomodour.Core
     {
         protected readonly ILogger _log = Log.ForContext<ActiveState>();
 
+        protected readonly PomoEngineSettings _settings;
+
         protected readonly NotificationsQueue _queue;
 
         private readonly int _roundCounter;
 
         protected TimeSpan _timeElapsed = TimeSpan.FromSeconds(0);
 
-        public ActiveState(int roundCounter, NotificationsQueue queue)
+        public ActiveState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
         {
+            _settings = settings;
             _roundCounter = roundCounter;
             _queue = queue;
         }

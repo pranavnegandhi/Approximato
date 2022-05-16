@@ -34,5 +34,41 @@ namespace Notadesigner.Pomodour.App.Properties {
                 this["AutoAdvance"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:25:00")]
+        public global::System.TimeSpan PomodoroDuration {
+            get {
+                return ((global::System.TimeSpan)(this["PomodoroDuration"]));
+            }
+            set {
+                this["PomodoroDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:05:00")]
+        public global::System.TimeSpan ShortBreakDuration {
+            get {
+                return ((global::System.TimeSpan)(this["ShortBreakDuration"]));
+            }
+            set {
+                this["ShortBreakDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:15:00")]
+        public global::System.TimeSpan LongBreakDuration {
+            get {
+                return ((global::System.TimeSpan)(this["LongBreakDuration"]));
+            }
+            set {
+                this["LongBreakDuration"] = value;
+            }
+        }
     }
 }

@@ -2,8 +2,8 @@
 {
     public class PomodoroCompletedState : IdleState
     {
-        public PomodoroCompletedState(int roundCounter, NotificationsQueue queue)
-            : base(roundCounter, queue)
+        public PomodoroCompletedState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
+            : base(roundCounter, settings, queue)
         {
         }
 
@@ -13,7 +13,7 @@
 
             await _moveNextSignal.WaitAsync(cancellationToken);
 
-            IEngineState nextState = RoundCounter < 3 ? new ShortBreakState(RoundCounter, _queue) : new LongBreakState(RoundCounter, _queue);
+            IEngineState nextState = RoundCounter < 3 ? new ShortBreakState(RoundCounter, _settings, _queue) : new LongBreakState(RoundCounter, _settings, _queue);
             _queue.Enqueue(new Notification(nextState));
         }
 

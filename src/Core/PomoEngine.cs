@@ -9,6 +9,8 @@ namespace Notadesigner.Pomodour.Core
 
         private readonly ILogger _log = Log.ForContext<PomoEngine>();
 
+        private readonly PomoEngineSettings _settings;
+
         private readonly NotificationsQueue _queue;
 
         private IEngineState _engineState;
@@ -17,10 +19,11 @@ namespace Notadesigner.Pomodour.Core
 
         private Task? _execute;
 
-        public PomoEngine(NotificationsQueue queue)
+        public PomoEngine(PomoEngineSettings settings, NotificationsQueue queue)
         {
+            _settings = settings;
             _queue = queue;
-            _engineState = new AppReadyState(0, _queue);
+            _engineState = new AppReadyState(0, _settings, _queue);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

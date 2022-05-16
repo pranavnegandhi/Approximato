@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Notadesigner.Pomodour.App.Properties;
 using Notadesigner.Pomodour.Core;
 using Serilog;
 
@@ -31,7 +32,10 @@ namespace Notadesigner.Pomodour.App
                 Log.Verbose("Launching {serviceName}", nameof(PomoEngine));
                 builder.ConfigureServices((_, services) =>
                     {
-                        services.AddSingleton<PomoEngine>()
+                        var appSettings = GuiRunnerSettings.Default;
+                        var engineSettings = new PomoEngineSettings(appSettings.PomodoroDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration);
+                        services.AddSingleton(engineSettings)
+                            .AddSingleton<PomoEngine>()
                             .AddSingleton<NotificationsQueue>()
                             .AddSingleton<MainForm>();
                     })

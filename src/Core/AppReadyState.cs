@@ -2,8 +2,8 @@
 {
     public class AppReadyState : IdleState
     {
-        public AppReadyState(int roundCounter, NotificationsQueue queue)
-            : base(roundCounter, queue)
+        public AppReadyState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
+            : base(roundCounter, settings, queue)
         {
         }
 
@@ -13,7 +13,7 @@
 
             await _moveNextSignal.WaitAsync(cancellationToken);
 
-            _queue.Enqueue(new Notification(new PomodoroState(0, _queue)));
+            _queue.Enqueue(new Notification(new PomodoroState(0, _settings, _queue)));
         }
 
         public override EngineState State => EngineState.AppReady;

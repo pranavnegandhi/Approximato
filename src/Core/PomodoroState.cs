@@ -2,11 +2,12 @@
 {
     public class PomodoroState : ActiveState
     {
-        private readonly TimeSpan StateDuration = TimeSpan.FromSeconds(15);
+        private readonly TimeSpan StateDuration;
 
-        public PomodoroState(int roundCounter, NotificationsQueue queue)
-            : base(roundCounter, queue)
+        public PomodoroState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
+            : base(roundCounter, settings, queue)
         {
+            StateDuration = settings.PomodoroDuration;
         }
 
         public override async Task EnterAsync(CancellationToken cancellationToken)
@@ -24,7 +25,7 @@
                 }
             }
 
-            _queue.Enqueue(new Notification(new PomodoroCompletedState(RoundCounter, _queue)));
+            _queue.Enqueue(new Notification(new PomodoroCompletedState(RoundCounter, _settings, _queue)));
         }
 
         public override EngineState State => EngineState.Pomodoro;

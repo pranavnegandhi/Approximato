@@ -2,11 +2,12 @@
 {
     public class LongBreakState : ActiveState
     {
-        private readonly TimeSpan StateDuration = TimeSpan.FromSeconds(60);
+        private readonly TimeSpan StateDuration;
 
-        public LongBreakState(int roundCounter, NotificationsQueue queue)
-            : base(roundCounter, queue)
+        public LongBreakState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
+            : base(roundCounter, settings, queue)
         {
+            StateDuration = settings.LongBreakDuration;
         }
 
         public override async Task EnterAsync(CancellationToken cancellationToken)
@@ -24,7 +25,7 @@
                 }
             }
 
-            _queue.Enqueue(new Notification(new AppReadyState(0, _queue)));
+            _queue.Enqueue(new Notification(new AppReadyState(0, _settings, _queue)));
         }
 
         public override EngineState State => EngineState.LongBreak;
