@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 // In SDK-style projects such as this one, several assembly attributes that were historically
 // defined in this file are now automatically added during build and populated with
@@ -23,4 +24,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Pomodour")]
 [assembly: AssemblyCopyright("Copyright © Pranav Negandhi")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")] 
+[assembly: AssemblyCulture("")]
+[assembly: SupportedOSPlatform("windows7.0")]
