@@ -13,29 +13,36 @@ namespace Notadesigner.Pomodour.App
 
             _engine = engine;
             _engine.StateChange += EngineStateChangeHandler;
+            _engine.Progress += EngineProgressHandler;
 
             InitializeComponent();
         }
 
         private void StartPomodoroClickHandler(object sender, EventArgs e)
         {
-            StartPomodoro.Enabled = false;
-            StartBreak.Enabled = false;
             _engine.MoveNext();
         }
 
         private void StartBreakClickHandler(object sender, EventArgs e)
         {
-            StartPomodoro.Enabled = false;
-            StartBreak.Enabled = false;
             _engine.MoveNext();
         }
 
-        private void EngineStateChangeHandler(object sender, StateChangeEventArgs e)
+        private void EngineProgressHandler(object? sender, ProgressEventArgs e)
+        {
+            circularProgressBar1.Invoke(() =>
+            {
+                circularProgressBar1.Value = Convert.ToInt32(e.ElapsedDuration.TotalSeconds);
+#if WINDOWS7_0_OR_GREATER
+                circularProgressBar1.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}";
+#endif
+            });
+        }
+
+        private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
         {
             if (e.State == EngineState.AppReady)
             {
-                StartPomodoro.Invoke(() => StartPomodoro.Enabled = true);
             }
 
             if (e.State == EngineState.PomodoroCompleted)
@@ -46,7 +53,6 @@ namespace Notadesigner.Pomodour.App
                 }
                 else
                 {
-                    StartBreak.Invoke(() => StartBreak.Enabled = true);
                 }
             }
 
@@ -58,7 +64,6 @@ namespace Notadesigner.Pomodour.App
                 }
                 else
                 {
-                    StartPomodoro.Invoke(() => StartPomodoro.Enabled = true);
                 }
             }
 
