@@ -4,6 +4,8 @@ namespace Notadesigner.Pomodour.Core
 {
     public abstract class ActiveState : IEngineState
     {
+        public event EventHandler<ProgressEventArgs>? Progress;
+
         protected readonly ILogger _log = Log.ForContext<ActiveState>();
 
         protected readonly PomoEngineSettings _settings;
@@ -33,5 +35,10 @@ namespace Notadesigner.Pomodour.Core
         }
 
         public abstract EngineState State { get; }
+
+        protected void OnProgress(TimeSpan elapsedDuration, TimeSpan totalDuration)
+        {
+            Progress?.Invoke(this, new ProgressEventArgs(elapsedDuration, totalDuration));
+        }
     }
 }

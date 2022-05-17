@@ -4,6 +4,8 @@ namespace Notadesigner.Pomodour.Core
 {
     public abstract class IdleState : IEngineState
     {
+        public event EventHandler<ProgressEventArgs>? Progress;
+
         protected readonly ILogger _logger = Log.ForContext<IdleState>();
 
         protected readonly PomoEngineSettings _settings;

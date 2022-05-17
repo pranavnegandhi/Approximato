@@ -18,6 +18,7 @@
             {
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                 _timeElapsed = _timeElapsed.Add(TimeSpan.FromSeconds(1));
+                OnProgress(_timeElapsed, StateDuration);
 
                 if (cancellationToken.IsCancellationRequested)
                 {

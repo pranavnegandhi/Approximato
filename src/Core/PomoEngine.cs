@@ -5,6 +5,8 @@ namespace Notadesigner.Pomodour.Core
 {
     public class PomoEngine : IHostedService
     {
+        public event EventHandler<ProgressEventArgs>? Progress;
+
         public event EventHandler<StateChangeEventArgs>? StateChange;
 
         private readonly ILogger _log = Log.ForContext<PomoEngine>();
@@ -56,7 +58,9 @@ namespace Notadesigner.Pomodour.Core
                 {
                     await _engineState.EnterAsync(cancellationToken);
                     var notification = await _queue.DequeueAsync(cancellationToken);
+                    _engineState.Progress -= EngineStateProgressHandler; /// Stop listening for Progress events from the current state instance
                     _engineState = notification?.State ?? throw new InvalidOperationException();
+                    _engineState.Progress += EngineStateProgressHandler; /// Start listening for Progress events from the new state instance
 
                     StateChange?.Invoke(this, new StateChangeEventArgs(_engineState.State, _engineState.RoundCounter));
                 }
@@ -69,6 +73,11 @@ namespace Notadesigner.Pomodour.Core
                     _log.Fatal(exception, "A fatal exception occured in the {serviceName}", nameof(PomoEngine));
                 }
             }
+        }
+
+        private void EngineStateProgressHandler(object? sender, ProgressEventArgs e)
+        {
+            Progress?.Invoke(this, e);
         }
     }
 }

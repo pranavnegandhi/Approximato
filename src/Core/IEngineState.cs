@@ -2,6 +2,8 @@
 {
     public interface IEngineState
     {
+        event EventHandler<ProgressEventArgs> Progress;
+
         Task EnterAsync(CancellationToken cancellationToken);
 
         void MoveNext();
