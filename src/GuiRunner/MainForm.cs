@@ -7,6 +7,16 @@ namespace Notadesigner.Pomodour.App
     {
         private readonly PomoEngine _engine;
 
+        private readonly CircularProgressBar.CircularProgressBar[] _allProgressBars = new CircularProgressBar.CircularProgressBar[]
+        {
+            ProgressBarFactory.Create(),
+            ProgressBarFactory.Create(),
+            ProgressBarFactory.Create(),
+            ProgressBarFactory.Create()
+        };
+
+        private CircularProgressBar.CircularProgressBar _activeProgressBar;
+
         public MainForm(PomoEngine engine)
         {
             _ = engine ?? throw new ArgumentNullException(nameof(engine));
@@ -16,10 +26,20 @@ namespace Notadesigner.Pomodour.App
             _engine.Progress += EngineProgressHandler;
 
             InitializeComponent();
+
+            Array.ForEach(_allProgressBars, p => ProgressBarsContainer.Controls.Add(p));
+            _activeProgressBar = _allProgressBars[0];
         }
 
         private void StartPomodoroClickHandler(object sender, EventArgs e)
         {
+            Array.ForEach(_allProgressBars, p =>
+            {
+                p.ProgressColor = SystemColors.Highlight;
+                p.Text = "__:__ / __:__";
+                p.Value = 0;
+            });
+
             _engine.MoveNext();
         }
 
@@ -30,11 +50,11 @@ namespace Notadesigner.Pomodour.App
 
         private void EngineProgressHandler(object? sender, ProgressEventArgs e)
         {
-            Pomodoro1ProgressBar.Invoke(() =>
+            _activeProgressBar.Invoke(() =>
             {
-                Pomodoro1ProgressBar.Value = Convert.ToInt32(e.ElapsedDuration.TotalSeconds);
-                Pomodoro1ProgressBar.Maximum = Convert.ToInt32(e.TotalDuration.TotalSeconds);
-                Pomodoro1ProgressBar.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}";
+                _activeProgressBar.Value = Convert.ToInt32(e.ElapsedDuration.TotalSeconds);
+                _activeProgressBar.Maximum = Convert.ToInt32(e.TotalDuration.TotalSeconds);
+                _activeProgressBar.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}";
             });
         }
 
@@ -42,7 +62,7 @@ namespace Notadesigner.Pomodour.App
         {
             if (e.State == EngineState.AppReady)
             {
-                Pomodoro1ProgressBar.ProgressColor = SystemColors.Highlight;
+                _activeProgressBar = _allProgressBars[e.RoundCounter];
             }
 
             if (e.State == EngineState.PomodoroCompleted)
@@ -55,7 +75,7 @@ namespace Notadesigner.Pomodour.App
                 {
                 }
 
-                Pomodoro1ProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
+                _activeProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
             }
 
             if (e.State == EngineState.BreakCompleted)
@@ -68,10 +88,9 @@ namespace Notadesigner.Pomodour.App
                 {
                 }
 
-                Pomodoro1ProgressBar.ProgressColor = SystemColors.Highlight;
+                _activeProgressBar = _allProgressBars[e.RoundCounter];
+                _activeProgressBar.ProgressColor = SystemColors.Highlight;
             }
-
-            Invoke(() => Text = $"Round {e.RoundCounter + 1} of 4");
         }
     }
 }
