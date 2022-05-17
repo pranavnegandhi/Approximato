@@ -60,9 +60,9 @@
             this.TimeRemainingProgressBar.SuperscriptMargin = new System.Windows.Forms.Padding(10, 35, 0, 0);
             this.TimeRemainingProgressBar.SuperscriptText = "";
             this.TimeRemainingProgressBar.TabIndex = 0;
-            this.TimeRemainingProgressBar.Text = "12:24 / 25:00";
+            this.TimeRemainingProgressBar.Text = "__:__ / __:__";
             this.TimeRemainingProgressBar.TextMargin = new System.Windows.Forms.Padding(0, 8, 0, 0);
-            this.TimeRemainingProgressBar.Value = 45;
+            this.TimeRemainingProgressBar.Value = 68;
             // 
             // StartPomodoro
             // 
