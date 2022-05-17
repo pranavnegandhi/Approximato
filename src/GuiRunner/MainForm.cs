@@ -30,11 +30,11 @@ namespace Notadesigner.Pomodour.App
 
         private void EngineProgressHandler(object? sender, ProgressEventArgs e)
         {
-            TimeRemainingProgressBar.Invoke(() =>
+            Pomodoro1ProgressBar.Invoke(() =>
             {
-                TimeRemainingProgressBar.Value = Convert.ToInt32(e.ElapsedDuration.TotalSeconds);
-                TimeRemainingProgressBar.Maximum = Convert.ToInt32(e.TotalDuration.TotalSeconds);
-                TimeRemainingProgressBar.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}";
+                Pomodoro1ProgressBar.Value = Convert.ToInt32(e.ElapsedDuration.TotalSeconds);
+                Pomodoro1ProgressBar.Maximum = Convert.ToInt32(e.TotalDuration.TotalSeconds);
+                Pomodoro1ProgressBar.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}";
             });
         }
 
@@ -42,7 +42,7 @@ namespace Notadesigner.Pomodour.App
         {
             if (e.State == EngineState.AppReady)
             {
-                TimeRemainingProgressBar.ProgressColor = SystemColors.Highlight;
+                Pomodoro1ProgressBar.ProgressColor = SystemColors.Highlight;
             }
 
             if (e.State == EngineState.PomodoroCompleted)
@@ -55,7 +55,7 @@ namespace Notadesigner.Pomodour.App
                 {
                 }
 
-                TimeRemainingProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
+                Pomodoro1ProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
             }
 
             if (e.State == EngineState.BreakCompleted)
@@ -68,7 +68,7 @@ namespace Notadesigner.Pomodour.App
                 {
                 }
 
-                TimeRemainingProgressBar.ProgressColor = SystemColors.Highlight;
+                Pomodoro1ProgressBar.ProgressColor = SystemColors.Highlight;
             }
 
             Invoke(() => Text = $"Round {e.RoundCounter + 1} of 4");
