@@ -27,6 +27,8 @@ namespace Notadesigner.Tommy.App
 
             InitializeComponent();
 
+            Icon = GuiRunnerResources.MainIcon;
+
             Array.ForEach(_allProgressBars, p => ProgressBarsContainer.Controls.Add(p));
             _activeProgressBar = _allProgressBars[0];
         }
