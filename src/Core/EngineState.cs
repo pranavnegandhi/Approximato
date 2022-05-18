@@ -5,8 +5,8 @@
         AppReady,
         BreakCompleted,
         LongBreak,
-        Pomodoro,
-        PomodoroCompleted,
+        WorkSession,
+        WorkCompleted,
         ShortBreak
     }
 }

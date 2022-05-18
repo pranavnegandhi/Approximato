@@ -1,15 +1,15 @@
 ﻿namespace Notadesigner.Pomodour.Core
 {
-    public class PomodoroCompletedState : IdleState
+    public class WorkCompletedState : IdleState
     {
-        public PomodoroCompletedState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
+        public WorkCompletedState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
             : base(roundCounter, settings, queue)
         {
         }
 
         public override async Task EnterAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug("Entering {stateMachine}", nameof(PomodoroCompletedState));
+            _logger.Debug("Entering {stateMachine}", nameof(WorkCompletedState));
 
             await _moveNextSignal.WaitAsync(cancellationToken);
 
@@ -17,6 +17,6 @@
             _queue.Enqueue(new Notification(nextState));
         }
 
-        public override EngineState State => EngineState.PomodoroCompleted;
+        public override EngineState State => EngineState.WorkCompleted;
     }
 }

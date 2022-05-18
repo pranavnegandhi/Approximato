@@ -65,7 +65,7 @@ namespace Notadesigner.Pomodour.App
                 _activeProgressBar = _allProgressBars[e.RoundCounter];
             }
 
-            if (e.State == EngineState.PomodoroCompleted)
+            if (e.State == EngineState.WorkCompleted)
             {
                 if (GuiRunnerSettings.Default.AutoAdvance)
                 {

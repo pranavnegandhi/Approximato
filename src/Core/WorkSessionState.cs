@@ -1,10 +1,10 @@
 ﻿namespace Notadesigner.Pomodour.Core
 {
-    public class PomodoroState : ActiveState
+    public class WorkSessionState : ActiveState
     {
         private readonly TimeSpan StateDuration;
 
-        public PomodoroState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
+        public WorkSessionState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
             : base(roundCounter, settings, queue)
         {
             StateDuration = settings.PomodoroDuration;
@@ -12,7 +12,7 @@
 
         public override async Task EnterAsync(CancellationToken cancellationToken)
         {
-            _log.Verbose("Entering {state}", nameof(PomodoroState));
+            _log.Verbose("Entering {state}", nameof(WorkSessionState));
 
             while (_timeElapsed < StateDuration)
             {
@@ -26,9 +26,9 @@
                 }
             }
 
-            _queue.Enqueue(new Notification(new PomodoroCompletedState(RoundCounter, _settings, _queue)));
+            _queue.Enqueue(new Notification(new WorkCompletedState(RoundCounter, _settings, _queue)));
         }
 
-        public override EngineState State => EngineState.Pomodoro;
+        public override EngineState State => EngineState.WorkSession;
     }
 }

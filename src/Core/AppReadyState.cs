@@ -13,7 +13,7 @@
 
             await _moveNextSignal.WaitAsync(cancellationToken);
 
-            _queue.Enqueue(new Notification(new PomodoroState(0, _settings, _queue)));
+            _queue.Enqueue(new Notification(new WorkSessionState(0, _settings, _queue)));
         }
 
         public override EngineState State => EngineState.AppReady;
