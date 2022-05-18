@@ -32,6 +32,15 @@ namespace Notadesigner.Tommy.App
 
             Array.ForEach(_allProgressBars, p => ProgressBarsContainer.Controls.Add(p));
             _activeProgressBar = _allProgressBars[0];
+
+            VisibleChanged += (s, e) =>
+            {
+                if (Visible)
+                {
+                    var rect = Screen.PrimaryScreen.WorkingArea;
+                    Location = new Point(rect.Right - Width, rect.Bottom - Height);
+                }
+            };
         }
 
         private void EngineStartSessionHandler(object? sender, EventArgs e)
