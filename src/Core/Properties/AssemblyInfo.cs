@@ -15,12 +15,12 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 
 [assembly: Guid("1b1a39bc-5791-43a7-9eb9-4dcfbadaab9f")]
-[assembly: AssemblyTitle("Pomodour Core")]
+[assembly: AssemblyTitle("Tommy Core")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("notadesigner.com")]
-[assembly: AssemblyProduct("Pomodour")]
+[assembly: AssemblyProduct("Tommy")]
 [assembly: AssemblyCopyright("Copyright © Pranav Negandhi")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")] 
