@@ -37,7 +37,8 @@ namespace Notadesigner.Pomodour.App
                         services.AddSingleton(engineSettings)
                             .AddSingleton<PomoEngine>()
                             .AddSingleton<NotificationsQueue>()
-                            .AddSingleton<MainForm>();
+                            .AddSingleton<MainForm>()
+                            .AddSingleton<GuiRunnerContext>();
                     })
                     .UseSerilog();
                 var host = builder.Build();
@@ -47,8 +48,8 @@ namespace Notadesigner.Pomodour.App
                 await engine.StartAsync(cts.Token);
 
                 ApplicationConfiguration.Initialize();
-                var form = host.Services.GetRequiredService<MainForm>();
-                Application.Run(form);
+                var context = host.Services.GetRequiredService<GuiRunnerContext>();
+                Application.Run(context);
             }
             catch (ApplicationException exception)
             {
