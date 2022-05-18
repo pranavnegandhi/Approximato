@@ -9,6 +9,8 @@ namespace Notadesigner.Tommy.Core
 
         public event EventHandler<StateChangeEventArgs>? StateChange;
 
+        public event EventHandler<EventArgs>? StartSession;
+
         private readonly ILogger _log = Log.ForContext<PomoEngine>();
 
         private readonly PomoEngineSettings _settings;
@@ -46,6 +48,11 @@ namespace Notadesigner.Tommy.Core
 
         public void MoveNext()
         {
+            if (_engineState.State == EngineState.AppReady)
+            {
+                StartSession?.Invoke(this, EventArgs.Empty);
+            }
+
             _engineState.MoveNext();
         }
 

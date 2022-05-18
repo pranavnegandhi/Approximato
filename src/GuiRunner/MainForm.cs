@@ -22,8 +22,9 @@ namespace Notadesigner.Tommy.App
             _ = engine ?? throw new ArgumentNullException(nameof(engine));
 
             _engine = engine;
-            _engine.StateChange += EngineStateChangeHandler;
             _engine.Progress += EngineProgressHandler;
+            _engine.StateChange += EngineStateChangeHandler;
+            _engine.StartSession += EngineStartSessionHandler;
 
             InitializeComponent();
 
@@ -33,7 +34,7 @@ namespace Notadesigner.Tommy.App
             _activeProgressBar = _allProgressBars[0];
         }
 
-        private void StartPomodoroClickHandler(object sender, EventArgs e)
+        private void EngineStartSessionHandler(object? sender, EventArgs e)
         {
             Array.ForEach(_allProgressBars, p =>
             {
@@ -41,8 +42,6 @@ namespace Notadesigner.Tommy.App
                 p.Text = "__:__ / __:__";
                 p.Value = 0;
             });
-
-            _engine.MoveNext();
         }
 
         private void StartBreakClickHandler(object sender, EventArgs e)
