@@ -8,6 +8,8 @@ namespace Notadesigner.Tommy.App
 
         private readonly NotifyIcon _notifyIcon;
 
+        private readonly ContextMenuStrip _contextMenu = new();
+
         public GuiRunnerContext(MainForm form)
         {
             _form = form;
@@ -20,6 +22,10 @@ namespace Notadesigner.Tommy.App
             };
 
             _notifyIcon.MouseClick += NotifyIconMouseClickHandler;
+
+            var exitMenu = new ToolStripMenuItem("E&xit");
+            exitMenu.Click += ExitMenuClickHandler;
+            _contextMenu.Items.Add(exitMenu);
         }
 
         protected override void Dispose(bool disposing)
@@ -37,7 +43,7 @@ namespace Notadesigner.Tommy.App
             }
             else if (e.Button == MouseButtons.Right)
             {
-                /// Show context menu
+                _contextMenu.Show(Cursor.Position);
             }
         }
 
@@ -45,6 +51,11 @@ namespace Notadesigner.Tommy.App
         {
             _form.Hide();
             e.Cancel = true;
+        }
+
+        private void ExitMenuClickHandler(object? sender, EventArgs e)
+        {
+            ExitThread();
         }
     }
 }
