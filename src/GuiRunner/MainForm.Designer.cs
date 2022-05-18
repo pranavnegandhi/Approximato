@@ -50,7 +50,7 @@
             this.Name = "MainForm";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Pomodour";
+            this.Text = "Tommy";
             this.ResumeLayout(false);
 
         }
