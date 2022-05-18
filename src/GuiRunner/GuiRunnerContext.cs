@@ -18,6 +18,7 @@ namespace Notadesigner.Tommy.App
         public GuiRunnerContext(PomoEngine engine, MainForm form)
         {
             _engine = engine;
+            _engine.Progress += (s, e) => _notifyIcon.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}"; ;
             _engine.StateChange += EngineStateChangeHandler;
 
             _form = form;
@@ -66,7 +67,12 @@ namespace Notadesigner.Tommy.App
 
         private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
         {
-            _startMenu.Enabled = (e.State == EngineState.AppReady);
+            if (!_form.IsHandleCreated)
+            {
+                return;
+            }
+
+            _form.Invoke(() => _startMenu.Enabled = e.State == EngineState.AppReady);
         }
     }
 }

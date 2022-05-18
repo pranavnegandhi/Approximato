@@ -60,6 +60,11 @@ namespace Notadesigner.Tommy.App
 
         private void EngineProgressHandler(object? sender, ProgressEventArgs e)
         {
+            if (!_activeProgressBar.IsHandleCreated)
+            {
+                return;
+            }
+
             _activeProgressBar.Invoke(() =>
             {
                 _activeProgressBar.Value = Convert.ToInt32(e.ElapsedDuration.TotalSeconds);
