@@ -1,6 +1,6 @@
-﻿using Notadesigner.Pomodour.App.Properties;
+﻿using Notadesigner.Tommy.App.Properties;
 
-namespace Notadesigner.Pomodour.App
+namespace Notadesigner.Tommy.App
 {
     public class GuiRunnerContext : ApplicationContext
     {

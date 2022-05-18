@@ -8,11 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Notadesigner.Pomodour.App.Properties {
+namespace Notadesigner.Tommy.App.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.2.0.0")]
     internal sealed partial class GuiRunnerSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static GuiRunnerSettings defaultInstance = ((GuiRunnerSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new GuiRunnerSettings())));

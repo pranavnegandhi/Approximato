@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Notadesigner.Pomodour.App.Properties;
-using Notadesigner.Pomodour.Core;
+using Notadesigner.Tommy.App.Properties;
+using Notadesigner.Tommy.Core;
 using Serilog;
 
-namespace Notadesigner.Pomodour.App
+namespace Notadesigner.Tommy.App
 {
     internal static class Program
     {

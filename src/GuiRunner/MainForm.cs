@@ -1,7 +1,7 @@
-using Notadesigner.Pomodour.App.Properties;
-using Notadesigner.Pomodour.Core;
+using Notadesigner.Tommy.App.Properties;
+using Notadesigner.Tommy.Core;
 
-namespace Notadesigner.Pomodour.App
+namespace Notadesigner.Tommy.App
 {
     public partial class MainForm : Form
     {

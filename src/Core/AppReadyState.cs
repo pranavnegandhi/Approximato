@@ -1,4 +1,4 @@
-﻿namespace Notadesigner.Pomodour.Core
+﻿namespace Notadesigner.Tommy.Core
 {
     public class AppReadyState : IdleState
     {

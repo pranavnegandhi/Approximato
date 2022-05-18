@@ -10,8 +10,8 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>Notadesigner.Pomodour.App</RootNamespace>
-    <AssemblyName>Pomodour</AssemblyName>
+    <RootNamespace>Notadesigner.Tommy.App</RootNamespace>
+    <AssemblyName>Tommy</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
