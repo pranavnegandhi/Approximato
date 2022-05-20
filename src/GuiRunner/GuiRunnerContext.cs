@@ -67,6 +67,7 @@ namespace Notadesigner.Tom.App
             if (e.Button == MouseButtons.Left)
             {
                 _form.Show();
+                _form.BringToFront();
             }
         }
 
