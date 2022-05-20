@@ -15,6 +15,10 @@ namespace Notadesigner.Tom.App
 
         private readonly ToolStripMenuItem _startMenu;
 
+        private readonly Dictionary<EngineState, IGuiState> EngineGuiStateMap = new();
+
+        private IGuiState _guiState;
+
         public GuiRunnerContext(PomoEngine engine, MainForm form)
         {
             _engine = engine;
@@ -42,6 +46,13 @@ namespace Notadesigner.Tom.App
             };
 
             _notifyIcon.MouseClick += NotifyIconMouseClickHandler;
+
+            EngineGuiStateMap.Add(EngineState.AppReady, new AppReadyGuiState(_startMenu));
+            EngineGuiStateMap.Add(EngineState.WorkSession, new WorkSessionGuiState(_notifyIcon));
+            EngineGuiStateMap.Add(EngineState.ShortBreak, new ShortBreakGuiState(_notifyIcon));
+            EngineGuiStateMap.Add(EngineState.LongBreak, new LongBreakGuiState(_notifyIcon));
+
+            _guiState = EngineGuiStateMap[EngineState.AppReady];
         }
 
         protected override void Dispose(bool disposing)
@@ -67,12 +78,13 @@ namespace Notadesigner.Tom.App
 
         private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
         {
-            if (!_form.IsHandleCreated)
+            if (!EngineGuiStateMap.TryGetValue(e.State, out var guiState))
             {
                 return;
             }
 
-            _form.Invoke(() => _startMenu.Enabled = e.State == EngineState.AppReady);
+            _guiState = guiState;
+            _guiState.Enter(e.RoundCounter);
         }
     }
 }
