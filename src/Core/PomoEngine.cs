@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace Notadesigner.Tommy.Core
+namespace Notadesigner.Tom.Core
 {
     public class PomoEngine : IHostedService
     {

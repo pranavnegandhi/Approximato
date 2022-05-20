@@ -1,4 +1,4 @@
-﻿namespace Notadesigner.Tommy.Core
+﻿namespace Notadesigner.Tom.Core
 {
     public enum EngineState
     {

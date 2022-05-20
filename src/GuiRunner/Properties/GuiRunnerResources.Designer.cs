@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Notadesigner.Tommy.App.Properties {
+namespace Notadesigner.Tom.App.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Notadesigner.Tommy.App.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Notadesigner.Tommy.App.Properties.GuiRunnerResources", typeof(GuiRunnerResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Notadesigner.Tom.App.Properties.GuiRunnerResources", typeof(GuiRunnerResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -10,8 +10,8 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>Notadesigner.Tommy.App</RootNamespace>
-    <AssemblyName>Tommy</AssemblyName>
+    <RootNamespace>Notadesigner.Tom.App</RootNamespace>
+    <AssemblyName>Tom</AssemblyName>
     <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
   </PropertyGroup>
 

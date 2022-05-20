@@ -1,4 +1,4 @@
-﻿namespace Notadesigner.Tommy.App
+﻿namespace Notadesigner.Tom.App
 {
     public static class ProgressBarFactory
     {

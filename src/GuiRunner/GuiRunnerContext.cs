@@ -1,7 +1,7 @@
-﻿using Notadesigner.Tommy.App.Properties;
-using Notadesigner.Tommy.Core;
+﻿using Notadesigner.Tom.App.Properties;
+using Notadesigner.Tom.Core;
 
-namespace Notadesigner.Tommy.App
+namespace Notadesigner.Tom.App
 {
     public class GuiRunnerContext : ApplicationContext
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Notadesigner.Tommy.Core
+namespace Notadesigner.Tom.Core
 {
     public class NotificationsQueue
     {

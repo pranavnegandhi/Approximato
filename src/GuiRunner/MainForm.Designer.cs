@@ -1,4 +1,4 @@
-﻿namespace Notadesigner.Tommy.App
+﻿namespace Notadesigner.Tom.App
 {
     partial class MainForm
     {
@@ -50,7 +50,7 @@
             this.Name = "MainForm";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Tommy";
+            this.Text = "Tom";
             this.ResumeLayout(false);
 
         }

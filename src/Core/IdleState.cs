@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace Notadesigner.Tommy.Core
+namespace Notadesigner.Tom.Core
 {
     public abstract class IdleState : IEngineState
     {
