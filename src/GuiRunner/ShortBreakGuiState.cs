@@ -1,4 +1,6 @@
-﻿namespace Notadesigner.Tom.App
+﻿using Notadesigner.Tom.App.Properties;
+
+namespace Notadesigner.Tom.App
 {
     public class ShortBreakGuiState : IGuiState
     {
@@ -13,7 +15,22 @@
 
         public void Enter(int roundCounter)
         {
-            _notifyIcon.ShowBalloonTip(500, string.Empty, $"Time for your {roundCounter} short break.", ToolTipIcon.None);
+            string message;
+
+            if (roundCounter == 0)
+            {
+                message = GuiRunnerResources.SHORT_BREAK_0;
+            }
+            else if (roundCounter == 1)
+            {
+                message = GuiRunnerResources.SHORT_BREAK_1;
+            }
+            else
+            {
+                message = GuiRunnerResources.SHORT_BREAK_2;
+            }
+
+            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
         }
     }
 }

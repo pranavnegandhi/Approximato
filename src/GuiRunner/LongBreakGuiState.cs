@@ -1,4 +1,6 @@
-﻿namespace Notadesigner.Tom.App
+﻿using Notadesigner.Tom.App.Properties;
+
+namespace Notadesigner.Tom.App
 {
     public class LongBreakGuiState : IGuiState
     {
@@ -11,9 +13,10 @@
 
         public GuiState State => GuiState.WorkSession;
 
-        public void Enter(int roundCounter)
+        public void Enter(int _)
         {
-            _notifyIcon.ShowBalloonTip(500, string.Empty, "Your last work session is complete. Take a longer break to rejuvenate.", ToolTipIcon.None);
+            var message = GuiRunnerResources.LONG_BREAK_3;
+            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
         }
     }
 }
