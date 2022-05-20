@@ -35,7 +35,7 @@ namespace Notadesigner.Tom.App
             _contextMenu.Items.Add(new ToolStripSeparator());
 
             var exitMenu = new ToolStripMenuItem("E&xit");
-            exitMenu.Click += (s, e) => ExitThread();
+            exitMenu.Click += ExitMenuClickHandler;
             _contextMenu.Items.Add(exitMenu);
 
             _notifyIcon = new NotifyIcon
@@ -85,6 +85,21 @@ namespace Notadesigner.Tom.App
 
             _guiState = guiState;
             _guiState.Enter(e.RoundCounter);
+        }
+
+        private void ExitMenuClickHandler(object? sender, EventArgs e)
+        {
+            var result = DialogResult.Yes;
+
+            if (_engine.State != EngineState.AppReady)
+            {
+                result = MessageBox.Show("Halt Pomodoro and exit?", "Tom", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+
+            if (result == DialogResult.Yes)
+            {
+                ExitThread();
+            }
         }
     }
 }

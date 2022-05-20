@@ -56,6 +56,8 @@ namespace Notadesigner.Tom.Core
             _engineState.MoveNext();
         }
 
+        public EngineState State => _engineState.State;
+
         private async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             _log.Verbose("Executing {serviceName}", nameof(PomoEngine));
