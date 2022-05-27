@@ -110,6 +110,7 @@ namespace Notadesigner.Tom.App
                 return;
             }
 
+            _guiState.Exit();
             _guiState = guiState;
             _form.Invoke(() => _guiState.Enter(e.RoundCounter));
         }

@@ -107,6 +107,15 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Tick {
+            get {
+                return ResourceManager.GetStream("Tick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your first work session has begun..
         /// </summary>
         internal static string WORK_SESSION_0 {

@@ -1,4 +1,5 @@
 ﻿using Notadesigner.Tom.App.Properties;
+using System.Media;
 
 namespace Notadesigner.Tom.App
 {
@@ -6,9 +7,12 @@ namespace Notadesigner.Tom.App
     {
         private readonly NotifyIcon _notifyIcon;
 
+        private readonly SoundPlayer _tickPlayer;
+
         public WorkSessionGuiState(NotifyIcon notifyIcon)
         {
             _notifyIcon = notifyIcon;
+            _tickPlayer = new(GuiRunnerResources.Tick);
         }
 
         public GuiState State => GuiState.WorkSession;
@@ -36,6 +40,10 @@ namespace Notadesigner.Tom.App
 
             _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
             _notifyIcon.ContextMenuStrip.Items[0].Enabled = false;
+
+            _tickPlayer.PlayLooping();
         }
+
+        public void Exit() => _tickPlayer.Stop();
     }
 }
