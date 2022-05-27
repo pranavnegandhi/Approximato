@@ -7,7 +7,7 @@
             var progressBar = new CircularProgressBar.CircularProgressBar
             {
                 AnimationFunction = WinFormAnimation.KnownAnimationFunctions.QuinticEaseIn,
-                AnimationSpeed = 500,
+                AnimationSpeed = 50,
                 BackColor = Color.Transparent,
                 Font = new Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point),
                 ForeColor = SystemColors.ControlText,
