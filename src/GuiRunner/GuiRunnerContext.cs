@@ -77,7 +77,7 @@ namespace Notadesigner.Tom.App
             e.Cancel = true;
         }
 
-        private async void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
+        private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
         {
             switch (e.State)
             {
@@ -95,8 +95,7 @@ namespace Notadesigner.Tom.App
                 case EngineState.WorkCompleted:
                     if (GuiRunnerSettings.Default.AutoAdvance)
                     {
-                        await Task.Delay(1000)
-                            .ContinueWith(state => _engine.MoveNext());
+                        _engine.MoveNext();
                     }
                     else
                     {

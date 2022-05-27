@@ -87,7 +87,11 @@ namespace Notadesigner.Tom.App
                     break;
 
                 case EngineState.WorkSession:
-                    _activeProgressBar.Invoke(() => _activeProgressBar.Text = "00:00 / 00:00");
+                    _activeProgressBar.Invoke(() =>
+                    {
+                        _activeProgressBar.Text = "00:00 / 00:00";
+                        _activeProgressBar.Refresh();
+                    });
                     break;
             }
         }
