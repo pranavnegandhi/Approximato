@@ -77,15 +77,41 @@ namespace Notadesigner.Tom.App
             e.Cancel = true;
         }
 
-        private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
+        private async void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
         {
+            switch (e.State)
+            {
+                case EngineState.BreakCompleted:
+                    if (GuiRunnerSettings.Default.AutoAdvance)
+                    {
+                        _engine.MoveNext();
+                    }
+                    else
+                    {
+                    }
+
+                    break;
+
+                case EngineState.WorkCompleted:
+                    if (GuiRunnerSettings.Default.AutoAdvance)
+                    {
+                        await Task.Delay(1000)
+                            .ContinueWith(state => _engine.MoveNext());
+                    }
+                    else
+                    {
+                    }
+
+                    break;
+            }
+
             if (!EngineGuiStateMap.TryGetValue(e.State, out var guiState))
             {
                 return;
             }
 
             _guiState = guiState;
-            _guiState.Enter(e.RoundCounter);
+            _form.Invoke(() => _guiState.Enter(e.RoundCounter));
         }
 
         private void ExitMenuClickHandler(object? sender, EventArgs e)

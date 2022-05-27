@@ -53,11 +53,6 @@ namespace Notadesigner.Tom.App
             });
         }
 
-        private void StartBreakClickHandler(object sender, EventArgs e)
-        {
-            _engine.MoveNext();
-        }
-
         private void EngineProgressHandler(object? sender, ProgressEventArgs e)
         {
             if (!_activeProgressBar.IsHandleCreated)
@@ -75,36 +70,25 @@ namespace Notadesigner.Tom.App
 
         private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
         {
-            if (e.State == EngineState.AppReady)
+            switch (e.State)
             {
-                _activeProgressBar = _allProgressBars[e.RoundCounter];
-            }
+                case EngineState.AppReady:
+                    _activeProgressBar = _allProgressBars[e.RoundCounter]; /// Point back to the first progress bar
+                    break;
 
-            if (e.State == EngineState.WorkCompleted)
-            {
-                if (GuiRunnerSettings.Default.AutoAdvance)
-                {
-                    _engine.MoveNext();
-                }
-                else
-                {
-                }
+                case EngineState.BreakCompleted:
+                    _activeProgressBar = _allProgressBars[e.RoundCounter]; /// Point to the progress bar that matches the active round
+                    break;
 
-                _activeProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
-            }
+                case EngineState.LongBreak:
+                case EngineState.ShortBreak:
+                    _activeProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
+                    _activeProgressBar.Invoke(() => _activeProgressBar.Text = "00:00 / 00:00");
+                    break;
 
-            if (e.State == EngineState.BreakCompleted)
-            {
-                if (GuiRunnerSettings.Default.AutoAdvance)
-                {
-                    _engine.MoveNext();
-                }
-                else
-                {
-                }
-
-                _activeProgressBar = _allProgressBars[e.RoundCounter];
-                _activeProgressBar.ProgressColor = SystemColors.Highlight;
+                case EngineState.WorkSession:
+                    _activeProgressBar.Invoke(() => _activeProgressBar.Text = "00:00 / 00:00");
+                    break;
             }
         }
     }
