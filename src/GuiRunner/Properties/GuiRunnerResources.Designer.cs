@@ -61,6 +61,24 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Ding {
+            get {
+                return ResourceManager.GetStream("Ding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream DingDing {
+            get {
+                return ResourceManager.GetStream("DingDing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your last work session is complete. Take a longer break to rejuvenate..
         /// </summary>
         internal static string LONG_BREAK_3 {
