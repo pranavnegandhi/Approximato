@@ -14,5 +14,8 @@
     <Setting Name="LongBreakDuration" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:15:00</Value>
     </Setting>
+    <Setting Name="IsUpgraded" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

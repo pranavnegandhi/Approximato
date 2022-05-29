@@ -1,5 +1,6 @@
 ﻿using Notadesigner.Tom.App.Properties;
 using Notadesigner.Tom.Core;
+using System.Diagnostics;
 
 namespace Notadesigner.Tom.App
 {
@@ -7,7 +8,9 @@ namespace Notadesigner.Tom.App
     {
         private readonly PomoEngine _engine;
 
-        private readonly MainForm _form;
+        private readonly MainForm _mainForm;
+
+        private readonly SettingsForm _settingsForm;
 
         private readonly NotifyIcon _notifyIcon;
 
@@ -19,18 +22,24 @@ namespace Notadesigner.Tom.App
 
         private IGuiState _guiState;
 
-        public GuiRunnerContext(PomoEngine engine, MainForm form)
+        public GuiRunnerContext(PomoEngine engine, MainForm mainForm, SettingsForm settingsForm)
         {
             _engine = engine;
             _engine.Progress += (s, e) => _notifyIcon.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}"; ;
             _engine.StateChange += EngineStateChangeHandler;
 
-            _form = form;
-            _form.FormClosing += FormClosingHandler;
+            _mainForm = mainForm;
+            _mainForm.FormClosing += FormClosingHandler;
+
+            _settingsForm = settingsForm;
 
             _startMenu = new ToolStripMenuItem("&Start");
             _startMenu.Click += (s, e) => _engine.MoveNext();
             _contextMenu.Items.Add(_startMenu);
+
+            var settingsMenu = new ToolStripMenuItem("S&ettings…");
+            settingsMenu.Click += SettingsClickHandler;
+            _contextMenu.Items.Add(settingsMenu);
 
             _contextMenu.Items.Add(new ToolStripSeparator());
 
@@ -66,14 +75,14 @@ namespace Notadesigner.Tom.App
         {
             if (e.Button == MouseButtons.Left)
             {
-                _form.Show();
-                _form.BringToFront();
+                _mainForm.Show();
+                _mainForm.BringToFront();
             }
         }
 
         private void FormClosingHandler(object? sender, FormClosingEventArgs e)
         {
-            _form.Hide();
+            _mainForm.Hide();
             e.Cancel = true;
         }
 
@@ -111,7 +120,19 @@ namespace Notadesigner.Tom.App
 
             _guiState.Exit();
             _guiState = guiState;
-            _form.Invoke(() => _guiState.Enter(e.RoundCounter));
+            _mainForm.Invoke(() => _guiState.Enter(e.RoundCounter));
+        }
+
+        private void SettingsClickHandler(object? sender, EventArgs e)
+        {
+            if (_settingsForm.Visible)
+            {
+                _settingsForm.Focus();
+            }
+            else
+            {
+                _settingsForm.ShowDialog();
+            }
         }
 
         private void ExitMenuClickHandler(object? sender, EventArgs e)

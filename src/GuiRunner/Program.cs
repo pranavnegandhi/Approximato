@@ -38,6 +38,7 @@ namespace Notadesigner.Tom.App
                             .AddSingleton<PomoEngine>()
                             .AddSingleton<NotificationsQueue>()
                             .AddSingleton<MainForm>()
+                            .AddSingleton<SettingsForm>()
                             .AddSingleton<GuiRunnerContext>();
                     })
                     .UseSerilog();
