@@ -2,8 +2,8 @@
 {
     public class WorkCompletedState : IdleState
     {
-        public WorkCompletedState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
-            : base(roundCounter, settings, queue)
+        public WorkCompletedState(int roundCounter, Func<PomoEngineSettings> settingsFactory, NotificationsQueue queue)
+            : base(roundCounter, settingsFactory, queue)
         {
         }
 
@@ -13,7 +13,7 @@
 
             await _moveNextSignal.WaitAsync(cancellationToken);
 
-            IEngineState nextState = RoundCounter < 3 ? new ShortBreakState(RoundCounter, _settings, _queue) : new LongBreakState(RoundCounter, _settings, _queue);
+            IEngineState nextState = RoundCounter < 3 ? new ShortBreakState(RoundCounter, _settingsFactory, _queue) : new LongBreakState(RoundCounter, _settingsFactory, _queue);
             _queue.Enqueue(new Notification(nextState));
         }
 

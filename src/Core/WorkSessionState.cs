@@ -4,10 +4,10 @@
     {
         private readonly TimeSpan StateDuration;
 
-        public WorkSessionState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
-            : base(roundCounter, settings, queue)
+        public WorkSessionState(int roundCounter, Func<PomoEngineSettings> settingsFactory, NotificationsQueue queue)
+            : base(roundCounter, settingsFactory, queue)
         {
-            StateDuration = settings.PomodoroDuration;
+            StateDuration = settingsFactory().PomodoroDuration;
         }
 
         public override async Task EnterAsync(CancellationToken cancellationToken)
@@ -26,7 +26,7 @@
                 }
             }
 
-            _queue.Enqueue(new Notification(new WorkCompletedState(RoundCounter, _settings, _queue)));
+            _queue.Enqueue(new Notification(new WorkCompletedState(RoundCounter, _settingsFactory, _queue)));
         }
 
         public override EngineState State => EngineState.WorkSession;

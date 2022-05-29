@@ -13,7 +13,7 @@ namespace Notadesigner.Tom.Core
 
         private readonly ILogger _log = Log.ForContext<PomoEngine>();
 
-        private readonly PomoEngineSettings _settings;
+        private readonly Func<PomoEngineSettings> _settingsFactory;
 
         private readonly NotificationsQueue _queue;
 
@@ -23,11 +23,11 @@ namespace Notadesigner.Tom.Core
 
         private Task? _execute;
 
-        public PomoEngine(PomoEngineSettings settings, NotificationsQueue queue)
+        public PomoEngine(Func<PomoEngineSettings> settingsFactory, NotificationsQueue queue)
         {
-            _settings = settings;
+            _settingsFactory = settingsFactory;
             _queue = queue;
-            _engineState = new AppReadyState(0, _settings, _queue);
+            _engineState = new AppReadyState(0, _settingsFactory, _queue);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

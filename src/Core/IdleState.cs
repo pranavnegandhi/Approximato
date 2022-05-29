@@ -8,7 +8,7 @@ namespace Notadesigner.Tom.Core
 
         protected readonly ILogger _logger = Log.ForContext<IdleState>();
 
-        protected readonly PomoEngineSettings _settings;
+        protected readonly Func<PomoEngineSettings> _settingsFactory;
 
         protected readonly NotificationsQueue _queue;
 
@@ -16,10 +16,10 @@ namespace Notadesigner.Tom.Core
 
         private readonly int _roundCounter;
 
-        public IdleState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
+        public IdleState(int roundCounter, Func<PomoEngineSettings> settingsFactory, NotificationsQueue queue)
         {
             _roundCounter = roundCounter;
-            _settings = settings;
+            _settingsFactory = settingsFactory;
             _queue = queue;
         }
 

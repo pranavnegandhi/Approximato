@@ -4,10 +4,10 @@
     {
         private readonly TimeSpan StateDuration;
 
-        public ShortBreakState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
-            : base(roundCounter, settings, queue)
+        public ShortBreakState(int roundCounter, Func<PomoEngineSettings> settingsFactory, NotificationsQueue queue)
+            : base(roundCounter, settingsFactory, queue)
         {
-            StateDuration = settings.ShortBreakDuration;
+            StateDuration = settingsFactory().ShortBreakDuration;
         }
 
         public override async Task EnterAsync(CancellationToken cancellationToken)
@@ -26,7 +26,7 @@
                 }
             }
 
-            _queue.Enqueue(new Notification(new BreakCompletedState(RoundCounter + 1, _settings, _queue)));
+            _queue.Enqueue(new Notification(new BreakCompletedState(RoundCounter + 1, _settingsFactory, _queue)));
         }
 
         public override EngineState State => EngineState.ShortBreak;

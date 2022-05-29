@@ -8,7 +8,7 @@ namespace Notadesigner.Tom.Core
 
         protected readonly ILogger _log = Log.ForContext<ActiveState>();
 
-        protected readonly PomoEngineSettings _settings;
+        protected readonly Func<PomoEngineSettings> _settingsFactory;
 
         protected readonly NotificationsQueue _queue;
 
@@ -16,9 +16,9 @@ namespace Notadesigner.Tom.Core
 
         protected TimeSpan _timeElapsed = TimeSpan.FromSeconds(0);
 
-        public ActiveState(int roundCounter, PomoEngineSettings settings, NotificationsQueue queue)
+        public ActiveState(int roundCounter, Func<PomoEngineSettings> settingsFactory, NotificationsQueue queue)
         {
-            _settings = settings;
+            _settingsFactory = settingsFactory;
             _roundCounter = roundCounter;
             _queue = queue;
         }
