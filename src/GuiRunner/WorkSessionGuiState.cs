@@ -44,8 +44,11 @@ namespace Notadesigner.Tom.App
                 message = GuiRunnerResources.WORK_SESSION_3;
             }
 
-            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
-            _notifyIcon.ContextMenuStrip.Items[0].Enabled = false;
+            _notifyIcon.ContextMenuStrip.Invoke(() =>
+            {
+                _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+                _notifyIcon.ContextMenuStrip.Items[0].Enabled = false;
+            });
 
             Task.Run(() => _enterSound.PlaySync())
                 .ContinueWith(state => _tickPlayer.PlayLooping());

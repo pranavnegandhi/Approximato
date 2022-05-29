@@ -13,7 +13,10 @@
 
         public void Enter(int roundCounter)
         {
-            _startMenu.Enabled = true;
+            _startMenu.Owner.Invoke(() =>
+            {
+                _startMenu.Enabled = true;
+            });
         }
     }
 }

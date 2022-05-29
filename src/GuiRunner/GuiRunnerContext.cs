@@ -120,7 +120,7 @@ namespace Notadesigner.Tom.App
 
             _guiState.Exit();
             _guiState = guiState;
-            _mainForm.Invoke(() => _guiState.Enter(e.RoundCounter));
+            _guiState.Enter(e.RoundCounter);
         }
 
         private void SettingsClickHandler(object? sender, EventArgs e)

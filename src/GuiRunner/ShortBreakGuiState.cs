@@ -30,7 +30,10 @@ namespace Notadesigner.Tom.App
                 message = GuiRunnerResources.SHORT_BREAK_2;
             }
 
-            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+            _notifyIcon.ContextMenuStrip.Invoke(() =>
+            {
+                _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+            });
         }
     }
 }

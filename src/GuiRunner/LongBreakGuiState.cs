@@ -16,7 +16,11 @@ namespace Notadesigner.Tom.App
         public void Enter(int _)
         {
             var message = GuiRunnerResources.LONG_BREAK_3;
-            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+
+            _notifyIcon.ContextMenuStrip.Invoke(() =>
+            {
+                _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+            });
         }
     }
 }

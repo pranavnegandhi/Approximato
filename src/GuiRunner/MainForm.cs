@@ -82,16 +82,25 @@ namespace Notadesigner.Tom.App
 
                 case EngineState.LongBreak:
                 case EngineState.ShortBreak:
-                    _activeProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
-                    _activeProgressBar.Invoke(() => _activeProgressBar.Text = "00:00 / 00:00");
+                    if (_activeProgressBar.IsHandleCreated)
+                    {
+                        _activeProgressBar.Invoke(() =>
+                        {
+                            _activeProgressBar.Text = "00:00 / 00:00";
+                            _activeProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
+                        });
+                    }
                     break;
 
                 case EngineState.WorkSession:
-                    _activeProgressBar.Invoke(() =>
+                    if (_activeProgressBar.IsHandleCreated)
                     {
-                        _activeProgressBar.Text = "00:00 / 00:00";
-                        _activeProgressBar.Refresh();
-                    });
+                        _activeProgressBar.Invoke(() =>
+                        {
+                            _activeProgressBar.Text = "00:00 / 00:00";
+                            _activeProgressBar.Refresh();
+                        });
+                    }
                     break;
             }
         }
