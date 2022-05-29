@@ -19,10 +19,16 @@ namespace Notadesigner.Tom.App
                 return;
             }
 
+            WorkSessionInput.GotFocus += SessionInputGotFocusHandler;
+            ShortBreakInput.GotFocus += SessionInputGotFocusHandler;
+            LongBreakInput.GotFocus += SessionInputGotFocusHandler;
+
             DisplayAssemblyInfo();
             PrepareSettingsBindings();
             _isInitialized = true;
         }
+
+        private void SessionInputGotFocusHandler(object? s, EventArgs e) => (_ = (s as NumericUpDown) ?? null)?.Select(0, 2);
 
         private void DisplayAssemblyInfo()
         {
