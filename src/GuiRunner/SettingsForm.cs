@@ -34,12 +34,11 @@ namespace Notadesigner.Tom.App
         {
             var assembly = Assembly.GetExecutingAssembly();
             var titleAttribute = assembly.GetCustomAttribute<AssemblyTitleAttribute>();
-            var versionAttribute = assembly.GetCustomAttribute<AssemblyVersionAttribute>();
             var copyrightAttribute = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>();
             var companyAttribute = assembly.GetCustomAttribute<AssemblyCompanyAttribute>();
 
-            var infoText = $"{titleAttribute?.Title ?? string.Empty}\t" +
-                $"{versionAttribute?.Version ?? string.Empty}{Environment.NewLine}" +
+            var infoText = $"{titleAttribute?.Title ?? string.Empty}{Environment.NewLine}" +
+                $"{assembly.GetName().Version}{Environment.NewLine}" +
                 $"{companyAttribute?.Company ?? string.Empty}{Environment.NewLine}" +
                 $"{copyrightAttribute?.Copyright ?? string.Empty}";
             AboutInfoLabel.Text = infoText;
