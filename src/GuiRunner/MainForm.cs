@@ -25,8 +25,8 @@ namespace Notadesigner.Tom.App
 
             Icon = GuiRunnerResources.MainIcon;
 
-            ProgressBarsContainer.Controls.Add(_workProgressBar);
-            ProgressBarsContainer.Controls.Add(_breakProgressBar);
+            progressBarsContainer.Controls.Add(_workProgressBar);
+            progressBarsContainer.Controls.Add(_breakProgressBar);
 
             VisibleChanged += (s, e) =>
             {
@@ -80,6 +80,8 @@ namespace Notadesigner.Tom.App
 
                             _breakProgressBar.Text = "__:__ / __:__";
                             _breakProgressBar.Value = 0;
+
+                            currentPhaseStatusLabel.Text = $"Pomodoro {e.RoundCounter + 1} of 4";
                         });
                     }
                     break;
