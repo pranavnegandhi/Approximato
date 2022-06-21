@@ -33,16 +33,17 @@
             // 
             // ProgressBarsContainer
             // 
+            this.ProgressBarsContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ProgressBarsContainer.Location = new System.Drawing.Point(0, 0);
             this.ProgressBarsContainer.Name = "ProgressBarsContainer";
-            this.ProgressBarsContainer.Size = new System.Drawing.Size(504, 126);
+            this.ProgressBarsContainer.Size = new System.Drawing.Size(236, 149);
             this.ProgressBarsContainer.TabIndex = 3;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(505, 127);
+            this.ClientSize = new System.Drawing.Size(236, 149);
             this.Controls.Add(this.ProgressBarsContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -52,6 +53,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Tom";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

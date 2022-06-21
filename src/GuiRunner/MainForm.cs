@@ -7,13 +7,9 @@ namespace Notadesigner.Tom.App
     {
         private readonly PomoEngine _engine;
 
-        private readonly CircularProgressBar.CircularProgressBar[] _allProgressBars = new CircularProgressBar.CircularProgressBar[]
-        {
-            ProgressBarFactory.Create(),
-            ProgressBarFactory.Create(),
-            ProgressBarFactory.Create(),
-            ProgressBarFactory.Create()
-        };
+        private readonly CircularProgressBar.CircularProgressBar _workProgressBar = ProgressBarFactory.Create(SystemColors.Highlight, new Size(120, 120));
+
+        private readonly CircularProgressBar.CircularProgressBar _breakProgressBar = ProgressBarFactory.Create(SystemColors.GradientActiveCaption, new Size(100, 100));
 
         private CircularProgressBar.CircularProgressBar _activeProgressBar;
 
@@ -24,14 +20,13 @@ namespace Notadesigner.Tom.App
             _engine = engine;
             _engine.Progress += EngineProgressHandler;
             _engine.StateChange += EngineStateChangeHandler;
-            _engine.StartSession += EngineStartSessionHandler;
 
             InitializeComponent();
 
             Icon = GuiRunnerResources.MainIcon;
 
-            Array.ForEach(_allProgressBars, p => ProgressBarsContainer.Controls.Add(p));
-            _activeProgressBar = _allProgressBars[0];
+            ProgressBarsContainer.Controls.Add(_workProgressBar);
+            ProgressBarsContainer.Controls.Add(_breakProgressBar);
 
             VisibleChanged += (s, e) =>
             {
@@ -43,16 +38,6 @@ namespace Notadesigner.Tom.App
             };
         }
 
-        private void EngineStartSessionHandler(object? sender, EventArgs e)
-        {
-            Array.ForEach(_allProgressBars, p =>
-            {
-                p.ProgressColor = SystemColors.Highlight;
-                p.Text = "__:__ / __:__";
-                p.Value = 0;
-            });
-        }
-
         private void EngineProgressHandler(object? sender, ProgressEventArgs e)
         {
             if (!_activeProgressBar.IsHandleCreated)
@@ -60,7 +45,7 @@ namespace Notadesigner.Tom.App
                 return;
             }
 
-            _activeProgressBar.Invoke(() =>
+            Invoke(() =>
             {
                 _activeProgressBar.Value = Convert.ToInt32(e.ElapsedDuration.TotalSeconds);
                 _activeProgressBar.Maximum = Convert.ToInt32(e.TotalDuration.TotalSeconds);
@@ -72,33 +57,29 @@ namespace Notadesigner.Tom.App
         {
             switch (e.State)
             {
-                case EngineState.AppReady:
-                    _activeProgressBar = _allProgressBars[e.RoundCounter]; /// Point back to the first progress bar
-                    break;
-
-                case EngineState.BreakCompleted:
-                    _activeProgressBar = _allProgressBars[e.RoundCounter]; /// Point to the progress bar that matches the active round
-                    break;
-
                 case EngineState.LongBreak:
                 case EngineState.ShortBreak:
-                    if (_activeProgressBar.IsHandleCreated)
+                    _activeProgressBar = _breakProgressBar;
+                    if (IsHandleCreated)
                     {
-                        _activeProgressBar.Invoke(() =>
+                        Invoke(() =>
                         {
-                            _activeProgressBar.Text = "00:00 / 00:00";
-                            _activeProgressBar.ProgressColor = SystemColors.GradientActiveCaption;
+                            _breakProgressBar.Text = "00:00 / 00:00";
                         });
                     }
                     break;
 
                 case EngineState.WorkSession:
-                    if (_activeProgressBar.IsHandleCreated)
+                    _activeProgressBar = _workProgressBar;
+                    if (IsHandleCreated)
                     {
-                        _activeProgressBar.Invoke(() =>
+                        Invoke(() =>
                         {
-                            _activeProgressBar.Text = "00:00 / 00:00";
-                            _activeProgressBar.Refresh();
+                            _workProgressBar.Text = "__:__ / __:__";
+                            _workProgressBar.Value = 0;
+
+                            _breakProgressBar.Text = "__:__ / __:__";
+                            _breakProgressBar.Value = 0;
                         });
                     }
                     break;

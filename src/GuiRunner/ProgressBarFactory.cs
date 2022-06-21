@@ -2,33 +2,33 @@
 {
     public static class ProgressBarFactory
     {
-        public static CircularProgressBar.CircularProgressBar Create()
+        public static CircularProgressBar.CircularProgressBar Create(Color progressColor, Size size)
         {
             var progressBar = new CircularProgressBar.CircularProgressBar
             {
                 AnimationFunction = WinFormAnimation.KnownAnimationFunctions.QuinticEaseIn,
                 AnimationSpeed = 50,
                 BackColor = Color.Transparent,
-                Font = new Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point),
+                Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point),
                 ForeColor = SystemColors.ControlText,
                 InnerColor = SystemColors.Control,
                 InnerMargin = 0,
                 InnerWidth = 10,
-                Location = new System.Drawing.Point(3, 3),
+                Location = new Point(3, 3),
                 MarqueeAnimationSpeed = 2000,
                 Name = "Pomodoro1ProgressBar",
                 OuterColor = SystemColors.ControlDarkDark,
-                OuterMargin = -20,
-                OuterWidth = 20,
-                ProgressColor = SystemColors.Highlight,
-                ProgressWidth = 20,
-                SecondaryFont = new Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point),
-                Size = new Size(120, 120),
+                OuterMargin = -10,
+                OuterWidth = 10,
+                ProgressColor = progressColor,
+                ProgressWidth = 10,
+                SecondaryFont = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point),
+                Size = size,
                 StartAngle = 270,
-                SubscriptColor = Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166))))),
+                SubscriptColor = Color.FromArgb(166, 166, 166),
                 SubscriptMargin = new Padding(10, -35, 0, 0),
                 SubscriptText = "",
-                SuperscriptColor = Color.FromArgb(((int)(((byte)(166)))), ((int)(((byte)(166)))), ((int)(((byte)(166))))),
+                SuperscriptColor = Color.FromArgb(166, 166, 166),
                 SuperscriptMargin = new Padding(10, 35, 0, 0),
                 SuperscriptText = "",
                 TabIndex = 1,
