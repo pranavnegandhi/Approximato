@@ -33,7 +33,7 @@ namespace Notadesigner.Tom.App
                 builder.ConfigureServices((_, services) =>
                     {
                         var appSettings = GuiRunnerSettings.Default;
-                        var settingsFactory = () => new PomoEngineSettings(appSettings.PomodoroDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration);
+                        var settingsFactory = () => new PomoEngineSettings(appSettings.MaximumRounds, appSettings.PomodoroDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration);
                         services.AddSingleton(settingsFactory)
                             .AddSingleton<PomoEngine>()
                             .AddSingleton<NotificationsQueue>()
