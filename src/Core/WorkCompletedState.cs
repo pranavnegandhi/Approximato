@@ -13,7 +13,8 @@
 
             await _moveNextSignal.WaitAsync(cancellationToken);
 
-            IEngineState nextState = RoundCounter < 3 ? new ShortBreakState(RoundCounter, _settingsFactory, _queue) : new LongBreakState(RoundCounter, _settingsFactory, _queue);
+            var maximumRounds = _settingsFactory().MaximumRounds;
+            IEngineState nextState = RoundCounter < maximumRounds ? new ShortBreakState(RoundCounter, _settingsFactory, _queue) : new LongBreakState(RoundCounter, _settingsFactory, _queue);
             _queue.Enqueue(new Notification(nextState));
         }
 
