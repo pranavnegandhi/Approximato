@@ -81,7 +81,7 @@ namespace Notadesigner.Tom.App
                             _breakProgressBar.Text = "__:__ / __:__";
                             _breakProgressBar.Value = 0;
 
-                            currentPhaseStatusLabel.Text = $"Pomodoro {e.RoundCounter + 1} of 4";
+                            currentPhaseStatusLabel.Text = $"Round {e.RoundCounter + 1} of {GuiRunnerSettings.Default.MaximumRounds + 1}";
                         });
                     }
                     break;
