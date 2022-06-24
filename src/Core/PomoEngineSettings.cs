@@ -2,12 +2,15 @@
 {
     public sealed class PomoEngineSettings
     {
-        public PomoEngineSettings(TimeSpan pomodoroDuration, TimeSpan shortBreakDuration, TimeSpan longBreakDuration)
+        public PomoEngineSettings(int maximumRounds, TimeSpan pomodoroDuration, TimeSpan shortBreakDuration, TimeSpan longBreakDuration)
         {
+            MaximumRounds = maximumRounds;
             PomodoroDuration = pomodoroDuration;
             ShortBreakDuration = shortBreakDuration;
             LongBreakDuration = longBreakDuration;
         }
+
+        public int MaximumRounds { get; set; }
 
         public TimeSpan PomodoroDuration { get; init; }
 

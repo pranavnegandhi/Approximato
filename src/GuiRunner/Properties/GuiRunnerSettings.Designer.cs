@@ -82,5 +82,17 @@ namespace Notadesigner.Tom.App.Properties {
                 this["IsUpgraded"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int MaximumRounds {
+            get {
+                return ((int)(this["MaximumRounds"]));
+            }
+            set {
+                this["MaximumRounds"] = value;
+            }
+        }
     }
 }
