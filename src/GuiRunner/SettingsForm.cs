@@ -10,6 +10,8 @@ namespace Notadesigner.Tom.App
     {
         private readonly bool _isInitialized = false;
 
+        private readonly IList<Tuple<int, int>> AvailableMaximumRounds = new List<Tuple<int, int>>(Enumerable.Range(0, 8).Select(i => new Tuple<int, int>(i, i + 1)));
+
         public SettingsForm()
         {
             InitializeComponent();
@@ -42,6 +44,10 @@ namespace Notadesigner.Tom.App
                 $"{companyAttribute?.Company ?? string.Empty}{Environment.NewLine}" +
                 $"{copyrightAttribute?.Copyright ?? string.Empty}";
             AboutInfoLabel.Text = infoText;
+
+            MaximumRoundsInput.DataSource = AvailableMaximumRounds;
+            MaximumRoundsInput.DisplayMember = "Item2";
+            MaximumRoundsInput.ValueMember = "Item1";
         }
 
         private void PrepareSettingsBindings()
@@ -75,7 +81,10 @@ namespace Notadesigner.Tom.App
                 binding = new Binding(nameof(NumericUpDown.Value), GuiRunnerSettings.Default, nameof(GuiRunnerSettings.LongBreakDuration), true, DataSourceUpdateMode.OnPropertyChanged, true);
                 binding.Format += TimeSpanToMinutesConverter;
                 binding.Parse += MinutesToTimeSpanConverter;
-                LongBreakInput.DataBindings.Add(binding);
+                LongBreakInput.DataBindings.Add(binding); ;
+
+                binding = new Binding(nameof(ComboBox.SelectedValue), GuiRunnerSettings.Default, nameof(GuiRunnerSettings.MaximumRounds), true, DataSourceUpdateMode.OnPropertyChanged, true);
+                MaximumRoundsInput.DataBindings.Add(binding);
 
                 GuiRunnerSettings.Default.PropertyChanged += SettingsPropertyChangedHandler;
             }

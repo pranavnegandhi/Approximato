@@ -38,6 +38,9 @@
             this.EnableAutoAdvance = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.MaximumRoundsLabel = new System.Windows.Forms.Label();
+            this.MaximumRoundsInput = new System.Windows.Forms.ComboBox();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.WorkSessionLabel = new System.Windows.Forms.Label();
             this.WorkSessionInput = new System.Windows.Forms.NumericUpDown();
@@ -53,6 +56,7 @@
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel6.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WorkSessionInput)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
@@ -167,7 +171,7 @@
             this.groupBox1.Controls.Add(this.flowLayoutPanel6);
             this.groupBox1.Location = new System.Drawing.Point(6, 52);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(209, 146);
+            this.groupBox1.Size = new System.Drawing.Size(209, 181);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Duration in Minutes";
@@ -175,21 +179,51 @@
             // flowLayoutPanel6
             // 
             this.flowLayoutPanel6.AutoSize = true;
+            this.flowLayoutPanel6.Controls.Add(this.flowLayoutPanel2);
             this.flowLayoutPanel6.Controls.Add(this.flowLayoutPanel3);
             this.flowLayoutPanel6.Controls.Add(this.flowLayoutPanel4);
             this.flowLayoutPanel6.Controls.Add(this.flowLayoutPanel5);
             this.flowLayoutPanel6.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel6.Location = new System.Drawing.Point(3, 19);
             this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-            this.flowLayoutPanel6.Size = new System.Drawing.Size(200, 105);
+            this.flowLayoutPanel6.Size = new System.Drawing.Size(200, 140);
             this.flowLayoutPanel6.TabIndex = 0;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.AutoSize = true;
+            this.flowLayoutPanel2.Controls.Add(this.MaximumRoundsLabel);
+            this.flowLayoutPanel2.Controls.Add(this.MaximumRoundsInput);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(182, 29);
+            this.flowLayoutPanel2.TabIndex = 7;
+            this.flowLayoutPanel2.WrapContents = false;
+            // 
+            // MaximumRoundsLabel
+            // 
+            this.MaximumRoundsLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.MaximumRoundsLabel.Location = new System.Drawing.Point(3, 7);
+            this.MaximumRoundsLabel.Name = "MaximumRoundsLabel";
+            this.MaximumRoundsLabel.Size = new System.Drawing.Size(90, 15);
+            this.MaximumRoundsLabel.TabIndex = 0;
+            this.MaximumRoundsLabel.Text = "Rounds";
+            // 
+            // MaximumRoundsInput
+            // 
+            this.MaximumRoundsInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MaximumRoundsInput.FormattingEnabled = true;
+            this.MaximumRoundsInput.Location = new System.Drawing.Point(99, 3);
+            this.MaximumRoundsInput.Name = "MaximumRoundsInput";
+            this.MaximumRoundsInput.Size = new System.Drawing.Size(80, 23);
+            this.MaximumRoundsInput.TabIndex = 2;
             // 
             // flowLayoutPanel3
             // 
             this.flowLayoutPanel3.AutoSize = true;
             this.flowLayoutPanel3.Controls.Add(this.WorkSessionLabel);
             this.flowLayoutPanel3.Controls.Add(this.WorkSessionInput);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 38);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
             this.flowLayoutPanel3.Size = new System.Drawing.Size(182, 29);
             this.flowLayoutPanel3.TabIndex = 4;
@@ -232,7 +266,7 @@
             this.flowLayoutPanel4.AutoSize = true;
             this.flowLayoutPanel4.Controls.Add(this.ShortBreakLabel);
             this.flowLayoutPanel4.Controls.Add(this.ShortBreakInput);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 38);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 73);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Size = new System.Drawing.Size(182, 29);
             this.flowLayoutPanel4.TabIndex = 5;
@@ -275,7 +309,7 @@
             this.flowLayoutPanel5.AutoSize = true;
             this.flowLayoutPanel5.Controls.Add(this.LongBreakLabel);
             this.flowLayoutPanel5.Controls.Add(this.LongBreakInput);
-            this.flowLayoutPanel5.Location = new System.Drawing.Point(3, 73);
+            this.flowLayoutPanel5.Location = new System.Drawing.Point(3, 108);
             this.flowLayoutPanel5.Name = "flowLayoutPanel5";
             this.flowLayoutPanel5.Size = new System.Drawing.Size(182, 29);
             this.flowLayoutPanel5.TabIndex = 6;
@@ -336,6 +370,7 @@
             this.groupBox1.PerformLayout();
             this.flowLayoutPanel6.ResumeLayout(false);
             this.flowLayoutPanel6.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.WorkSessionInput)).EndInit();
             this.flowLayoutPanel4.ResumeLayout(false);
@@ -367,5 +402,8 @@
         private NumericUpDown LongBreakInput;
         private Button CloseSettings;
         private Label InstructionsLabel;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private Label MaximumRoundsLabel;
+        private ComboBox MaximumRoundsInput;
     }
 }
