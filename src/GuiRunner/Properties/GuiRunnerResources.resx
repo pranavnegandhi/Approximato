@@ -127,34 +127,19 @@
   <data name="DingDing" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DingDing.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="LONG_BREAK_3" xml:space="preserve">
-    <value>Your last work session is complete. Take a longer break to rejuvenate.</value>
+  <data name="LONG_BREAK" xml:space="preserve">
+    <value>Work session completed.</value>
   </data>
   <data name="MainIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MainIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SHORT_BREAK_0" xml:space="preserve">
-    <value>Time for your first short break.</value>
-  </data>
-  <data name="SHORT_BREAK_1" xml:space="preserve">
-    <value>It's time for your second short break.</value>
-  </data>
-  <data name="SHORT_BREAK_2" xml:space="preserve">
-    <value>Time to take your third short break.</value>
+  <data name="SHORT_BREAK" xml:space="preserve">
+    <value>Work session completed.</value>
   </data>
   <data name="Tick" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tick.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="WORK_SESSION_0" xml:space="preserve">
-    <value>Your first work session has begun.</value>
-  </data>
-  <data name="WORK_SESSION_1" xml:space="preserve">
-    <value>This is your second work session.</value>
-  </data>
-  <data name="WORK_SESSION_2" xml:space="preserve">
-    <value>Your third work session has begun.</value>
-  </data>
-  <data name="WORK_SESSION_3" xml:space="preserve">
-    <value>This is your final work session. Make it count!</value>
+  <data name="WORK_SESSION" xml:space="preserve">
+    <value>Starting a work session.</value>
   </data>
 </root>

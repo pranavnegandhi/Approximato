@@ -15,7 +15,7 @@ namespace Notadesigner.Tom.App
 
         public void Enter(int _)
         {
-            var message = GuiRunnerResources.LONG_BREAK_3;
+            var message = GuiRunnerResources.LONG_BREAK;
 
             _notifyIcon.ContextMenuStrip.Invoke(() =>
             {

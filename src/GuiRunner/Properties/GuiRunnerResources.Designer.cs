@@ -89,11 +89,11 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your last work session is complete. Take a longer break to rejuvenate..
+        ///   Looks up a localized string similar to Work session completed..
         /// </summary>
-        internal static string LONG_BREAK_3 {
+        internal static string LONG_BREAK {
             get {
-                return ResourceManager.GetString("LONG_BREAK_3", resourceCulture);
+                return ResourceManager.GetString("LONG_BREAK", resourceCulture);
             }
         }
         
@@ -108,29 +108,11 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time for your first short break..
+        ///   Looks up a localized string similar to Work session completed..
         /// </summary>
-        internal static string SHORT_BREAK_0 {
+        internal static string SHORT_BREAK {
             get {
-                return ResourceManager.GetString("SHORT_BREAK_0", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to It&apos;s time for your second short break..
-        /// </summary>
-        internal static string SHORT_BREAK_1 {
-            get {
-                return ResourceManager.GetString("SHORT_BREAK_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Time to take your third short break..
-        /// </summary>
-        internal static string SHORT_BREAK_2 {
-            get {
-                return ResourceManager.GetString("SHORT_BREAK_2", resourceCulture);
+                return ResourceManager.GetString("SHORT_BREAK", resourceCulture);
             }
         }
         
@@ -144,38 +126,11 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your first work session has begun..
+        ///   Looks up a localized string similar to Starting a work session..
         /// </summary>
-        internal static string WORK_SESSION_0 {
+        internal static string WORK_SESSION {
             get {
-                return ResourceManager.GetString("WORK_SESSION_0", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This is your second work session..
-        /// </summary>
-        internal static string WORK_SESSION_1 {
-            get {
-                return ResourceManager.GetString("WORK_SESSION_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your third work session has begun..
-        /// </summary>
-        internal static string WORK_SESSION_2 {
-            get {
-                return ResourceManager.GetString("WORK_SESSION_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This is your final work session. Make it count!.
-        /// </summary>
-        internal static string WORK_SESSION_3 {
-            get {
-                return ResourceManager.GetString("WORK_SESSION_3", resourceCulture);
+                return ResourceManager.GetString("WORK_SESSION", resourceCulture);
             }
         }
     }

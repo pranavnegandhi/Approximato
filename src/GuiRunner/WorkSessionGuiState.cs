@@ -25,24 +25,7 @@ namespace Notadesigner.Tom.App
 
         public void Enter(int roundCounter)
         {
-            string message;
-
-            if (roundCounter == 0)
-            {
-                message = GuiRunnerResources.WORK_SESSION_0;
-            }
-            else if (roundCounter == 1)
-            {
-                message = GuiRunnerResources.WORK_SESSION_1;
-            }
-            else if (roundCounter == 2)
-            {
-                message = GuiRunnerResources.WORK_SESSION_2;
-            }
-            else
-            {
-                message = GuiRunnerResources.WORK_SESSION_3;
-            }
+            var message = GuiRunnerResources.WORK_SESSION;
 
             _notifyIcon.ContextMenuStrip.Invoke(() =>
             {

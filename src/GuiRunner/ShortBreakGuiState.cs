@@ -15,20 +15,7 @@ namespace Notadesigner.Tom.App
 
         public void Enter(int roundCounter)
         {
-            string message;
-
-            if (roundCounter == 0)
-            {
-                message = GuiRunnerResources.SHORT_BREAK_0;
-            }
-            else if (roundCounter == 1)
-            {
-                message = GuiRunnerResources.SHORT_BREAK_1;
-            }
-            else
-            {
-                message = GuiRunnerResources.SHORT_BREAK_2;
-            }
+            var message = GuiRunnerResources.SHORT_BREAK;
 
             _notifyIcon.ContextMenuStrip.Invoke(() =>
             {
