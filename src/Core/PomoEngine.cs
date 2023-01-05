@@ -3,7 +3,7 @@ using Serilog;
 
 namespace Notadesigner.Tom.Core
 {
-    public class PomoEngine : IHostedService
+    public class PomoEngine : BackgroundService
     {
         public event EventHandler<ProgressEventArgs>? Progress;
 
@@ -30,20 +30,10 @@ namespace Notadesigner.Tom.Core
             _engineState = new AppReadyState(0, _settingsFactory, _queue);
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public override Task StartAsync(CancellationToken cancellationToken)
         {
             _log.Verbose("Starting {serviceName}", nameof(PomoEngine));
-            await Task.CompletedTask;
-            _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            _execute = ExecuteAsync(_cts.Token);
-        }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            _cts?.Cancel();
-            _ = _execute ?? throw new InvalidOperationException();
-
-            await _execute;
+            return base.StartAsync(cancellationToken);
         }
 
         public void MoveNext()
@@ -58,7 +48,7 @@ namespace Notadesigner.Tom.Core
 
         public EngineState State => _engineState.State;
 
-        private async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             _log.Verbose("Executing {serviceName}", nameof(PomoEngine));
             while (!cancellationToken.IsCancellationRequested)
