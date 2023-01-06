@@ -1,15 +1,19 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Serilog;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Notadesigner.Tom.Core
 {
-    public class PomoEngine : BackgroundService
+    public class PomoEngine : BackgroundService, INotifyPropertyChanged
     {
         public event EventHandler<ProgressEventArgs>? Progress;
 
         public event EventHandler<StateChangeEventArgs>? StateChange;
 
         public event EventHandler<EventArgs>? StartSession;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly ILogger _log = Log.ForContext<PomoEngine>();
 
@@ -21,7 +25,9 @@ namespace Notadesigner.Tom.Core
 
         private CancellationTokenSource? _cts;
 
-        private Task? _execute;
+        private TimeSpan _elapsedDuration;
+
+        private TimeSpan _totalDuration;
 
         public PomoEngine(Func<PomoEngineSettings> settingsFactory, NotificationsQueue queue)
         {
@@ -33,6 +39,7 @@ namespace Notadesigner.Tom.Core
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             _log.Verbose("Starting {serviceName}", nameof(PomoEngine));
+
             return base.StartAsync(cancellationToken);
         }
 
@@ -47,6 +54,36 @@ namespace Notadesigner.Tom.Core
         }
 
         public EngineState State => _engineState.State;
+
+        public TimeSpan ElapsedDuration
+        {
+            get => _elapsedDuration;
+
+            set
+            {
+                if (value != _elapsedDuration)
+                {
+                    _elapsedDuration = value;
+
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public TimeSpan TotalDuration
+        {
+            get => _totalDuration;
+
+            set
+            {
+                if (value != _totalDuration)
+                {
+                    _totalDuration = value;
+
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
@@ -76,7 +113,13 @@ namespace Notadesigner.Tom.Core
 
         private void EngineStateProgressHandler(object? sender, ProgressEventArgs e)
         {
-            Progress?.Invoke(this, e);
+            ElapsedDuration = e.ElapsedDuration;
+            TotalDuration = e.TotalDuration;
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Notadesigner.Tom.App.Properties;
 using Notadesigner.Tom.Core;
-using System.Diagnostics;
 
 namespace Notadesigner.Tom.App
 {
@@ -54,6 +53,12 @@ namespace Notadesigner.Tom.App
                 Visible = true
             };
 
+            var binding = new Binding(nameof(App.MainForm.TotalDuration), _engine, nameof(PomoEngine.TotalDuration), false);
+            _mainForm.DataBindings.Add(binding);
+
+            binding = new Binding(nameof(App.MainForm.ElapsedDuration), _engine, nameof(PomoEngine.ElapsedDuration), false);
+            _mainForm.DataBindings.Add(binding);
+
             _notifyIcon.MouseClick += NotifyIconMouseClickHandler;
 
             EngineGuiStateMap.Add(EngineState.AppReady, new AppReadyGuiState(_startMenu));
@@ -88,6 +93,9 @@ namespace Notadesigner.Tom.App
 
         private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
         {
+            _mainForm.EngineState = e.State;
+            _mainForm.RoundCounter = e.RoundCounter;
+
             switch (e.State)
             {
                 case EngineState.BreakCompleted:
