@@ -5,11 +5,11 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{FF29C209-4E30-4DA7-85CA-961AF398636F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuiRunner", "GuiRunner\GuiRunner.csproj", "{3BC50504-FE64-4440-A580-1F21495ED0E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CircularProgressBar", "CircularProgressBar\CircularProgressBar.csproj", "{8C96CCC6-98C7-434C-8800-0EE08F9D0302}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularProgressBar", "CircularProgressBar\CircularProgressBar.csproj", "{8C96CCC6-98C7-434C-8800-0EE08F9D0302}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormAnimation", "WinFormAnimation\WinFormAnimation.csproj", "{554AF8D8-EEAA-4585-9A6B-69C9E5338DA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormAnimation", "WinFormAnimation\WinFormAnimation.csproj", "{554AF8D8-EEAA-4585-9A6B-69C9E5338DA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Windows", "Notadesigner.Tom.Windows\Notadesigner.Tom.Windows.csproj", "{2109654E-D07A-4059-B71B-A0955D343502}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{FF29C209-4E30-4DA7-85CA-961AF398636F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF29C209-4E30-4DA7-85CA-961AF398636F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF29C209-4E30-4DA7-85CA-961AF398636F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BC50504-FE64-4440-A580-1F21495ED0E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BC50504-FE64-4440-A580-1F21495ED0E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BC50504-FE64-4440-A580-1F21495ED0E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BC50504-FE64-4440-A580-1F21495ED0E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C96CCC6-98C7-434C-8800-0EE08F9D0302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C96CCC6-98C7-434C-8800-0EE08F9D0302}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C96CCC6-98C7-434C-8800-0EE08F9D0302}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{554AF8D8-EEAA-4585-9A6B-69C9E5338DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{554AF8D8-EEAA-4585-9A6B-69C9E5338DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{554AF8D8-EEAA-4585-9A6B-69C9E5338DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2109654E-D07A-4059-B71B-A0955D343502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2109654E-D07A-4059-B71B-A0955D343502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2109654E-D07A-4059-B71B-A0955D343502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2109654E-D07A-4059-B71B-A0955D343502}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
