@@ -23,6 +23,13 @@ namespace Notadesigner.Tom.App
 
         public GuiRunnerContext(PomoEngine engine, MainForm mainForm, SettingsForm settingsForm)
         {
+            _notifyIcon = new NotifyIcon
+            {
+                ContextMenuStrip = _contextMenu,
+                Icon = GuiRunnerResources.MainIcon,
+                Visible = true
+            };
+
             _engine = engine;
             _engine.Progress += (s, e) => _notifyIcon.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}"; ;
             _engine.StateChange += EngineStateChangeHandler;
@@ -50,13 +57,6 @@ namespace Notadesigner.Tom.App
             var exitMenu = new ToolStripMenuItem("E&xit…");
             exitMenu.Click += ExitMenuClickHandler;
             _contextMenu.Items.Add(exitMenu);
-
-            _notifyIcon = new NotifyIcon
-            {
-                ContextMenuStrip = _contextMenu,
-                Icon = GuiRunnerResources.MainIcon,
-                Visible = true
-            };
 
             var binding = new Binding(nameof(App.MainForm.TotalDuration), _engine, nameof(PomoEngine.TotalDuration), false);
             _mainForm.DataBindings.Add(binding);
