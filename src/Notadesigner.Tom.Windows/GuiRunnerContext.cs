@@ -7,8 +7,6 @@ namespace Notadesigner.Tom.App
     {
         private readonly PomoEngine _engine;
 
-        private readonly MainForm _mainForm;
-
         private readonly SettingsForm _settingsForm;
 
         private readonly NotifyIcon _notifyIcon;
@@ -34,8 +32,8 @@ namespace Notadesigner.Tom.App
             _engine.Progress += (s, e) => _notifyIcon.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}"; ;
             _engine.StateChange += EngineStateChangeHandler;
 
-            _mainForm = mainForm;
-            _mainForm.FormClosing += FormClosingHandler;
+            MainForm = mainForm;
+            MainForm.FormClosing += FormClosingHandler;
 
             _settingsForm = settingsForm;
 
@@ -59,10 +57,10 @@ namespace Notadesigner.Tom.App
             _contextMenu.Items.Add(exitMenu);
 
             var binding = new Binding(nameof(App.MainForm.TotalDuration), _engine, nameof(PomoEngine.TotalDuration), false);
-            _mainForm.DataBindings.Add(binding);
+            MainForm.DataBindings.Add(binding);
 
             binding = new Binding(nameof(App.MainForm.ElapsedDuration), _engine, nameof(PomoEngine.ElapsedDuration), false);
-            _mainForm.DataBindings.Add(binding);
+            MainForm.DataBindings.Add(binding);
 
             _notifyIcon.MouseClick += NotifyIconMouseClickHandler;
 
@@ -85,21 +83,31 @@ namespace Notadesigner.Tom.App
         {
             if (e.Button == MouseButtons.Left)
             {
-                _mainForm.Show();
-                _mainForm.BringToFront();
+                MainForm?.Show();
+                MainForm?.BringToFront();
             }
+        }
+
+        protected override void OnMainFormClosed(object? sender, EventArgs e)
+        {
         }
 
         private void FormClosingHandler(object? sender, FormClosingEventArgs e)
         {
-            _mainForm.Hide();
+            MainForm?.Hide();
             e.Cancel = true;
         }
 
         private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
         {
-            _mainForm.EngineState = e.State;
-            _mainForm.RoundCounter = e.RoundCounter;
+            if (MainForm is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var mainForm = (MainForm)MainForm;
+            mainForm.EngineState = e.State;
+            mainForm.RoundCounter = e.RoundCounter;
 
             switch (e.State)
             {
