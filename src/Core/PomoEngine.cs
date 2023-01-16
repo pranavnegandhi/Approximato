@@ -11,8 +11,6 @@ namespace Notadesigner.Tom.Core
 
         public event EventHandler<StateChangeEventArgs>? StateChange;
 
-        public event EventHandler<EventArgs>? StartSession;
-
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly ILogger _log = Log.ForContext<PomoEngine>();
@@ -45,11 +43,6 @@ namespace Notadesigner.Tom.Core
 
         public void MoveNext()
         {
-            if (_engineState.State == EngineState.AppReady)
-            {
-                StartSession?.Invoke(this, EventArgs.Empty);
-            }
-
             _engineState.MoveNext();
         }
 
