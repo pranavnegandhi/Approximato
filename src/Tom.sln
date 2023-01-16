@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{FF29C209-4E30-4DA7-85CA-961AF398636F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CircularProgressBar", "CircularProgressBar\CircularProgressBar.csproj", "{8C96CCC6-98C7-434C-8800-0EE08F9D0302}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormAnimation", "WinFormAnimation\WinFormAnimation.csproj", "{554AF8D8-EEAA-4585-9A6B-69C9E5338DA6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Windows", "Notadesigner.Tom.Windows\Notadesigner.Tom.Windows.csproj", "{2109654E-D07A-4059-B71B-A0955D343502}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Core", "Notadesigner.Tom.Core\Notadesigner.Tom.Core.csproj", "{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FF29C209-4E30-4DA7-85CA-961AF398636F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF29C209-4E30-4DA7-85CA-961AF398636F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF29C209-4E30-4DA7-85CA-961AF398636F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF29C209-4E30-4DA7-85CA-961AF398636F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C96CCC6-98C7-434C-8800-0EE08F9D0302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C96CCC6-98C7-434C-8800-0EE08F9D0302}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C96CCC6-98C7-434C-8800-0EE08F9D0302}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{2109654E-D07A-4059-B71B-A0955D343502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2109654E-D07A-4059-B71B-A0955D343502}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2109654E-D07A-4059-B71B-A0955D343502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
