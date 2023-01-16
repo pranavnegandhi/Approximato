@@ -22,7 +22,7 @@
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    return;
+                    break;
                 }
             }
 
