@@ -21,7 +21,7 @@ namespace Notadesigner.Tom.Core
 
         private IEngineState _engineState;
 
-        private CancellationTokenSource? _cts;
+        private CancellationTokenSource _engineStateCts = new();
 
         private TimeSpan _elapsedDuration;
 
@@ -39,6 +39,18 @@ namespace Notadesigner.Tom.Core
             _log.Verbose("Starting {serviceName}", nameof(PomoEngine));
 
             return base.StartAsync(cancellationToken);
+        }
+
+        public async Task ResetAsync()
+        {
+            if (_engineState.State == EngineState.AppReady)
+            {
+                return;
+            }
+
+            _engineStateCts.Cancel();
+            await Task.Delay(TimeSpan.FromSeconds(2)); /// Stupid hack to get around multi-threaded operations, I think
+            _engineStateCts = new CancellationTokenSource();
         }
 
         public void MoveNext()
@@ -85,7 +97,7 @@ namespace Notadesigner.Tom.Core
             {
                 try
                 {
-                    await _engineState.EnterAsync(cancellationToken);
+                    await _engineState.EnterAsync(_engineStateCts.Token);
                     var notification = await _queue.DequeueAsync(cancellationToken);
                     _engineState.Progress -= EngineStateProgressHandler; /// Stop listening for Progress events from the current state instance
                     _engineState = notification?.State ?? throw new InvalidOperationException();

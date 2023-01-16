@@ -36,13 +36,18 @@ namespace Notadesigner.Tom.App
             _startMenu.Click += (s, e) => _engine.MoveNext();
             _contextMenu.Items.Add(_startMenu);
 
+            var resetMenu = new ToolStripMenuItem("&Reset…");
+            resetMenu.Enabled = false;
+            resetMenu.Click += ResetMenuClickHandlerAsync;
+            _contextMenu.Items.Add(resetMenu);
+
             var settingsMenu = new ToolStripMenuItem("S&ettings…");
             settingsMenu.Click += SettingsClickHandler;
             _contextMenu.Items.Add(settingsMenu);
 
             _contextMenu.Items.Add(new ToolStripSeparator());
 
-            var exitMenu = new ToolStripMenuItem("E&xit");
+            var exitMenu = new ToolStripMenuItem("E&xit…");
             exitMenu.Click += ExitMenuClickHandler;
             _contextMenu.Items.Add(exitMenu);
 
@@ -61,8 +66,8 @@ namespace Notadesigner.Tom.App
 
             _notifyIcon.MouseClick += NotifyIconMouseClickHandler;
 
-            EngineGuiStateMap.Add(EngineState.AppReady, new AppReadyGuiState(_startMenu));
-            EngineGuiStateMap.Add(EngineState.WorkSession, new WorkSessionGuiState(_notifyIcon));
+            EngineGuiStateMap.Add(EngineState.AppReady, new AppReadyGuiState(_startMenu, resetMenu));
+            EngineGuiStateMap.Add(EngineState.WorkSession, new WorkSessionGuiState(_startMenu, resetMenu, _notifyIcon));
             EngineGuiStateMap.Add(EngineState.ShortBreak, new ShortBreakGuiState(_notifyIcon));
             EngineGuiStateMap.Add(EngineState.LongBreak, new LongBreakGuiState(_notifyIcon));
 
@@ -129,6 +134,16 @@ namespace Notadesigner.Tom.App
             _guiState.Exit();
             _guiState = guiState;
             _guiState.Enter(e.RoundCounter);
+        }
+
+        private async void ResetMenuClickHandlerAsync(object? sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Reset the Pomodoro?", "Tom", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                await _engine.ResetAsync();
+            }
         }
 
         private void SettingsClickHandler(object? sender, EventArgs e)

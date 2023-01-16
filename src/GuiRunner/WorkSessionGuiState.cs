@@ -7,14 +7,20 @@ namespace Notadesigner.Tom.App
     {
         private readonly NotifyIcon _notifyIcon;
 
+        private readonly ToolStripMenuItem _startMenu;
+
+        private readonly ToolStripMenuItem _resetMenu;
+
         private readonly SoundPlayer _tickPlayer;
 
         private readonly SoundPlayer _enterSound;
 
         private readonly SoundPlayer _exitSound;
 
-        public WorkSessionGuiState(NotifyIcon notifyIcon)
+        public WorkSessionGuiState(ToolStripMenuItem startMenu, ToolStripMenuItem resetMenu, NotifyIcon notifyIcon)
         {
+            _startMenu = startMenu;
+            _resetMenu = resetMenu;
             _notifyIcon = notifyIcon;
             _tickPlayer = new(GuiRunnerResources.Tick);
             _enterSound = new(GuiRunnerResources.Ding);
@@ -27,10 +33,11 @@ namespace Notadesigner.Tom.App
         {
             var message = GuiRunnerResources.WORK_SESSION;
 
-            _notifyIcon.ContextMenuStrip.Invoke(() =>
+            _startMenu.Owner.Invoke(() =>
             {
+                _startMenu.Enabled = false;
+                _resetMenu.Enabled = true;
                 _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
-                _notifyIcon.ContextMenuStrip.Items[0].Enabled = false;
             });
 
             Task.Run(() => _enterSound.PlaySync())

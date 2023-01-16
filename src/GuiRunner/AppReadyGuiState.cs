@@ -4,9 +4,12 @@
     {
         private readonly ToolStripMenuItem _startMenu;
 
-        public AppReadyGuiState(ToolStripMenuItem startMenu)
+        private readonly ToolStripMenuItem _resetMenu;
+
+        public AppReadyGuiState(ToolStripMenuItem startMenu, ToolStripMenuItem resetMenu)
         {
             _startMenu = startMenu;
+            _resetMenu = resetMenu;
         }
 
         public GuiState State => GuiState.AppReady;
@@ -16,6 +19,7 @@
             _startMenu.Owner.Invoke(() =>
             {
                 _startMenu.Enabled = true;
+                _resetMenu.Enabled = false;
             });
         }
     }
