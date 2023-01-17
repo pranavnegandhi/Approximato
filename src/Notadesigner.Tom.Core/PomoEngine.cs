@@ -109,6 +109,10 @@ namespace Notadesigner.Tom.Core
                 {
                     /// Nothing to do here
                 }
+                catch (OperationCanceledException)
+                {
+                    /// Nothing to do here
+                }
                 catch (Exception exception)
                 {
                     _log.Fatal(exception, "A fatal exception occured in the {serviceName}", nameof(PomoEngine));

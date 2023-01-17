@@ -13,8 +13,6 @@ namespace Notadesigner.Tom.App
 
         private readonly ContextMenuStrip _contextMenu = new();
 
-        private readonly ToolStripMenuItem _startMenu;
-
         private readonly Dictionary<EngineState, IGuiState> EngineGuiStateMap = new();
 
         private IGuiState _guiState;
@@ -37,9 +35,14 @@ namespace Notadesigner.Tom.App
 
             _settingsForm = settingsForm;
 
-            _startMenu = new ToolStripMenuItem("&Start");
-            _startMenu.Click += (s, e) => _engine.MoveNext();
-            _contextMenu.Items.Add(_startMenu);
+            var startMenu = new ToolStripMenuItem("&Start");
+            startMenu.Click += (s, e) => _engine.MoveNext();
+            _contextMenu.Items.Add(startMenu);
+
+            var continueMenu = new ToolStripMenuItem("&Continue");
+            continueMenu.Enabled = false;
+            continueMenu.Click += (s, e) => _engine.MoveNext();
+            _contextMenu.Items.Add(continueMenu);
 
             var resetMenu = new ToolStripMenuItem("&Reset…");
             resetMenu.Enabled = false;
@@ -64,10 +67,12 @@ namespace Notadesigner.Tom.App
 
             _notifyIcon.MouseClick += NotifyIconMouseClickHandler;
 
-            EngineGuiStateMap.Add(EngineState.AppReady, new AppReadyGuiState(_startMenu, resetMenu));
-            EngineGuiStateMap.Add(EngineState.WorkSession, new WorkSessionGuiState(_startMenu, resetMenu, _notifyIcon));
-            EngineGuiStateMap.Add(EngineState.ShortBreak, new ShortBreakGuiState(_notifyIcon));
-            EngineGuiStateMap.Add(EngineState.LongBreak, new LongBreakGuiState(_notifyIcon));
+            EngineGuiStateMap.Add(EngineState.AppReady, new AppReadyGuiState(startMenu, continueMenu, resetMenu));
+            EngineGuiStateMap.Add(EngineState.WorkSession, new WorkSessionGuiState(startMenu, continueMenu, resetMenu, _notifyIcon));
+            EngineGuiStateMap.Add(EngineState.WorkCompleted, new WorkCompletedGuiState(startMenu, continueMenu, resetMenu, _notifyIcon));
+            EngineGuiStateMap.Add(EngineState.ShortBreak, new ShortBreakGuiState(startMenu, continueMenu, resetMenu));
+            EngineGuiStateMap.Add(EngineState.BreakCompleted, new BreakCompletedGuiState(startMenu, continueMenu, resetMenu, _notifyIcon));
+            EngineGuiStateMap.Add(EngineState.LongBreak, new LongBreakGuiState(startMenu, continueMenu, resetMenu));
 
             _guiState = EngineGuiStateMap[EngineState.AppReady];
         }
@@ -116,10 +121,6 @@ namespace Notadesigner.Tom.App
                     {
                         _engine.MoveNext();
                     }
-                    else
-                    {
-                    }
-
                     break;
 
                 case EngineState.WorkCompleted:
@@ -127,10 +128,6 @@ namespace Notadesigner.Tom.App
                     {
                         _engine.MoveNext();
                     }
-                    else
-                    {
-                    }
-
                     break;
             }
 

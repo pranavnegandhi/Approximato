@@ -71,6 +71,15 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Break completed..
+        /// </summary>
+        internal static string BREAK_COMPLETED {
+            get {
+                return ResourceManager.GetString("BREAK_COMPLETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Ding {
@@ -89,15 +98,6 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Work session completed..
-        /// </summary>
-        internal static string LONG_BREAK {
-            get {
-                return ResourceManager.GetString("LONG_BREAK", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon MainIcon {
@@ -108,20 +108,20 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Work session completed..
-        /// </summary>
-        internal static string SHORT_BREAK {
-            get {
-                return ResourceManager.GetString("SHORT_BREAK", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Tick {
             get {
                 return ResourceManager.GetStream("Tick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Work session completed..
+        /// </summary>
+        internal static string WORK_COMPLETED {
+            get {
+                return ResourceManager.GetString("WORK_COMPLETED", resourceCulture);
             }
         }
         
