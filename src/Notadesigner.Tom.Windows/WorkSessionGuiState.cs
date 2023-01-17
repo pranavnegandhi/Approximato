@@ -9,6 +9,8 @@ namespace Notadesigner.Tom.App
 
         private readonly ToolStripMenuItem _startMenu;
 
+        private readonly ToolStripMenuItem _continueMenu;
+
         private readonly ToolStripMenuItem _resetMenu;
 
         private readonly SoundPlayer _tickPlayer;
@@ -17,9 +19,10 @@ namespace Notadesigner.Tom.App
 
         private readonly SoundPlayer _exitSound;
 
-        public WorkSessionGuiState(ToolStripMenuItem startMenu, ToolStripMenuItem resetMenu, NotifyIcon notifyIcon)
+        public WorkSessionGuiState(ToolStripMenuItem startMenu, ToolStripMenuItem continueMenu, ToolStripMenuItem resetMenu, NotifyIcon notifyIcon)
         {
             _startMenu = startMenu;
+            _continueMenu = continueMenu;
             _resetMenu = resetMenu;
             _notifyIcon = notifyIcon;
             _tickPlayer = new(GuiRunnerResources.Tick);
@@ -36,6 +39,7 @@ namespace Notadesigner.Tom.App
             _startMenu.Owner.Invoke(() =>
             {
                 _startMenu.Enabled = false;
+                _continueMenu.Enabled = false;
                 _resetMenu.Enabled = true;
                 _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
             });

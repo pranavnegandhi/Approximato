@@ -1,25 +1,29 @@
-﻿using Notadesigner.Tom.App.Properties;
-
-namespace Notadesigner.Tom.App
+﻿namespace Notadesigner.Tom.App
 {
     public class ShortBreakGuiState : IGuiState
     {
-        private readonly NotifyIcon _notifyIcon;
+        private readonly ToolStripMenuItem _startMenu;
 
-        public ShortBreakGuiState(NotifyIcon notifyIcon)
+        private readonly ToolStripMenuItem _continueMenu;
+
+        private readonly ToolStripMenuItem _resetMenu;
+
+        public ShortBreakGuiState(ToolStripMenuItem startMenu, ToolStripMenuItem continueMenu, ToolStripMenuItem resetMenu)
         {
-            _notifyIcon = notifyIcon;
+            _startMenu = startMenu;
+            _continueMenu = continueMenu;
+            _resetMenu = resetMenu;
         }
 
         public GuiState State => GuiState.WorkSession;
 
         public void Enter(int roundCounter)
         {
-            var message = GuiRunnerResources.SHORT_BREAK;
-
-            _notifyIcon.ContextMenuStrip.Invoke(() =>
+            _startMenu.Owner.Invoke(() =>
             {
-                _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+                _startMenu.Enabled = false;
+                _continueMenu.Enabled = false;
+                _resetMenu.Enabled = true;
             });
         }
     }

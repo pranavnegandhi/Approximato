@@ -4,11 +4,14 @@
     {
         private readonly ToolStripMenuItem _startMenu;
 
+        private readonly ToolStripMenuItem _continueMenu;
+
         private readonly ToolStripMenuItem _resetMenu;
 
-        public AppReadyGuiState(ToolStripMenuItem startMenu, ToolStripMenuItem resetMenu)
+        public AppReadyGuiState(ToolStripMenuItem startMenu, ToolStripMenuItem continueMenu, ToolStripMenuItem resetMenu)
         {
             _startMenu = startMenu;
+            _continueMenu = continueMenu;
             _resetMenu = resetMenu;
         }
 
@@ -19,6 +22,7 @@
             _startMenu.Owner.Invoke(() =>
             {
                 _startMenu.Enabled = true;
+                _continueMenu.Enabled = false;
                 _resetMenu.Enabled = false;
             });
         }
