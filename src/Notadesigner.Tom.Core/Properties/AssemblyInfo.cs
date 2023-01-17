@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("1b1a39bc-5791-43a7-9eb9-4dcfbadaab9f")]
 [assembly: AssemblyTitle("Tom – Time Manager Core")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("notadesigner.com")]
