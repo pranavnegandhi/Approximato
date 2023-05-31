@@ -10,7 +10,7 @@ namespace Notadesigner.Tom.App
     {
         private readonly bool _isInitialized = false;
 
-        private readonly IList<Tuple<int, int>> AvailableMaximumRounds = new List<Tuple<int, int>>(Enumerable.Range(0, 8).Select(i => new Tuple<int, int>(i, i + 1)));
+        private readonly IList<Tuple<int, int>> AvailableMaximumRounds = new List<Tuple<int, int>>(Enumerable.Range(1, 8).Select(i => new Tuple<int, int>(i, i)));
 
         public SettingsForm()
         {
