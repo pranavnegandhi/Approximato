@@ -243,11 +243,11 @@ namespace Notadesigner.Tom.App
         }
 
         private void SettingsClickHandler(object? sender, EventArgs e)
-            {
+        {
             if (_settingsForm.Visible)
-                    {
+            {
                 _settingsForm.Focus();
-                    }
+            }
             else
             {
                 _settingsForm.ShowDialog();
@@ -259,20 +259,20 @@ namespace Notadesigner.Tom.App
             var result = DialogResult.Yes;
 
             if (TimerState != TimerState.Begin)
-                    {
+            {
                 result = MessageBox.Show("Halt Pomodoro and exit?", "Tom", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    }
+            }
 
             if (result == DialogResult.Yes)
             {
                 ExitThread();
             }
-            }
+        }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-            {
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
+        }
 
         private async Task UpdateTransitionAsync()
         {
@@ -280,7 +280,7 @@ namespace Notadesigner.Tom.App
             {
                 var @event = await _transitionChannel.Reader.ReadAsync();
                 TimerState = @event.TimerState;
-        }
+            }
         }
 
         private async Task UpdateTimerAsync()
@@ -300,45 +300,45 @@ namespace Notadesigner.Tom.App
             stateMachine.Configure(TimerState.Abandoned)
                 .OnEntry(() =>
             {
-                    /// What to do when the pomodoro is abandoned?
-                })
+                /// What to do when the pomodoro is abandoned?
+            })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
             stateMachine.Configure(TimerState.Begin)
                 .OnEntry(() =>
             {
-                    /// What to do before the pomodoro begins?
-                    _startMenu.Enabled = true;
-                    _interruptMenu.Enabled = false;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = false;
-                    _resetMenu.Enabled = false;
-                })
+                /// What to do before the pomodoro begins?
+                _startMenu.Enabled = true;
+                _interruptMenu.Enabled = false;
+                _continueMenu.Enabled = false;
+                _abandonMenu.Enabled = false;
+                _resetMenu.Enabled = false;
+            })
                 .Permit(TimerTrigger.Focus, TimerState.Focused)
                 .PermitReentry(TimerTrigger.Reset); /// Explicitly allowed to easily set UI state on application startup
 
             stateMachine.Configure(TimerState.End)
                 .OnEntry(() =>
         {
-                    /// What to do when the pomodoro ends?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = false;
-                    _resetMenu.Enabled = true;
-                })
+            /// What to do when the pomodoro ends?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = false;
+            _continueMenu.Enabled = false;
+            _abandonMenu.Enabled = false;
+            _resetMenu.Enabled = true;
+        })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
             stateMachine.Configure(TimerState.Finished)
                 .OnEntry(() =>
             {
-                    /// What to do when a focus is finished?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _continueMenu.Enabled = true;
-                    _abandonMenu.Enabled = true;
-                    _resetMenu.Enabled = false;
-                })
+                /// What to do when a focus is finished?
+                _startMenu.Enabled = false;
+                _interruptMenu.Enabled = false;
+                _continueMenu.Enabled = true;
+                _abandonMenu.Enabled = true;
+                _resetMenu.Enabled = false;
+            })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .PermitIf(TimerTrigger.Continue, TimerState.Stopped, () => TimerState == TimerState.Stopped)
                 .PermitIf(TimerTrigger.Continue, TimerState.Relaxed, () => TimerState == TimerState.Relaxed);
@@ -346,20 +346,20 @@ namespace Notadesigner.Tom.App
             stateMachine.Configure(TimerState.Focused)
                 .OnEntry(() =>
             {
-                    /// What to do when entering a focus?
-                    var message = GuiRunnerResources.WORK_SESSION;
+                /// What to do when entering a focus?
+                var message = GuiRunnerResources.WORK_SESSION;
 
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = true;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = true;
-                    _resetMenu.Enabled = false;
+                _startMenu.Enabled = false;
+                _interruptMenu.Enabled = true;
+                _continueMenu.Enabled = false;
+                _abandonMenu.Enabled = true;
+                _resetMenu.Enabled = false;
 
-                    _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+                _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
 
-                    Task.Run(() => _enterSound.PlaySync())
-                        .ContinueWith(state => _tickPlayer.PlayLooping());
-                })
+                Task.Run(() => _enterSound.PlaySync())
+                    .ContinueWith(state => _tickPlayer.PlayLooping());
+            })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Interrupt, TimerState.Interrupted)
                 .Permit(TimerTrigger.Timeout, TimerState.Finished);
@@ -414,6 +414,6 @@ namespace Notadesigner.Tom.App
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Timeout, TimerState.End);
-            }
         }
+    }
 }

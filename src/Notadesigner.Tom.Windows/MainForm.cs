@@ -177,6 +177,8 @@ namespace Notadesigner.Tom.App
 
                 case TimerState.Focused:
                     _activeProgressBar = _workProgressBar;
+                    ElapsedDuration = TimeSpan.Zero;
+                    TotalDuration = TimeSpan.Zero;
                     break;
 
                 case TimerState.Interrupted:
@@ -190,6 +192,8 @@ namespace Notadesigner.Tom.App
                 case TimerState.Relaxed:
                 case TimerState.Stopped:
                     _activeProgressBar = _breakProgressBar;
+                    ElapsedDuration = TimeSpan.Zero;
+                    TotalDuration = TimeSpan.Zero;
                     break;
 
                 case TimerState.End:
