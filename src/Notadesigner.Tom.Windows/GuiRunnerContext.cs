@@ -38,6 +38,8 @@ namespace Notadesigner.Tom.App
 
         private TimeSpan _totalDuration;
 
+        private int _focusCounter;
+
         private TimerState _timerState;
 
         private readonly SoundPlayer _tickPlayer;
@@ -107,6 +109,9 @@ namespace Notadesigner.Tom.App
             binding = new Binding(nameof(App.MainForm.TotalDuration), this, nameof(TotalDuration), false);
             MainForm.DataBindings.Add(binding);
 
+            binding = new Binding(nameof(App.MainForm.FocusCounter), this, nameof(FocusCounter), false);
+            MainForm.DataBindings.Add(binding);
+
             binding = new Binding(nameof(App.MainForm.TimerState), this, nameof(TimerState), false);
             MainForm.DataBindings.Add(binding);
 
@@ -146,6 +151,21 @@ namespace Notadesigner.Tom.App
                 if (value != _elapsedDuration)
                 {
                     _elapsedDuration = value;
+
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int FocusCounter
+        {
+            get => _focusCounter;
+
+            set
+            {
+                if (value != _focusCounter)
+                {
+                    _focusCounter = value;
 
                     OnPropertyChanged();
                 }
@@ -279,6 +299,7 @@ namespace Notadesigner.Tom.App
             while (await _transitionChannel.Reader.WaitToReadAsync())
             {
                 var @event = await _transitionChannel.Reader.ReadAsync();
+                FocusCounter = @event.FocusCounter;
                 TimerState = @event.TimerState;
             }
         }

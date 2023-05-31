@@ -15,7 +15,7 @@ namespace Notadesigner.Tom.App
 
         private TimeSpan _totalDuration = TimeSpan.Zero;
 
-        private int _roundCounter = 0;
+        private int _focusCounter = 0;
 
         private TimerState _timerState = TimerState.Begin;
 
@@ -87,18 +87,18 @@ namespace Notadesigner.Tom.App
             }
         }
 
-        public int RoundCounter
+        public int FocusCounter
         {
-            get => _roundCounter;
+            get => _focusCounter;
 
             set
             {
-                if (_roundCounter == value)
+                if (_focusCounter == value)
                 {
                     return;
                 }
 
-                _roundCounter = value;
+                _focusCounter = value;
                 if (InvokeRequired)
                 {
                     Invoke(() => SetRoundCounter(value));
@@ -203,7 +203,7 @@ namespace Notadesigner.Tom.App
 
         private void SetRoundCounter(int value)
         {
-            currentPhaseStatusLabel.Text = $"Round {value + 1} of {GuiRunnerSettings.Default.MaximumRounds + 1}";
+            currentPhaseStatusLabel.Text = $"Round {value} of {GuiRunnerSettings.Default.MaximumRounds}";
         }
     }
 }

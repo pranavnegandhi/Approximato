@@ -47,21 +47,18 @@ namespace Notadesigner.Tom.Core
             tomo.OnTransitioned(transition => { });
 
             tomo.Configure(TimerState.Abandoned)
-                .OnEntry(() => _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.Abandoned)));
+                .OnEntry(() => _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.Abandoned, _focusCounter)));
 
             tomo.Configure(TimerState.Begin)
                 .OnEntry(() =>
                 {
                     _focusCounter = 0;
-                    _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.Begin));
+                    _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.Begin, _focusCounter));
                 })
                 .Permit(TimerTrigger.Focus, TimerState.Focused);
 
             tomo.Configure(TimerState.End)
-                .OnEntry(() =>
-                {
-                    _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.End));
-                })
+                .OnEntry(() => _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.End, _focusCounter)))
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
             tomo.Configure(TimerState.Finished)
@@ -97,7 +94,7 @@ namespace Notadesigner.Tom.Core
 
         private async Task EnterFinishedAsync()
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Finished));
+            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Finished, _focusCounter));
 
             if (!_settingsFactory().AutoAdvance)
             {
@@ -106,15 +103,12 @@ namespace Notadesigner.Tom.Core
                 await _serviceChannel.Reader.ReadAsync();
             }
 
-            // var trigger = (++_focusCounter < _settingsFactory().MaximumRounds) ? TimerTrigger.Relax : TimerTrigger.Stop;
-
-            ++_focusCounter;
             await _stateMachine.FireAsync(TimerTrigger.Continue);
         }
 
         private async Task EnterFocusedFromFocusAsync(StateMachine<TimerState, TimerTrigger>.Transition transition)
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused));
+            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
 
             var delay = _settingsFactory().PomodoroDuration;
             var elapsed = TimeSpan.Zero;
@@ -131,7 +125,7 @@ namespace Notadesigner.Tom.Core
 
         private async Task EnterRefreshedAsync()
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Refreshed));
+            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Refreshed, _focusCounter));
 
             if (!_settingsFactory().AutoAdvance)
             {
@@ -145,7 +139,7 @@ namespace Notadesigner.Tom.Core
 
         private async Task EnterRelaxedAsync()
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Relaxed));
+            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Relaxed, _focusCounter));
 
             var delay = _settingsFactory().ShortBreakDuration;
             var elapsed = TimeSpan.Zero;
@@ -162,7 +156,7 @@ namespace Notadesigner.Tom.Core
 
         private async Task EnterStoppedAsync()
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Stopped));
+            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Stopped, _focusCounter));
 
             var delay = _settingsFactory().LongBreakDuration;
             var elapsed = TimeSpan.Zero;
