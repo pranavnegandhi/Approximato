@@ -116,7 +116,7 @@ namespace Notadesigner.Tom.Core
         {
             await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused));
 
-            var delay = TimeSpan.FromSeconds(10);
+            var delay = _settingsFactory().PomodoroDuration;
             var elapsed = TimeSpan.Zero;
             while (elapsed <= delay)
             {
@@ -147,7 +147,7 @@ namespace Notadesigner.Tom.Core
         {
             await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Relaxed));
 
-            var delay = TimeSpan.FromSeconds(5);
+            var delay = _settingsFactory().ShortBreakDuration;
             var elapsed = TimeSpan.Zero;
             while (elapsed <= delay)
             {
@@ -164,7 +164,7 @@ namespace Notadesigner.Tom.Core
         {
             await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Stopped));
 
-            var delay = TimeSpan.FromSeconds(7);
+            var delay = _settingsFactory().LongBreakDuration;
             var elapsed = TimeSpan.Zero;
             while (elapsed <= delay)
             {
