@@ -30,7 +30,7 @@ namespace Notadesigner.Tom.App
                 /// Attempt to initialize the service
                 Log.Information("Starting Pomodour process");
 
-                Log.Verbose("Launching {serviceName}", nameof(PomoEngine));
+                Log.Verbose("Launching {serviceName}", nameof(PomodoroService));
                 var builder = Host.CreateDefaultBuilder(args)
                     .UseWindowsFormsLifetime<GuiRunnerContext>()
                     .ConfigureServices((_, services) =>
@@ -39,8 +39,6 @@ namespace Notadesigner.Tom.App
                         var settingsFactory = () => new PomoEngineSettings(appSettings.MaximumRounds, appSettings.PomodoroDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration, appSettings.AutoAdvance);
                         services.AddSingleton(settingsFactory)
                             .AddHostedService<PomodoroService>()
-                            .AddSingleton<PomoEngine>()
-                            .AddSingleton<NotificationsQueue>()
                             .AddSingleton(provider => Channel.CreateUnbounded<TransitionEvent>())
                             .AddSingleton(provider => Channel.CreateUnbounded<TimerEvent>())
                             .AddSingleton(provider => Channel.CreateUnbounded<UIEvent>())
