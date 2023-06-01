@@ -28,356 +28,315 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.MainContainer = new System.Windows.Forms.TableLayoutPanel();
-            this.CloseSettings = new System.Windows.Forms.Button();
-            this.AboutInfoContainer = new System.Windows.Forms.GroupBox();
-            this.AboutInfoLabel = new System.Windows.Forms.Label();
-            this.AboutInfoImage = new System.Windows.Forms.PictureBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.InstructionsLabel = new System.Windows.Forms.Label();
-            this.EnableAutoAdvance = new System.Windows.Forms.CheckBox();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.MaximumRoundsLabel = new System.Windows.Forms.Label();
-            this.MaximumRoundsInput = new System.Windows.Forms.ComboBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-            this.WorkSessionLabel = new System.Windows.Forms.Label();
-            this.WorkSessionInput = new System.Windows.Forms.NumericUpDown();
-            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
-            this.ShortBreakLabel = new System.Windows.Forms.Label();
-            this.ShortBreakInput = new System.Windows.Forms.NumericUpDown();
-            this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
-            this.LongBreakLabel = new System.Windows.Forms.Label();
-            this.LongBreakInput = new System.Windows.Forms.NumericUpDown();
-            this.MainContainer.SuspendLayout();
-            this.AboutInfoContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AboutInfoImage)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.flowLayoutPanel2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.flowLayoutPanel6.SuspendLayout();
-            this.flowLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.WorkSessionInput)).BeginInit();
-            this.flowLayoutPanel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ShortBreakInput)).BeginInit();
-            this.flowLayoutPanel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LongBreakInput)).BeginInit();
-            this.SuspendLayout();
+            MainContainer = new TableLayoutPanel();
+            CloseSettings = new Button();
+            AboutInfoContainer = new GroupBox();
+            AboutInfoLabel = new Label();
+            AboutInfoImage = new PictureBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            EnableAutoAdvance = new CheckBox();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            MaximumRoundsLabel = new Label();
+            MaximumRoundsInput = new ComboBox();
+            groupBox1 = new GroupBox();
+            flowLayoutPanel6 = new FlowLayoutPanel();
+            flowLayoutPanel3 = new FlowLayoutPanel();
+            WorkSessionLabel = new Label();
+            WorkSessionInput = new NumericUpDown();
+            flowLayoutPanel4 = new FlowLayoutPanel();
+            ShortBreakLabel = new Label();
+            ShortBreakInput = new NumericUpDown();
+            flowLayoutPanel5 = new FlowLayoutPanel();
+            LongBreakLabel = new Label();
+            LongBreakInput = new NumericUpDown();
+            InstructionsLabel = new Label();
+            MainContainer.SuspendLayout();
+            AboutInfoContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)AboutInfoImage).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
+            flowLayoutPanel2.SuspendLayout();
+            groupBox1.SuspendLayout();
+            flowLayoutPanel6.SuspendLayout();
+            flowLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)WorkSessionInput).BeginInit();
+            flowLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ShortBreakInput).BeginInit();
+            flowLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)LongBreakInput).BeginInit();
+            SuspendLayout();
             // 
             // MainContainer
             // 
-            this.MainContainer.ColumnCount = 2;
-            this.MainContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MainContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MainContainer.Controls.Add(this.CloseSettings, 1, 1);
-            this.MainContainer.Controls.Add(this.AboutInfoContainer, 0, 0);
-            this.MainContainer.Controls.Add(this.flowLayoutPanel1, 1, 0);
-            this.MainContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainContainer.Location = new System.Drawing.Point(0, 0);
-            this.MainContainer.Name = "MainContainer";
-            this.MainContainer.RowCount = 2;
-            this.MainContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MainContainer.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.MainContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.MainContainer.Size = new System.Drawing.Size(484, 311);
-            this.MainContainer.TabIndex = 0;
+            MainContainer.ColumnCount = 2;
+            MainContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            MainContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            MainContainer.Controls.Add(CloseSettings, 1, 1);
+            MainContainer.Controls.Add(AboutInfoContainer, 0, 0);
+            MainContainer.Controls.Add(flowLayoutPanel1, 1, 0);
+            MainContainer.Dock = DockStyle.Fill;
+            MainContainer.Location = new Point(0, 0);
+            MainContainer.Name = "MainContainer";
+            MainContainer.RowCount = 2;
+            MainContainer.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            MainContainer.RowStyles.Add(new RowStyle());
+            MainContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            MainContainer.Size = new Size(484, 311);
+            MainContainer.TabIndex = 0;
             // 
             // CloseSettings
             // 
-            this.CloseSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.CloseSettings.Location = new System.Drawing.Point(406, 285);
-            this.CloseSettings.Name = "CloseSettings";
-            this.CloseSettings.Size = new System.Drawing.Size(75, 23);
-            this.CloseSettings.TabIndex = 4;
-            this.CloseSettings.Text = "&Close";
-            this.CloseSettings.UseVisualStyleBackColor = true;
+            CloseSettings.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            CloseSettings.Location = new Point(406, 285);
+            CloseSettings.Name = "CloseSettings";
+            CloseSettings.Size = new Size(75, 23);
+            CloseSettings.TabIndex = 4;
+            CloseSettings.Text = "&Close";
+            CloseSettings.UseVisualStyleBackColor = true;
             // 
             // AboutInfoContainer
             // 
-            this.AboutInfoContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AboutInfoContainer.Controls.Add(this.AboutInfoLabel);
-            this.AboutInfoContainer.Controls.Add(this.AboutInfoImage);
-            this.AboutInfoContainer.Location = new System.Drawing.Point(10, 10);
-            this.AboutInfoContainer.Margin = new System.Windows.Forms.Padding(10);
-            this.AboutInfoContainer.Name = "AboutInfoContainer";
-            this.AboutInfoContainer.Size = new System.Drawing.Size(222, 262);
-            this.AboutInfoContainer.TabIndex = 0;
-            this.AboutInfoContainer.TabStop = false;
-            this.AboutInfoContainer.Text = "About";
+            AboutInfoContainer.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            AboutInfoContainer.Controls.Add(AboutInfoLabel);
+            AboutInfoContainer.Controls.Add(AboutInfoImage);
+            AboutInfoContainer.Location = new Point(10, 10);
+            AboutInfoContainer.Margin = new Padding(10);
+            AboutInfoContainer.Name = "AboutInfoContainer";
+            AboutInfoContainer.Size = new Size(222, 262);
+            AboutInfoContainer.TabIndex = 0;
+            AboutInfoContainer.TabStop = false;
+            AboutInfoContainer.Text = "About";
             // 
             // AboutInfoLabel
             // 
-            this.AboutInfoLabel.Location = new System.Drawing.Point(6, 80);
-            this.AboutInfoLabel.Name = "AboutInfoLabel";
-            this.AboutInfoLabel.Size = new System.Drawing.Size(210, 161);
-            this.AboutInfoLabel.TabIndex = 2;
-            this.AboutInfoLabel.Text = "label1";
-            this.AboutInfoLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            AboutInfoLabel.Location = new Point(6, 80);
+            AboutInfoLabel.Name = "AboutInfoLabel";
+            AboutInfoLabel.Size = new Size(210, 161);
+            AboutInfoLabel.TabIndex = 2;
+            AboutInfoLabel.Text = "label1";
+            AboutInfoLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // AboutInfoImage
             // 
-            this.AboutInfoImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.AboutInfoImage.BackgroundImage = global::Notadesigner.Tom.App.Properties.GuiRunnerResources.AppLogo_32_48;
-            this.AboutInfoImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.AboutInfoImage.Location = new System.Drawing.Point(6, 25);
-            this.AboutInfoImage.Name = "AboutInfoImage";
-            this.AboutInfoImage.Size = new System.Drawing.Size(210, 50);
-            this.AboutInfoImage.TabIndex = 0;
-            this.AboutInfoImage.TabStop = false;
+            AboutInfoImage.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            AboutInfoImage.BackgroundImage = Properties.GuiRunnerResources.AppLogo_32_48;
+            AboutInfoImage.BackgroundImageLayout = ImageLayout.Center;
+            AboutInfoImage.Location = new Point(6, 25);
+            AboutInfoImage.Name = "AboutInfoImage";
+            AboutInfoImage.Size = new Size(210, 50);
+            AboutInfoImage.TabIndex = 0;
+            AboutInfoImage.TabStop = false;
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel1.Controls.Add(this.EnableAutoAdvance);
-            this.flowLayoutPanel1.Controls.Add(this.flowLayoutPanel2);
-            this.flowLayoutPanel1.Controls.Add(this.groupBox1);
-            this.flowLayoutPanel1.Controls.Add(this.InstructionsLabel);
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(252, 10);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(10);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(222, 262);
-            this.flowLayoutPanel1.TabIndex = 1;
-            // 
-            // InstructionsLabel
-            // 
-            this.InstructionsLabel.AutoSize = true;
-            this.InstructionsLabel.Location = new System.Drawing.Point(3, 3);
-            this.InstructionsLabel.Margin = new System.Windows.Forms.Padding(0, 0, 0, 6);
-            this.InstructionsLabel.Name = "InstructionsLabel";
-            this.InstructionsLabel.Size = new System.Drawing.Size(183, 15);
-            this.InstructionsLabel.TabIndex = 6;
-            this.InstructionsLabel.Text = "Changes are saved automatically.";
+            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanel1.Controls.Add(EnableAutoAdvance);
+            flowLayoutPanel1.Controls.Add(flowLayoutPanel2);
+            flowLayoutPanel1.Controls.Add(groupBox1);
+            flowLayoutPanel1.Controls.Add(InstructionsLabel);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(252, 10);
+            flowLayoutPanel1.Margin = new Padding(10);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Padding = new Padding(3);
+            flowLayoutPanel1.Size = new Size(222, 262);
+            flowLayoutPanel1.TabIndex = 1;
             // 
             // EnableAutoAdvance
             // 
-            this.EnableAutoAdvance.AutoSize = true;
-            this.EnableAutoAdvance.Location = new System.Drawing.Point(6, 27);
-            this.EnableAutoAdvance.Name = "EnableAutoAdvance";
-            this.EnableAutoAdvance.Size = new System.Drawing.Size(191, 19);
-            this.EnableAutoAdvance.TabIndex = 0;
-            this.EnableAutoAdvance.Text = "Auto-ad&vance to the next stage";
-            this.EnableAutoAdvance.UseVisualStyleBackColor = true;
+            EnableAutoAdvance.AutoSize = true;
+            EnableAutoAdvance.Location = new Point(6, 6);
+            EnableAutoAdvance.Name = "EnableAutoAdvance";
+            EnableAutoAdvance.Size = new Size(192, 19);
+            EnableAutoAdvance.TabIndex = 0;
+            EnableAutoAdvance.Text = "Auto-ad&vance to the next stage";
+            EnableAutoAdvance.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel2
             // 
-            this.flowLayoutPanel2.AutoSize = true;
-            this.flowLayoutPanel2.Controls.Add(this.MaximumRoundsLabel);
-            this.flowLayoutPanel2.Controls.Add(this.MaximumRoundsInput);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 52);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(182, 29);
-            this.flowLayoutPanel2.TabIndex = 7;
-            this.flowLayoutPanel2.WrapContents = false;
+            flowLayoutPanel2.AutoSize = true;
+            flowLayoutPanel2.Controls.Add(MaximumRoundsLabel);
+            flowLayoutPanel2.Controls.Add(MaximumRoundsInput);
+            flowLayoutPanel2.Location = new Point(6, 31);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(182, 29);
+            flowLayoutPanel2.TabIndex = 0;
+            flowLayoutPanel2.WrapContents = false;
             // 
             // MaximumRoundsLabel
             // 
-            this.MaximumRoundsLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.MaximumRoundsLabel.Location = new System.Drawing.Point(3, 7);
-            this.MaximumRoundsLabel.Name = "MaximumRoundsLabel";
-            this.MaximumRoundsLabel.Size = new System.Drawing.Size(90, 15);
-            this.MaximumRoundsLabel.TabIndex = 0;
-            this.MaximumRoundsLabel.Text = "Rounds";
+            MaximumRoundsLabel.Anchor = AnchorStyles.Left;
+            MaximumRoundsLabel.Location = new Point(3, 7);
+            MaximumRoundsLabel.Name = "MaximumRoundsLabel";
+            MaximumRoundsLabel.Size = new Size(90, 15);
+            MaximumRoundsLabel.TabIndex = 0;
+            MaximumRoundsLabel.Text = "&Rounds";
             // 
             // MaximumRoundsInput
             // 
-            this.MaximumRoundsInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.MaximumRoundsInput.FormattingEnabled = true;
-            this.MaximumRoundsInput.Location = new System.Drawing.Point(99, 3);
-            this.MaximumRoundsInput.Name = "MaximumRoundsInput";
-            this.MaximumRoundsInput.Size = new System.Drawing.Size(80, 23);
-            this.MaximumRoundsInput.TabIndex = 2;
+            MaximumRoundsInput.DropDownStyle = ComboBoxStyle.DropDownList;
+            MaximumRoundsInput.FormattingEnabled = true;
+            MaximumRoundsInput.Location = new Point(99, 3);
+            MaximumRoundsInput.Name = "MaximumRoundsInput";
+            MaximumRoundsInput.Size = new Size(80, 23);
+            MaximumRoundsInput.TabIndex = 6;
             // 
             // groupBox1
             // 
-            this.groupBox1.AutoSize = true;
-            this.groupBox1.Controls.Add(this.flowLayoutPanel6);
-            this.groupBox1.Location = new System.Drawing.Point(6, 87);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(209, 146);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Duration in Minutes";
+            groupBox1.AutoSize = true;
+            groupBox1.Controls.Add(flowLayoutPanel6);
+            groupBox1.Location = new Point(6, 66);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(209, 146);
+            groupBox1.TabIndex = 4;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Duration in Minutes";
             // 
             // flowLayoutPanel6
             // 
-            this.flowLayoutPanel6.AutoSize = true;
-            this.flowLayoutPanel6.Controls.Add(this.flowLayoutPanel3);
-            this.flowLayoutPanel6.Controls.Add(this.flowLayoutPanel4);
-            this.flowLayoutPanel6.Controls.Add(this.flowLayoutPanel5);
-            this.flowLayoutPanel6.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel6.Location = new System.Drawing.Point(3, 19);
-            this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-            this.flowLayoutPanel6.Size = new System.Drawing.Size(200, 105);
-            this.flowLayoutPanel6.TabIndex = 0;
+            flowLayoutPanel6.AutoSize = true;
+            flowLayoutPanel6.Controls.Add(flowLayoutPanel3);
+            flowLayoutPanel6.Controls.Add(flowLayoutPanel4);
+            flowLayoutPanel6.Controls.Add(flowLayoutPanel5);
+            flowLayoutPanel6.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel6.Location = new Point(3, 19);
+            flowLayoutPanel6.Name = "flowLayoutPanel6";
+            flowLayoutPanel6.Size = new Size(200, 105);
+            flowLayoutPanel6.TabIndex = 0;
             // 
             // flowLayoutPanel3
             // 
-            this.flowLayoutPanel3.AutoSize = true;
-            this.flowLayoutPanel3.Controls.Add(this.WorkSessionLabel);
-            this.flowLayoutPanel3.Controls.Add(this.WorkSessionInput);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(182, 29);
-            this.flowLayoutPanel3.TabIndex = 4;
-            this.flowLayoutPanel3.WrapContents = false;
+            flowLayoutPanel3.AutoSize = true;
+            flowLayoutPanel3.Controls.Add(WorkSessionLabel);
+            flowLayoutPanel3.Controls.Add(WorkSessionInput);
+            flowLayoutPanel3.Location = new Point(3, 3);
+            flowLayoutPanel3.Name = "flowLayoutPanel3";
+            flowLayoutPanel3.Size = new Size(182, 29);
+            flowLayoutPanel3.TabIndex = 4;
+            flowLayoutPanel3.WrapContents = false;
             // 
             // WorkSessionLabel
             // 
-            this.WorkSessionLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.WorkSessionLabel.Location = new System.Drawing.Point(3, 7);
-            this.WorkSessionLabel.Name = "WorkSessionLabel";
-            this.WorkSessionLabel.Size = new System.Drawing.Size(90, 15);
-            this.WorkSessionLabel.TabIndex = 0;
-            this.WorkSessionLabel.Text = "&Work Session";
+            WorkSessionLabel.Anchor = AnchorStyles.Left;
+            WorkSessionLabel.Location = new Point(3, 7);
+            WorkSessionLabel.Name = "WorkSessionLabel";
+            WorkSessionLabel.Size = new Size(90, 15);
+            WorkSessionLabel.TabIndex = 0;
+            WorkSessionLabel.Text = "&Work Session";
             // 
             // WorkSessionInput
             // 
-            this.WorkSessionInput.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.WorkSessionInput.Location = new System.Drawing.Point(99, 3);
-            this.WorkSessionInput.Maximum = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            this.WorkSessionInput.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.WorkSessionInput.Name = "WorkSessionInput";
-            this.WorkSessionInput.Size = new System.Drawing.Size(80, 23);
-            this.WorkSessionInput.TabIndex = 1;
-            this.WorkSessionInput.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            WorkSessionInput.Anchor = AnchorStyles.None;
+            WorkSessionInput.Location = new Point(99, 3);
+            WorkSessionInput.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            WorkSessionInput.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            WorkSessionInput.Name = "WorkSessionInput";
+            WorkSessionInput.Size = new Size(80, 23);
+            WorkSessionInput.TabIndex = 11;
+            WorkSessionInput.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // flowLayoutPanel4
             // 
-            this.flowLayoutPanel4.AutoSize = true;
-            this.flowLayoutPanel4.Controls.Add(this.ShortBreakLabel);
-            this.flowLayoutPanel4.Controls.Add(this.ShortBreakInput);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 38);
-            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(182, 29);
-            this.flowLayoutPanel4.TabIndex = 5;
-            this.flowLayoutPanel4.WrapContents = false;
+            flowLayoutPanel4.AutoSize = true;
+            flowLayoutPanel4.Controls.Add(ShortBreakLabel);
+            flowLayoutPanel4.Controls.Add(ShortBreakInput);
+            flowLayoutPanel4.Location = new Point(3, 38);
+            flowLayoutPanel4.Name = "flowLayoutPanel4";
+            flowLayoutPanel4.Size = new Size(182, 29);
+            flowLayoutPanel4.TabIndex = 5;
+            flowLayoutPanel4.WrapContents = false;
             // 
             // ShortBreakLabel
             // 
-            this.ShortBreakLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.ShortBreakLabel.Location = new System.Drawing.Point(3, 7);
-            this.ShortBreakLabel.Name = "ShortBreakLabel";
-            this.ShortBreakLabel.Size = new System.Drawing.Size(90, 15);
-            this.ShortBreakLabel.TabIndex = 0;
-            this.ShortBreakLabel.Text = "&Short Break";
+            ShortBreakLabel.Anchor = AnchorStyles.Left;
+            ShortBreakLabel.Location = new Point(3, 7);
+            ShortBreakLabel.Name = "ShortBreakLabel";
+            ShortBreakLabel.Size = new Size(90, 15);
+            ShortBreakLabel.TabIndex = 0;
+            ShortBreakLabel.Text = "&Short Break";
             // 
             // ShortBreakInput
             // 
-            this.ShortBreakInput.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ShortBreakInput.Location = new System.Drawing.Point(99, 3);
-            this.ShortBreakInput.Maximum = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            this.ShortBreakInput.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.ShortBreakInput.Name = "ShortBreakInput";
-            this.ShortBreakInput.Size = new System.Drawing.Size(80, 23);
-            this.ShortBreakInput.TabIndex = 1;
-            this.ShortBreakInput.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            ShortBreakInput.Anchor = AnchorStyles.None;
+            ShortBreakInput.Location = new Point(99, 3);
+            ShortBreakInput.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            ShortBreakInput.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            ShortBreakInput.Name = "ShortBreakInput";
+            ShortBreakInput.Size = new Size(80, 23);
+            ShortBreakInput.TabIndex = 11;
+            ShortBreakInput.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // flowLayoutPanel5
             // 
-            this.flowLayoutPanel5.AutoSize = true;
-            this.flowLayoutPanel5.Controls.Add(this.LongBreakLabel);
-            this.flowLayoutPanel5.Controls.Add(this.LongBreakInput);
-            this.flowLayoutPanel5.Location = new System.Drawing.Point(3, 73);
-            this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-            this.flowLayoutPanel5.Size = new System.Drawing.Size(182, 29);
-            this.flowLayoutPanel5.TabIndex = 6;
-            this.flowLayoutPanel5.WrapContents = false;
+            flowLayoutPanel5.AutoSize = true;
+            flowLayoutPanel5.Controls.Add(LongBreakLabel);
+            flowLayoutPanel5.Controls.Add(LongBreakInput);
+            flowLayoutPanel5.Location = new Point(3, 73);
+            flowLayoutPanel5.Name = "flowLayoutPanel5";
+            flowLayoutPanel5.Size = new Size(182, 29);
+            flowLayoutPanel5.TabIndex = 6;
+            flowLayoutPanel5.WrapContents = false;
             // 
             // LongBreakLabel
             // 
-            this.LongBreakLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.LongBreakLabel.Location = new System.Drawing.Point(3, 7);
-            this.LongBreakLabel.Name = "LongBreakLabel";
-            this.LongBreakLabel.Size = new System.Drawing.Size(90, 15);
-            this.LongBreakLabel.TabIndex = 0;
-            this.LongBreakLabel.Text = "&Long Break";
+            LongBreakLabel.Anchor = AnchorStyles.Left;
+            LongBreakLabel.Location = new Point(3, 7);
+            LongBreakLabel.Name = "LongBreakLabel";
+            LongBreakLabel.Size = new Size(90, 15);
+            LongBreakLabel.TabIndex = 0;
+            LongBreakLabel.Text = "&Long Break";
             // 
             // LongBreakInput
             // 
-            this.LongBreakInput.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.LongBreakInput.Location = new System.Drawing.Point(99, 3);
-            this.LongBreakInput.Maximum = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            this.LongBreakInput.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.LongBreakInput.Name = "LongBreakInput";
-            this.LongBreakInput.Size = new System.Drawing.Size(80, 23);
-            this.LongBreakInput.TabIndex = 1;
-            this.LongBreakInput.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            LongBreakInput.Anchor = AnchorStyles.None;
+            LongBreakInput.Location = new Point(99, 3);
+            LongBreakInput.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            LongBreakInput.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            LongBreakInput.Name = "LongBreakInput";
+            LongBreakInput.Size = new Size(80, 23);
+            LongBreakInput.TabIndex = 11;
+            LongBreakInput.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // InstructionsLabel
+            // 
+            InstructionsLabel.AutoSize = true;
+            InstructionsLabel.Location = new Point(3, 215);
+            InstructionsLabel.Margin = new Padding(0, 0, 0, 6);
+            InstructionsLabel.Name = "InstructionsLabel";
+            InstructionsLabel.Size = new Size(183, 15);
+            InstructionsLabel.TabIndex = 6;
+            InstructionsLabel.Text = "Changes are saved automatically.";
             // 
             // SettingsForm
             // 
-            this.AcceptButton = this.CloseSettings;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.CloseSettings;
-            this.ClientSize = new System.Drawing.Size(484, 311);
-            this.ControlBox = false;
-            this.Controls.Add(this.MainContainer);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "SettingsForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Settings";
-            this.MainContainer.ResumeLayout(false);
-            this.AboutInfoContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.AboutInfoImage)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.flowLayoutPanel6.ResumeLayout(false);
-            this.flowLayoutPanel6.PerformLayout();
-            this.flowLayoutPanel3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.WorkSessionInput)).EndInit();
-            this.flowLayoutPanel4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ShortBreakInput)).EndInit();
-            this.flowLayoutPanel5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.LongBreakInput)).EndInit();
-            this.ResumeLayout(false);
-
+            AcceptButton = CloseSettings;
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            CancelButton = CloseSettings;
+            ClientSize = new Size(484, 311);
+            ControlBox = false;
+            Controls.Add(MainContainer);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Name = "SettingsForm";
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Settings";
+            MainContainer.ResumeLayout(false);
+            AboutInfoContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)AboutInfoImage).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
+            flowLayoutPanel2.ResumeLayout(false);
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            flowLayoutPanel6.ResumeLayout(false);
+            flowLayoutPanel6.PerformLayout();
+            flowLayoutPanel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)WorkSessionInput).EndInit();
+            flowLayoutPanel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)ShortBreakInput).EndInit();
+            flowLayoutPanel5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)LongBreakInput).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion

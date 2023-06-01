@@ -15,6 +15,10 @@ namespace Notadesigner.Tom.App
 
         private TimeSpan _totalDuration = TimeSpan.Zero;
 
+        private int _focusCounter = 0;
+
+        private TimerState _timerState = TimerState.Begin;
+
         public MainForm()
         {
             InitializeComponent();
@@ -25,7 +29,7 @@ namespace Notadesigner.Tom.App
             progressBarsContainer.Controls.Add(_breakProgressBar);
 
             _activeProgressBar = _workProgressBar;
-            SetEngineState(EngineState.AppReady);
+            SetTimerState(TimerState.Begin);
 
             VisibleChanged += (s, e) =>
             {
@@ -43,6 +47,12 @@ namespace Notadesigner.Tom.App
 
             set
             {
+                if (_elapsedDuration == value)
+                {
+                    return;
+                }
+
+                _elapsedDuration = value;
                 if (InvokeRequired)
                 {
                     Invoke(() => SetElapsedDuration(value));
@@ -60,6 +70,12 @@ namespace Notadesigner.Tom.App
 
             set
             {
+                if (_totalDuration == value)
+                {
+                    return;
+                }
+
+                _totalDuration = value;
                 if (InvokeRequired)
                 {
                     Invoke(() => SetTotalDuration(value));
@@ -71,10 +87,18 @@ namespace Notadesigner.Tom.App
             }
         }
 
-        public int RoundCounter
+        public int FocusCounter
         {
+            get => _focusCounter;
+
             set
             {
+                if (_focusCounter == value)
+                {
+                    return;
+                }
+
+                _focusCounter = value;
                 if (InvokeRequired)
                 {
                     Invoke(() => SetRoundCounter(value));
@@ -86,34 +110,27 @@ namespace Notadesigner.Tom.App
             }
         }
 
-        public EngineState EngineState
+        public TimerState TimerState
         {
+            get => _timerState;
+
             set
             {
+                if (_timerState == value)
+                {
+                    return;
+                }
+
+                _timerState = value;
                 if (InvokeRequired)
                 {
-                    Invoke(() => SetEngineState(value));
+                    Invoke(() => SetTimerState(value));
                 }
                 else
                 {
-                    SetEngineState(value);
+                    SetTimerState(value);
                 }
             }
-        }
-
-        private void EngineProgressHandler(object? sender, ProgressEventArgs e)
-        {
-            if (_activeProgressBar is null || !_activeProgressBar.IsHandleCreated)
-            {
-                return;
-            }
-
-            Invoke(() =>
-            {
-                _activeProgressBar.Value = Convert.ToInt32(e.ElapsedDuration.TotalSeconds);
-                _activeProgressBar.Maximum = Convert.ToInt32(e.TotalDuration.TotalSeconds);
-                _activeProgressBar.Text = $"{e.ElapsedDuration:mm\\:ss} / {e.TotalDuration:mm\\:ss}";
-            });
         }
 
         private void SetElapsedDuration(TimeSpan value)
@@ -144,11 +161,12 @@ namespace Notadesigner.Tom.App
             _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss} / {_totalDuration:mm\\:ss}";
         }
 
-        private void SetEngineState(EngineState value)
+        private void SetTimerState(TimerState value)
         {
             switch (value)
             {
-                case EngineState.AppReady:
+                case TimerState.Begin:
+                case TimerState.Abandoned:
                     _activeProgressBar = null;
                     _workProgressBar.Text = "__:__ / __:__";
                     _workProgressBar.Value = 0;
@@ -157,61 +175,35 @@ namespace Notadesigner.Tom.App
                     _breakProgressBar.Value = 0;
                     break;
 
-                case EngineState.LongBreak:
-                case EngineState.ShortBreak:
-                    _activeProgressBar = _breakProgressBar;
-                    _breakProgressBar.Text = "00:00 / 00:00";
+                case TimerState.Focused:
+                    _activeProgressBar = _workProgressBar;
+                    ElapsedDuration = TimeSpan.Zero;
+                    TotalDuration = TimeSpan.Zero;
                     break;
 
-                case EngineState.WorkSession:
-                    _activeProgressBar = _workProgressBar;
-                    _workProgressBar.Text = "__:__ / __:__";
-                    _workProgressBar.Value = 0;
+                case TimerState.Interrupted:
+                    break;
 
-                    _breakProgressBar.Text = "__:__ / __:__";
-                    _breakProgressBar.Value = 0;
+                case TimerState.Finished:
+                case TimerState.Refreshed:
+                    _activeProgressBar = null;
+                    break;
+
+                case TimerState.Relaxed:
+                case TimerState.Stopped:
+                    _activeProgressBar = _breakProgressBar;
+                    ElapsedDuration = TimeSpan.Zero;
+                    TotalDuration = TimeSpan.Zero;
+                    break;
+
+                case TimerState.End:
                     break;
             }
         }
 
         private void SetRoundCounter(int value)
         {
-            currentPhaseStatusLabel.Text = $"Round {value + 1} of {GuiRunnerSettings.Default.MaximumRounds + 1}";
-        }
-
-        private void EngineStateChangeHandler(object? sender, StateChangeEventArgs e)
-        {
-            switch (e.State)
-            {
-                case EngineState.LongBreak:
-                case EngineState.ShortBreak:
-                    _activeProgressBar = _breakProgressBar;
-                    if (IsHandleCreated)
-                    {
-                        Invoke(() =>
-                        {
-                            _breakProgressBar.Text = "00:00 / 00:00";
-                        });
-                    }
-                    break;
-
-                case EngineState.WorkSession:
-                    _activeProgressBar = _workProgressBar;
-                    if (IsHandleCreated)
-                    {
-                        Invoke(() =>
-                        {
-                            _workProgressBar.Text = "__:__ / __:__";
-                            _workProgressBar.Value = 0;
-
-                            _breakProgressBar.Text = "__:__ / __:__";
-                            _breakProgressBar.Value = 0;
-
-                            currentPhaseStatusLabel.Text = $"Round {e.RoundCounter + 1} of {GuiRunnerSettings.Default.MaximumRounds + 1}";
-                        });
-                    }
-                    break;
-            }
+            currentPhaseStatusLabel.Text = $"Round {value} of {GuiRunnerSettings.Default.MaximumRounds}";
         }
     }
 }

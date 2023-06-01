@@ -4,6 +4,8 @@ using Microsoft.Extensions.Hosting;
 using Notadesigner.Tom.App.Properties;
 using Notadesigner.Tom.Core;
 using Serilog;
+using System.Threading.Channels;
+using WindowsFormsLifetime;
 
 namespace Notadesigner.Tom.App
 {
@@ -28,15 +30,18 @@ namespace Notadesigner.Tom.App
                 /// Attempt to initialize the service
                 Log.Information("Starting Pomodour process");
 
-                var builder = Host.CreateDefaultBuilder(args);
-                Log.Verbose("Launching {serviceName}", nameof(PomoEngine));
-                builder.ConfigureServices((_, services) =>
+                Log.Verbose("Launching {serviceName}", nameof(PomodoroService));
+                var builder = Host.CreateDefaultBuilder(args)
+                    .UseWindowsFormsLifetime<GuiRunnerContext>()
+                    .ConfigureServices((_, services) =>
                     {
                         var appSettings = GuiRunnerSettings.Default;
-                        var settingsFactory = () => new PomoEngineSettings(appSettings.MaximumRounds, appSettings.PomodoroDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration);
+                        var settingsFactory = () => new PomoEngineSettings(appSettings.MaximumRounds, appSettings.PomodoroDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration, appSettings.AutoAdvance);
                         services.AddSingleton(settingsFactory)
-                            .AddSingleton<PomoEngine>()
-                            .AddSingleton<NotificationsQueue>()
+                            .AddHostedService<PomodoroService>()
+                            .AddSingleton(provider => Channel.CreateUnbounded<TransitionEvent>())
+                            .AddSingleton(provider => Channel.CreateUnbounded<TimerEvent>())
+                            .AddSingleton(provider => Channel.CreateUnbounded<UIEvent>())
                             .AddSingleton<MainForm>()
                             .AddSingleton<SettingsForm>()
                             .AddSingleton<GuiRunnerContext>();
@@ -44,13 +49,9 @@ namespace Notadesigner.Tom.App
                     .UseSerilog();
                 var host = builder.Build();
 
-                var cts = new CancellationTokenSource();
-                var engine = host.Services.GetRequiredService<PomoEngine>();
-                await engine.StartAsync(cts.Token);
-
                 ApplicationConfiguration.Initialize();
-                var context = host.Services.GetRequiredService<GuiRunnerContext>();
-                Application.Run(context);
+
+                await host.RunAsync();
             }
             catch (ApplicationException exception)
             {
