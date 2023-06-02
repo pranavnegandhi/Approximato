@@ -2,13 +2,13 @@
 {
     public sealed class PomoEngineSettings
     {
-        public PomoEngineSettings(int maximumRounds, TimeSpan pomodoroDuration, TimeSpan shortBreakDuration, TimeSpan longBreakDuration, bool autoAdvance)
+        public PomoEngineSettings(int maximumRounds, TimeSpan pomodoroDuration, TimeSpan shortBreakDuration, TimeSpan longBreakDuration, bool lenientMode)
         {
             MaximumRounds = maximumRounds;
             PomodoroDuration = pomodoroDuration;
             ShortBreakDuration = shortBreakDuration;
             LongBreakDuration = longBreakDuration;
-            AutoAdvance = autoAdvance;
+            LenientMode = lenientMode;
         }
 
         public int MaximumRounds { get; set; }
@@ -19,6 +19,6 @@
 
         public TimeSpan LongBreakDuration { get; init; }
 
-        public bool AutoAdvance { get; init; }
+        public bool LenientMode { get; init; }
     }
 }

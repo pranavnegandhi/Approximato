@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Notadesigner.Tom.App.Properties" GeneratedClassName="GuiRunnerSettings">
   <Profiles />
   <Settings>
-    <Setting Name="AutoAdvance" Type="System.Boolean" Scope="User">
+    <Setting Name="LenientMode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="PomodoroDuration" Type="System.TimeSpan" Scope="User">
