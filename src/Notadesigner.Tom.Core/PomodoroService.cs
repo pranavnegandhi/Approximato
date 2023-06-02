@@ -110,7 +110,7 @@ namespace Notadesigner.Tom.Core
         {
             await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
 
-            var delay = _settingsFactory().PomodoroDuration;
+            var delay = _settingsFactory().FocusDuration;
             var elapsed = TimeSpan.Zero;
             while (elapsed <= delay)
             {

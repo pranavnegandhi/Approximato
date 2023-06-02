@@ -38,12 +38,12 @@ namespace Notadesigner.Tom.App.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:25:00")]
-        public global::System.TimeSpan PomodoroDuration {
+        public global::System.TimeSpan FocusDuration {
             get {
-                return ((global::System.TimeSpan)(this["PomodoroDuration"]));
+                return ((global::System.TimeSpan)(this["FocusDuration"]));
             }
             set {
-                this["PomodoroDuration"] = value;
+                this["FocusDuration"] = value;
             }
         }
         
