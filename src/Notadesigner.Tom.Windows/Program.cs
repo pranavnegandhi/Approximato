@@ -36,7 +36,7 @@ namespace Notadesigner.Tom.App
                     .ConfigureServices((_, services) =>
                     {
                         var appSettings = GuiRunnerSettings.Default;
-                        var settingsFactory = () => new PomoEngineSettings(appSettings.MaximumRounds, appSettings.PomodoroDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration, appSettings.AutoAdvance);
+                        var settingsFactory = () => new PomodoroServiceSettings(appSettings.MaximumRounds, appSettings.PomodoroDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration, appSettings.AutoAdvance);
                         services.AddSingleton(settingsFactory)
                             .AddHostedService<PomodoroService>()
                             .AddSingleton(provider => Channel.CreateUnbounded<TransitionEvent>())

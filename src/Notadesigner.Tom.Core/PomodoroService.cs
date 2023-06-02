@@ -8,7 +8,7 @@ namespace Notadesigner.Tom.Core
     {
         private static readonly TimeSpan UnitIncrement = TimeSpan.FromSeconds(1);
 
-        private readonly Func<PomoEngineSettings> _settingsFactory;
+        private readonly Func<PomodoroServiceSettings> _settingsFactory;
 
         private readonly StateMachine<TimerState, TimerTrigger> _stateMachine = new(TimerState.Begin);
 
@@ -20,7 +20,7 @@ namespace Notadesigner.Tom.Core
 
         private int _focusCounter = 0;
 
-        public PomodoroService(Func<PomoEngineSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel, Channel<UIEvent> serviceChannel)
+        public PomodoroService(Func<PomodoroServiceSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel, Channel<UIEvent> serviceChannel)
         {
             _settingsFactory = settingsFactory;
             _transitionChannel = transitionChannel;
