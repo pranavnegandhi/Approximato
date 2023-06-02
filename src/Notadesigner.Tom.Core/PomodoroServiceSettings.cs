@@ -1,8 +1,8 @@
 ﻿namespace Notadesigner.Tom.Core
 {
-    public sealed class PomoEngineSettings
+    public sealed class PomodoroServiceSettings
     {
-        public PomoEngineSettings(int maximumRounds, TimeSpan pomodoroDuration, TimeSpan shortBreakDuration, TimeSpan longBreakDuration, bool autoAdvance)
+        public PomodoroServiceSettings(int maximumRounds, TimeSpan pomodoroDuration, TimeSpan shortBreakDuration, TimeSpan longBreakDuration, bool autoAdvance)
         {
             MaximumRounds = maximumRounds;
             PomodoroDuration = pomodoroDuration;
