@@ -34,7 +34,7 @@
             AboutInfoLabel = new Label();
             AboutInfoImage = new PictureBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
-            EnableAutoAdvance = new CheckBox();
+            EnableLenientMode = new CheckBox();
             flowLayoutPanel2 = new FlowLayoutPanel();
             MaximumRoundsLabel = new Label();
             MaximumRoundsInput = new ComboBox();
@@ -129,7 +129,7 @@
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            flowLayoutPanel1.Controls.Add(EnableAutoAdvance);
+            flowLayoutPanel1.Controls.Add(EnableLenientMode);
             flowLayoutPanel1.Controls.Add(flowLayoutPanel2);
             flowLayoutPanel1.Controls.Add(groupBox1);
             flowLayoutPanel1.Controls.Add(InstructionsLabel);
@@ -141,15 +141,15 @@
             flowLayoutPanel1.Size = new Size(222, 262);
             flowLayoutPanel1.TabIndex = 1;
             // 
-            // EnableAutoAdvance
+            // EnableLenientMode
             // 
-            EnableAutoAdvance.AutoSize = true;
-            EnableAutoAdvance.Location = new Point(6, 6);
-            EnableAutoAdvance.Name = "EnableAutoAdvance";
-            EnableAutoAdvance.Size = new Size(192, 19);
-            EnableAutoAdvance.TabIndex = 0;
-            EnableAutoAdvance.Text = "Auto-ad&vance to the next stage";
-            EnableAutoAdvance.UseVisualStyleBackColor = true;
+            EnableLenientMode.AutoSize = true;
+            EnableLenientMode.Location = new Point(6, 6);
+            EnableLenientMode.Name = "EnableLenientMode";
+            EnableLenientMode.Size = new Size(99, 19);
+            EnableLenientMode.TabIndex = 0;
+            EnableLenientMode.Text = "&Lenient Mode";
+            EnableLenientMode.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel2
             // 
@@ -344,7 +344,7 @@
         private TableLayoutPanel MainContainer;
         private GroupBox AboutInfoContainer;
         private FlowLayoutPanel flowLayoutPanel1;
-        private CheckBox EnableAutoAdvance;
+        private CheckBox EnableLenientMode;
         private PictureBox AboutInfoImage;
         private Label AboutInfoLabel;
         private GroupBox groupBox1;

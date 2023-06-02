@@ -12,7 +12,7 @@ namespace Notadesigner.Tom.App.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.4.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
     internal sealed partial class GuiRunnerSettings : global::System.Configuration.ApplicationSettingsBase {
         
         private static GuiRunnerSettings defaultInstance = ((GuiRunnerSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new GuiRunnerSettings())));
@@ -26,12 +26,12 @@ namespace Notadesigner.Tom.App.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AutoAdvance {
+        public bool LenientMode {
             get {
-                return ((bool)(this["AutoAdvance"]));
+                return ((bool)(this["LenientMode"]));
             }
             set {
-                this["AutoAdvance"] = value;
+                this["LenientMode"] = value;
             }
         }
         
