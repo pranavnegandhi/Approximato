@@ -65,8 +65,8 @@ namespace Notadesigner.Tom.App
                 /// Set up the binding for use during the runtime. Wrap it up in a
                 /// try-catch block to prevent binding exceptions from breaking the
                 /// design-time authoring of the control.
-                var binding = new Binding(nameof(CheckBox.Checked), GuiRunnerSettings.Default, nameof(GuiRunnerSettings.AutoAdvance), false, DataSourceUpdateMode.OnPropertyChanged, true);
-                EnableAutoAdvance.DataBindings.Add(binding);
+                var binding = new Binding(nameof(CheckBox.Checked), GuiRunnerSettings.Default, nameof(GuiRunnerSettings.LenientMode), false, DataSourceUpdateMode.OnPropertyChanged, true);
+                EnableLenientMode.DataBindings.Add(binding);
 
                 binding = new Binding(nameof(NumericUpDown.Value), GuiRunnerSettings.Default, nameof(GuiRunnerSettings.PomodoroDuration), true, DataSourceUpdateMode.OnPropertyChanged, true);
                 binding.Format += TimeSpanToMinutesConverter;

@@ -96,7 +96,7 @@ namespace Notadesigner.Tom.Core
         {
             await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Finished, _focusCounter));
 
-            if (!_settingsFactory().AutoAdvance)
+            if (!_settingsFactory().LenientMode)
             {
                 /// TODO: Wait until signal to proceed is not received from the UI thread
                 await _serviceChannel.Reader.WaitToReadAsync();
@@ -127,7 +127,7 @@ namespace Notadesigner.Tom.Core
         {
             await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Refreshed, _focusCounter));
 
-            if (!_settingsFactory().AutoAdvance)
+            if (!_settingsFactory().LenientMode)
             {
                 /// TODO: Wait until signal to proceed is not received from the UI thread
                 await _serviceChannel.Reader.WaitToReadAsync();
