@@ -68,7 +68,7 @@ namespace Notadesigner.Tom.App
                 var binding = new Binding(nameof(CheckBox.Checked), GuiRunnerSettings.Default, nameof(GuiRunnerSettings.LenientMode), false, DataSourceUpdateMode.OnPropertyChanged, true);
                 EnableLenientMode.DataBindings.Add(binding);
 
-                binding = new Binding(nameof(NumericUpDown.Value), GuiRunnerSettings.Default, nameof(GuiRunnerSettings.PomodoroDuration), true, DataSourceUpdateMode.OnPropertyChanged, true);
+                binding = new Binding(nameof(NumericUpDown.Value), GuiRunnerSettings.Default, nameof(GuiRunnerSettings.FocusDuration), true, DataSourceUpdateMode.OnPropertyChanged, true);
                 binding.Format += TimeSpanToMinutesConverter;
                 binding.Parse += MinutesToTimeSpanConverter;
                 WorkSessionInput.DataBindings.Add(binding);

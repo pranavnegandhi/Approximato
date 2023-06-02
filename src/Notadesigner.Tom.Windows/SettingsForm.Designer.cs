@@ -221,7 +221,7 @@
             WorkSessionLabel.Name = "WorkSessionLabel";
             WorkSessionLabel.Size = new Size(90, 15);
             WorkSessionLabel.TabIndex = 0;
-            WorkSessionLabel.Text = "&Work Session";
+            WorkSessionLabel.Text = "&Focus";
             // 
             // WorkSessionInput
             // 
