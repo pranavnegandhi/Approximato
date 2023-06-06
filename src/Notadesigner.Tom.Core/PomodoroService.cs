@@ -20,6 +20,8 @@ namespace Notadesigner.Tom.Core
 
         private int _focusCounter = 0;
 
+        private CancellationTokenSource? _focusCts;
+
         public PomodoroService(Func<PomodoroServiceSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel, Channel<UIEvent> serviceChannel)
         {
             _settingsFactory = settingsFactory;
@@ -64,17 +66,39 @@ namespace Notadesigner.Tom.Core
             tomo.Configure(TimerState.Finished)
                 .OnEntryAsync(EnterFinishedAsync)
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .PermitIf(TimerTrigger.Continue, TimerState.Relaxed, () => _focusCounter < _settingsFactory().MaximumRounds)
-                .PermitIf(TimerTrigger.Continue, TimerState.Stopped, () => _focusCounter >= _settingsFactory().MaximumRounds);
+                .PermitIf(TimerTrigger.Relax, TimerState.Relaxed, () => _focusCounter < _settingsFactory().MaximumRounds)
+                .PermitIf(TimerTrigger.Stop, TimerState.Stopped, () => _focusCounter >= _settingsFactory().MaximumRounds);
 
             tomo.Configure(TimerState.Focused)
-                .OnEntryFromAsync(TimerTrigger.Focus, EnterFocusedFromFocusAsync)
+                .OnEntryFromAsync(TimerTrigger.Focus, async () =>
+                {
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
+
+                    _focusCts = new();
+                    var _ = RunFocusedAsync(_focusCts.Token);
+                })
+                .OnEntryFromAsync(TimerTrigger.Resume, async () =>
+                {
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, _focusCounter)); /// Don't increment focusCounter when resuming an interrupted session
+
+                    _focusCts = new();
+                    var _ = RunFocusedAsync(_focusCts.Token);
+                })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Interrupt, TimerState.Interrupted)
                 .Permit(TimerTrigger.Timeout, TimerState.Finished);
 
             tomo.Configure(TimerState.Interrupted)
-                .Permit(TimerTrigger.Focus, TimerState.Focused);
+                .OnEntryAsync(async () =>
+                {
+                    _focusCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Interrupted, _focusCounter));
+
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _focusCts?.Dispose();
+                })
+                .Permit(TimerTrigger.Resume, TimerState.Focused);
 
             tomo.Configure(TimerState.Refreshed)
                 .OnEntryAsync(EnterRefreshedAsync)
@@ -103,24 +127,35 @@ namespace Notadesigner.Tom.Core
                 await _serviceChannel.Reader.ReadAsync();
             }
 
-            await _stateMachine.FireAsync(TimerTrigger.Continue);
+            /// Dispose the cancellationTokenSource
+            /// as it is no longer needed
+            _focusCts?.Dispose();
+
+            var trigger = TimerTrigger.Relax;
+            if (_focusCounter >= _settingsFactory().MaximumRounds)
+            {
+                trigger = TimerTrigger.Stop;
+            }
+
+            await _stateMachine.FireAsync(trigger);
         }
 
-        private async Task EnterFocusedFromFocusAsync(StateMachine<TimerState, TimerTrigger>.Transition transition)
+        private async Task RunFocusedAsync(CancellationToken cancellationToken)
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
-
             var delay = _settingsFactory().FocusDuration;
             var elapsed = TimeSpan.Zero;
-            while (elapsed <= delay)
+            while (elapsed <= delay && !cancellationToken.IsCancellationRequested)
             {
                 _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, delay));
 
-                await Task.Delay(UnitIncrement);
+                await Task.Delay(UnitIncrement, cancellationToken);
                 elapsed = elapsed.Add(UnitIncrement);
             }
 
-            _stateMachine.Fire(TimerTrigger.Timeout);
+            if (elapsed >= delay)
+            {
+                _stateMachine.Fire(TimerTrigger.Timeout);
+            }
         }
 
         private async Task EnterRefreshedAsync()

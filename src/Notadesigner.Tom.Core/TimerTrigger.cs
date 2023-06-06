@@ -3,10 +3,12 @@
     public enum TimerTrigger
     {
         Abandon,
-        Continue,
         Focus,
         Interrupt,
+        Relax,
         Reset,
-        Timeout,
+        Resume,
+        Stop,
+        Timeout
     }
 }
