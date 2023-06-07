@@ -28,6 +28,8 @@ namespace Notadesigner.Tom.App
 
         private readonly ToolStripMenuItem _interruptMenu;
 
+        private readonly ToolStripMenuItem _resumeMenu;
+
         private readonly ToolStripMenuItem _continueMenu;
 
         private readonly ToolStripMenuItem _abandonMenu;
@@ -79,8 +81,12 @@ namespace Notadesigner.Tom.App
             _interruptMenu.Click += async (s, e) => await _serviceChannel.Writer.WriteAsync(new UIEvent(TimerTrigger.Interrupt));
             _contextMenu.Items.Add(_interruptMenu);
 
+            _resumeMenu = new ToolStripMenuItem("&Resume");
+            _resumeMenu.Click += async (s, e) => await _serviceChannel.Writer.WriteAsync(new UIEvent(TimerTrigger.Resume));
+            _contextMenu.Items.Add(_resumeMenu);
+
             _continueMenu = new ToolStripMenuItem("&Continue");
-            _continueMenu.Click += async (s, e) => await _serviceChannel.Writer.WriteAsync(new UIEvent(TimerTrigger.Resume));
+            _continueMenu.Click += async (s, e) => await _serviceChannel.Writer.WriteAsync(new UIEvent(TimerTrigger.Continue));
             _contextMenu.Items.Add(_continueMenu);
 
             _abandonMenu = new ToolStripMenuItem("&Abandon…");
@@ -211,11 +217,8 @@ namespace Notadesigner.Tom.App
                             break;
 
                         case TimerState.Relaxed:
-                            _stateMachine.Fire(TimerTrigger.Relax);
-                            break;
-
                         case TimerState.Stopped:
-                            _stateMachine.Fire(TimerTrigger.Stop);
+                            _stateMachine.Fire(TimerTrigger.Continue);
                             break;
                     }
 
@@ -331,6 +334,7 @@ namespace Notadesigner.Tom.App
                     /// What to do before the pomodoro begins?
                     _startMenu.Enabled = true;
                     _interruptMenu.Enabled = false;
+                    _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = false;
                     _resetMenu.Enabled = false;
@@ -344,6 +348,7 @@ namespace Notadesigner.Tom.App
                     /// What to do when the pomodoro ends?
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = false;
+                    _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = false;
                     _resetMenu.Enabled = true;
@@ -356,13 +361,14 @@ namespace Notadesigner.Tom.App
                     /// What to do when a focus is finished?
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = false;
+                    _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = true;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .PermitIf(TimerTrigger.Stop, TimerState.Stopped, () => TimerState == TimerState.Stopped)
-                .PermitIf(TimerTrigger.Relax, TimerState.Relaxed, () => TimerState == TimerState.Relaxed);
+                .PermitIf(TimerTrigger.Continue, TimerState.Stopped, () => TimerState == TimerState.Stopped)
+                .PermitIf(TimerTrigger.Continue, TimerState.Relaxed, () => TimerState == TimerState.Relaxed);
 
             stateMachine.Configure(TimerState.Focused)
                 .OnEntry(() =>
@@ -372,6 +378,7 @@ namespace Notadesigner.Tom.App
 
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = true;
+                    _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
@@ -391,7 +398,8 @@ namespace Notadesigner.Tom.App
                     /// What to do when the pomodoro is interrupted?
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = false;
-                    _continueMenu.Enabled = true;
+                    _resumeMenu.Enabled = true;
+                    _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = false;
                     _resetMenu.Enabled = false;
                 })
@@ -403,6 +411,7 @@ namespace Notadesigner.Tom.App
                     /// What to do when refreshed?
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = true;
+                    _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = true;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
@@ -416,6 +425,7 @@ namespace Notadesigner.Tom.App
                     /// What to do when relaxed?
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = false;
+                    _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
@@ -429,6 +439,7 @@ namespace Notadesigner.Tom.App
                     /// What to do when all pomodoros are completed?
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = true;
+                    _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = true;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
