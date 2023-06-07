@@ -186,7 +186,10 @@ namespace Notadesigner.Tom.App
             {
                 if (value != _timerState)
                 {
-                    switch (value)
+                    var oldTimerState = _timerState;
+                    _timerState = value;
+
+                    switch (_timerState)
                     {
                         case TimerState.Abandoned:
                             _stateMachine.Fire(TimerTrigger.Abandon);
@@ -205,7 +208,7 @@ namespace Notadesigner.Tom.App
                             break;
 
                         case TimerState.Focused:
-                            _stateMachine.Fire(_timerState == TimerState.Interrupted ? TimerTrigger.Resume : TimerTrigger.Focus);
+                            _stateMachine.Fire(oldTimerState == TimerState.Interrupted ? TimerTrigger.Resume : TimerTrigger.Focus);
                             break;
 
                         case TimerState.Interrupted:
@@ -221,8 +224,6 @@ namespace Notadesigner.Tom.App
                             _stateMachine.Fire(TimerTrigger.Continue);
                             break;
                     }
-
-                    _timerState = value;
 
                     OnPropertyChanged();
                 }
