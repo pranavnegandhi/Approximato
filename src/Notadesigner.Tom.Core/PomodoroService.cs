@@ -49,7 +49,16 @@ namespace Notadesigner.Tom.Core
             tomo.OnTransitioned(transition => { });
 
             tomo.Configure(TimerState.Abandoned)
-                .OnEntry(() => _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.Abandoned, _focusCounter)));
+                .OnEntryAsync(async () =>
+                {
+                    _focusCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Abandoned, _focusCounter));
+
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _focusCts?.Dispose();
+                })
+                .Permit(TimerTrigger.Reset, TimerState.Begin);
 
             tomo.Configure(TimerState.Begin)
                 .OnEntry(() =>
@@ -148,7 +157,7 @@ namespace Notadesigner.Tom.Core
 
             if (elapsed >= delay)
             {
-                _stateMachine.Fire(TimerTrigger.Timeout);
+                await _stateMachine.FireAsync(TimerTrigger.Timeout);
             }
         }
 

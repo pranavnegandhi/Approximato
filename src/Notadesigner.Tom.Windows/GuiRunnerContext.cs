@@ -91,7 +91,7 @@ namespace Notadesigner.Tom.App
 
             _abandonMenu = new ToolStripMenuItem("&Abandon…");
             _abandonMenu.Enabled = false;
-            _abandonMenu.Click += AbandonMenuClickHandler;
+            _abandonMenu.Click += AbandonMenuClickHandlerAsync;
             _contextMenu.Items.Add(_abandonMenu);
 
             _resetMenu = new ToolStripMenuItem("&Reset");
@@ -255,13 +255,13 @@ namespace Notadesigner.Tom.App
             e.Cancel = true;
         }
 
-        private async void AbandonMenuClickHandler(object? sender, EventArgs e)
+        private async void AbandonMenuClickHandlerAsync(object? sender, EventArgs e)
         {
             var result = MessageBox.Show("Abandon the Pomodoro?", "Tom", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
-                // await _engine.ResetAsync();
+                await _serviceChannel.Writer.WriteAsync(new UIEvent(TimerTrigger.Abandon));
             }
         }
 
@@ -325,6 +325,12 @@ namespace Notadesigner.Tom.App
                 .OnEntry(() =>
                 {
                     /// What to do when the pomodoro is abandoned?
+                    _startMenu.Enabled = false;
+                    _interruptMenu.Enabled = false;
+                    _resumeMenu.Enabled = false;
+                    _continueMenu.Enabled = false;
+                    _abandonMenu.Enabled = false;
+                    _resetMenu.Enabled = true;
                 })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
