@@ -66,8 +66,8 @@ namespace Notadesigner.Tom.Core
             tomo.Configure(TimerState.Finished)
                 .OnEntryAsync(EnterFinishedAsync)
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .PermitIf(TimerTrigger.Relax, TimerState.Relaxed, () => _focusCounter < _settingsFactory().MaximumRounds)
-                .PermitIf(TimerTrigger.Stop, TimerState.Stopped, () => _focusCounter >= _settingsFactory().MaximumRounds);
+                .PermitIf(TimerTrigger.Continue, TimerState.Relaxed, () => _focusCounter < _settingsFactory().MaximumRounds)
+                .PermitIf(TimerTrigger.Continue, TimerState.Stopped, () => _focusCounter >= _settingsFactory().MaximumRounds);
 
             tomo.Configure(TimerState.Focused)
                 .OnEntryFromAsync(TimerTrigger.Focus, async () =>
@@ -131,13 +131,7 @@ namespace Notadesigner.Tom.Core
             /// as it is no longer needed
             _focusCts?.Dispose();
 
-            var trigger = TimerTrigger.Relax;
-            if (_focusCounter >= _settingsFactory().MaximumRounds)
-            {
-                trigger = TimerTrigger.Stop;
-            }
-
-            await _stateMachine.FireAsync(trigger);
+            await _stateMachine.FireAsync(TimerTrigger.Continue);
         }
 
         private async Task RunFocusedAsync(CancellationToken cancellationToken)
