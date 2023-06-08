@@ -20,15 +20,7 @@ namespace Notadesigner.Tom.Core
 
         private int _focusCounter = 0;
 
-        private CancellationTokenSource? _focusedCts;
-
-        private CancellationTokenSource? _finishedCts;
-
-        private CancellationTokenSource? _relaxedCts;
-
-        private CancellationTokenSource? _refreshedCts;
-
-        private CancellationTokenSource? _stoppedCts;
+        private CancellationTokenSource? _activeCts;
 
         public PomodoroService(Func<PomodoroServiceSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel, Channel<UIEvent> serviceChannel)
         {
@@ -59,13 +51,13 @@ namespace Notadesigner.Tom.Core
             stateMachine.Configure(TimerState.Abandoned)
                 .OnEntryAsync(async () =>
                 {
-                    _focusedCts?.Cancel();
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Abandoned, _focusCounter));
-
                     /// Dispose the cancellationTokenSource
                     /// as it is no longer needed
-                    _focusedCts?.Dispose();
-                    _focusedCts = null;
+                    _activeCts?.Cancel();
+                    _activeCts?.Dispose();
+                    _activeCts = null;
+
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Abandoned, _focusCounter));
                 })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
@@ -80,28 +72,28 @@ namespace Notadesigner.Tom.Core
             stateMachine.Configure(TimerState.End)
                 .OnEntryAsync(async () =>
                 {
-                    _stoppedCts?.Cancel();
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.End, _focusCounter));
-
                     /// Dispose the cancellationTokenSource
                     /// as it is no longer needed
-                    _stoppedCts?.Dispose();
-                    _stoppedCts = null;
+                    _activeCts?.Cancel();
+                    _activeCts?.Dispose();
+                    _activeCts = null;
+
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.End, _focusCounter));
                 })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
             stateMachine.Configure(TimerState.Finished)
                 .OnEntryAsync(async () =>
                 {
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Finished, _focusCounter));
-
                     /// Dispose the cancellationTokenSource
                     /// as it is no longer needed
-                    _focusedCts?.Dispose();
-                    _focusedCts = null;
+                    _activeCts?.Dispose();
+                    _activeCts = null;
 
-                    _finishedCts = new();
-                    var _ = RunFinishedAsync(_finishedCts.Token);
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Finished, _focusCounter));
+
+                    _activeCts = new();
+                    var _ = RunFinishedAsync(_activeCts.Token);
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .PermitIf(TimerTrigger.Continue, TimerState.Relaxed, () => _focusCounter < _settingsFactory().MaximumRounds)
@@ -112,28 +104,28 @@ namespace Notadesigner.Tom.Core
                 {
                     await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
 
-                    _focusedCts = new();
-                    var _ = RunFocusedAsync(_focusedCts.Token);
+                    _activeCts = new();
+                    var _ = RunFocusedAsync(_activeCts.Token);
                 })
                 .OnEntryFromAsync(TimerTrigger.Resume, async () =>
                 {
                     await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, _focusCounter)); /// Don't increment focusCounter when resuming an interrupted session
 
-                    _focusedCts = new();
-                    var _ = RunFocusedAsync(_focusedCts.Token);
+                    _activeCts = new();
+                    var _ = RunFocusedAsync(_activeCts.Token);
                 })
                 .OnEntryFromAsync(TimerTrigger.Continue, async () =>
                 {
-                    _refreshedCts?.Cancel();
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
-
-                    _focusedCts = new();
-                    var _ = RunFocusedAsync(_focusedCts.Token);
-
                     /// Dispose the cancellationTokenSource
                     /// as it is no longer needed
-                    _refreshedCts?.Dispose();
-                    _refreshedCts = null;
+                    _activeCts?.Cancel();
+                    _activeCts?.Dispose();
+                    _activeCts = null;
+
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
+
+                    _activeCts = new();
+                    var _ = RunFocusedAsync(_activeCts.Token);
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Interrupt, TimerState.Interrupted)
@@ -142,27 +134,29 @@ namespace Notadesigner.Tom.Core
             stateMachine.Configure(TimerState.Interrupted)
                 .OnEntryAsync(async () =>
                 {
-                    _focusedCts?.Cancel();
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Interrupted, _focusCounter));
-
                     /// Dispose the cancellationTokenSource
                     /// as it is no longer needed
-                    _focusedCts?.Dispose();
-                    _focusedCts = null;
+                    _activeCts?.Cancel();
+                    _activeCts?.Dispose();
+                    _activeCts = null;
+
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Interrupted, _focusCounter));
                 })
                 .Permit(TimerTrigger.Resume, TimerState.Focused);
 
             stateMachine.Configure(TimerState.Refreshed)
                 .OnEntryAsync(async () =>
                 {
-                    _relaxedCts?.Cancel();
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _activeCts?.Cancel();
+                    _activeCts?.Dispose();
+                    _activeCts = null;
+
                     await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Refreshed, _focusCounter));
 
-                    _refreshedCts = new();
-                    var _ = RunRefreshedAsync(_refreshedCts.Token);
-
-                    _relaxedCts?.Dispose();
-                    _relaxedCts = null;
+                    _activeCts = new();
+                    var _ = RunRefreshedAsync(_activeCts.Token);
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Continue, TimerState.Focused);
@@ -170,14 +164,16 @@ namespace Notadesigner.Tom.Core
             stateMachine.Configure(TimerState.Relaxed)
                 .OnEntryAsync(async () =>
                 {
-                    _finishedCts?.Cancel();
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _activeCts?.Cancel();
+                    _activeCts?.Dispose();
+                    _activeCts = null;
+
                     await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Relaxed, _focusCounter));
 
-                    _relaxedCts = new();
-                    var _ = RunRelaxedAsync(_relaxedCts.Token);
-
-                    _finishedCts?.Dispose();
-                    _finishedCts = null;
+                    _activeCts = new();
+                    var _ = RunRelaxedAsync(_activeCts.Token);
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Timeout, TimerState.Refreshed);
@@ -185,16 +181,18 @@ namespace Notadesigner.Tom.Core
             stateMachine.Configure(TimerState.Stopped)
                 .OnEntryAsync(async () =>
                 {
-                    _finishedCts?.Cancel();
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _activeCts?.Cancel();
+                    _activeCts?.Dispose();
+                    _activeCts = null;
+
                     await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Stopped, _focusCounter));
 
-                    _stoppedCts = new();
-                    var _ = RunStoppedAsync(_stoppedCts.Token);
-
-                    _finishedCts?.Dispose();
-                    _finishedCts = null;
+                    _activeCts = new();
+                    var _ = RunStoppedAsync(_activeCts.Token);
                 })
-                .Permit(TimerTrigger.Focus, TimerState.Focused)
+                .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Timeout, TimerState.End);
         }
 
