@@ -71,15 +71,6 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Break completed..
-        /// </summary>
-        internal static string BREAK_COMPLETED {
-            get {
-                return ResourceManager.GetString("BREAK_COMPLETED", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Ding {
@@ -98,6 +89,15 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Starting a focus session..
+        /// </summary>
+        internal static string FocusedEnterNotification {
+            get {
+                return ResourceManager.GetString("FocusedEnterNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon MainIcon {
@@ -108,29 +108,29 @@ namespace Notadesigner.Tom.App.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Break completed..
+        /// </summary>
+        internal static string RefreshedEnterNotification {
+            get {
+                return ResourceManager.GetString("RefreshedEnterNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done! Take a long break..
+        /// </summary>
+        internal static string StoppedEnterNotification {
+            get {
+                return ResourceManager.GetString("StoppedEnterNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Tick {
             get {
                 return ResourceManager.GetStream("Tick", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Work session completed..
-        /// </summary>
-        internal static string WORK_COMPLETED {
-            get {
-                return ResourceManager.GetString("WORK_COMPLETED", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Starting a work session..
-        /// </summary>
-        internal static string WORK_SESSION {
-            get {
-                return ResourceManager.GetString("WORK_SESSION", resourceCulture);
             }
         }
     }

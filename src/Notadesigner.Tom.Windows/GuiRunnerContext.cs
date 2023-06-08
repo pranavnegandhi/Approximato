@@ -381,8 +381,6 @@ namespace Notadesigner.Tom.App
                 .OnEntry(() =>
                 {
                     /// What to do when entering a focus?
-                    var message = GuiRunnerResources.WORK_SESSION;
-
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = true;
                     _resumeMenu.Enabled = false;
@@ -390,6 +388,7 @@ namespace Notadesigner.Tom.App
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
 
+                    var message = GuiRunnerResources.FocusedEnterNotification;
                     _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
 
                     var _ = Task.Run(() => _enterSound.PlaySync())
@@ -427,6 +426,9 @@ namespace Notadesigner.Tom.App
                     _continueMenu.Enabled = true;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
+
+                    var message = GuiRunnerResources.RefreshedEnterNotification;
+                    _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Focus, TimerState.Focused);
@@ -455,6 +457,9 @@ namespace Notadesigner.Tom.App
                     _continueMenu.Enabled = true;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
+
+                    var message = GuiRunnerResources.StoppedEnterNotification;
+                    _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Timeout, TimerState.End);

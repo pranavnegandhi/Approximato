@@ -121,25 +121,25 @@
   <data name="AppLogo_32_48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AppLogo-32-48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BREAK_COMPLETED" xml:space="preserve">
-    <value>Break completed.</value>
-  </data>
   <data name="Ding" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ding.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="DingDing" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DingDing.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="FocusedEnterNotification" xml:space="preserve">
+    <value>Starting a focus session.</value>
+  </data>
   <data name="MainIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MainIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="RefreshedEnterNotification" xml:space="preserve">
+    <value>Break completed.</value>
+  </data>
+  <data name="StoppedEnterNotification" xml:space="preserve">
+    <value>Done! Take a long break.</value>
+  </data>
   <data name="Tick" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tick.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="WORK_COMPLETED" xml:space="preserve">
-    <value>Work session completed.</value>
-  </data>
-  <data name="WORK_SESSION" xml:space="preserve">
-    <value>Starting a work session.</value>
   </data>
 </root>
