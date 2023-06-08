@@ -392,8 +392,13 @@ namespace Notadesigner.Tom.App
 
                     _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
 
-                    Task.Run(() => _enterSound.PlaySync())
+                    var _ = Task.Run(() => _enterSound.PlaySync())
                         .ContinueWith(state => _tickPlayer.PlayLooping());
+                })
+                .OnExit(() =>
+                {
+                    _tickPlayer.Stop();
+                    _exitSound.PlaySync();
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Interrupt, TimerState.Interrupted)
