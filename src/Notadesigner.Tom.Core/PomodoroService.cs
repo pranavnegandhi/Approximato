@@ -20,6 +20,16 @@ namespace Notadesigner.Tom.Core
 
         private int _focusCounter = 0;
 
+        private CancellationTokenSource? _focusedCts;
+
+        private CancellationTokenSource? _finishedCts;
+
+        private CancellationTokenSource? _relaxedCts;
+
+        private CancellationTokenSource? _refreshedCts;
+
+        private CancellationTokenSource? _stoppedCts;
+
         public PomodoroService(Func<PomodoroServiceSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel, Channel<UIEvent> serviceChannel)
         {
             _settingsFactory = settingsFactory;
@@ -41,15 +51,25 @@ namespace Notadesigner.Tom.Core
             }
         }
 
-        private void ConfigureStates(StateMachine<TimerState, TimerTrigger> tomo)
+        private void ConfigureStates(StateMachine<TimerState, TimerTrigger> stateMachine)
         {
-            tomo.OnUnhandledTrigger((state, trigger) => { });
-            tomo.OnTransitioned(transition => { });
+            stateMachine.OnUnhandledTrigger((state, trigger) => { });
+            stateMachine.OnTransitioned(transition => { });
 
-            tomo.Configure(TimerState.Abandoned)
-                .OnEntry(() => _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.Abandoned, _focusCounter)));
+            stateMachine.Configure(TimerState.Abandoned)
+                .OnEntryAsync(async () =>
+                {
+                    _focusedCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Abandoned, _focusCounter));
 
-            tomo.Configure(TimerState.Begin)
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _focusedCts?.Dispose();
+                    _focusedCts = null;
+                })
+                .Permit(TimerTrigger.Reset, TimerState.Begin);
+
+            stateMachine.Configure(TimerState.Begin)
                 .OnEntry(() =>
                 {
                     _focusCounter = 0;
@@ -57,118 +77,209 @@ namespace Notadesigner.Tom.Core
                 })
                 .Permit(TimerTrigger.Focus, TimerState.Focused);
 
-            tomo.Configure(TimerState.End)
-                .OnEntry(() => _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.End, _focusCounter)))
+            stateMachine.Configure(TimerState.End)
+                .OnEntryAsync(async () =>
+                {
+                    _stoppedCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.End, _focusCounter));
+
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _stoppedCts?.Dispose();
+                    _stoppedCts = null;
+                })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
-            tomo.Configure(TimerState.Finished)
-                .OnEntryAsync(EnterFinishedAsync)
+            stateMachine.Configure(TimerState.Finished)
+                .OnEntryAsync(async () =>
+                {
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Finished, _focusCounter));
+
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _focusedCts?.Dispose();
+                    _focusedCts = null;
+
+                    _finishedCts = new();
+                    var _ = RunFinishedAsync(_finishedCts.Token);
+                })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .PermitIf(TimerTrigger.Continue, TimerState.Relaxed, () => _focusCounter < _settingsFactory().MaximumRounds)
                 .PermitIf(TimerTrigger.Continue, TimerState.Stopped, () => _focusCounter >= _settingsFactory().MaximumRounds);
 
-            tomo.Configure(TimerState.Focused)
-                .OnEntryFromAsync(TimerTrigger.Focus, EnterFocusedFromFocusAsync)
+            stateMachine.Configure(TimerState.Focused)
+                .OnEntryFromAsync(TimerTrigger.Focus, async () =>
+                {
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
+
+                    _focusedCts = new();
+                    var _ = RunFocusedAsync(_focusedCts.Token);
+                })
+                .OnEntryFromAsync(TimerTrigger.Resume, async () =>
+                {
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, _focusCounter)); /// Don't increment focusCounter when resuming an interrupted session
+
+                    _focusedCts = new();
+                    var _ = RunFocusedAsync(_focusedCts.Token);
+                })
+                .OnEntryFromAsync(TimerTrigger.Continue, async () =>
+                {
+                    _refreshedCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
+
+                    _focusedCts = new();
+                    var _ = RunFocusedAsync(_focusedCts.Token);
+
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _refreshedCts?.Dispose();
+                    _refreshedCts = null;
+                })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Interrupt, TimerState.Interrupted)
                 .Permit(TimerTrigger.Timeout, TimerState.Finished);
 
-            tomo.Configure(TimerState.Interrupted)
-                .Permit(TimerTrigger.Focus, TimerState.Focused);
+            stateMachine.Configure(TimerState.Interrupted)
+                .OnEntryAsync(async () =>
+                {
+                    _focusedCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Interrupted, _focusCounter));
 
-            tomo.Configure(TimerState.Refreshed)
-                .OnEntryAsync(EnterRefreshedAsync)
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _focusedCts?.Dispose();
+                    _focusedCts = null;
+                })
+                .Permit(TimerTrigger.Resume, TimerState.Focused);
+
+            stateMachine.Configure(TimerState.Refreshed)
+                .OnEntryAsync(async () =>
+                {
+                    _relaxedCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Refreshed, _focusCounter));
+
+                    _refreshedCts = new();
+                    var _ = RunRefreshedAsync(_refreshedCts.Token);
+
+                    _relaxedCts?.Dispose();
+                    _relaxedCts = null;
+                })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .Permit(TimerTrigger.Focus, TimerState.Focused);
+                .Permit(TimerTrigger.Continue, TimerState.Focused);
 
-            tomo.Configure(TimerState.Relaxed)
-                .OnEntryAsync(EnterRelaxedAsync)
+            stateMachine.Configure(TimerState.Relaxed)
+                .OnEntryAsync(async () =>
+                {
+                    _finishedCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Relaxed, _focusCounter));
+
+                    _relaxedCts = new();
+                    var _ = RunRelaxedAsync(_relaxedCts.Token);
+
+                    _finishedCts?.Dispose();
+                    _finishedCts = null;
+                })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Timeout, TimerState.Refreshed);
 
-            tomo.Configure(TimerState.Stopped)
-                .OnEntryAsync(EnterStoppedAsync)
+            stateMachine.Configure(TimerState.Stopped)
+                .OnEntryAsync(async () =>
+                {
+                    _finishedCts?.Cancel();
+                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Stopped, _focusCounter));
+
+                    _stoppedCts = new();
+                    var _ = RunStoppedAsync(_stoppedCts.Token);
+
+                    _finishedCts?.Dispose();
+                    _finishedCts = null;
+                })
                 .Permit(TimerTrigger.Focus, TimerState.Focused)
                 .Permit(TimerTrigger.Timeout, TimerState.End);
         }
 
-        private async Task EnterFinishedAsync()
+        private async Task RunFocusedAsync(CancellationToken cancellationToken)
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Finished, _focusCounter));
-
-            if (!_settingsFactory().LenientMode)
-            {
-                /// TODO: Wait until signal to proceed is not received from the UI thread
-                await _serviceChannel.Reader.WaitToReadAsync();
-                await _serviceChannel.Reader.ReadAsync();
-            }
-
-            await _stateMachine.FireAsync(TimerTrigger.Continue);
-        }
-
-        private async Task EnterFocusedFromFocusAsync(StateMachine<TimerState, TimerTrigger>.Transition transition)
-        {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
-
             var delay = _settingsFactory().FocusDuration;
             var elapsed = TimeSpan.Zero;
-            while (elapsed <= delay)
+            while (elapsed <= delay && !cancellationToken.IsCancellationRequested)
             {
                 _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, delay));
 
-                await Task.Delay(UnitIncrement);
+                await Task.Delay(UnitIncrement, cancellationToken);
                 elapsed = elapsed.Add(UnitIncrement);
             }
 
-            _stateMachine.Fire(TimerTrigger.Timeout);
-        }
-
-        private async Task EnterRefreshedAsync()
-        {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Refreshed, _focusCounter));
-
-            if (!_settingsFactory().LenientMode)
+            if (elapsed >= delay)
             {
-                /// TODO: Wait until signal to proceed is not received from the UI thread
-                await _serviceChannel.Reader.WaitToReadAsync();
-                var @event = await _serviceChannel.Reader.ReadAsync();
+                await _stateMachine.FireAsync(TimerTrigger.Timeout);
             }
-
-            _stateMachine.Fire(TimerTrigger.Focus);
         }
 
-        private async Task EnterRelaxedAsync()
+        private async Task RunFinishedAsync(CancellationToken cancellationToken)
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Relaxed, _focusCounter));
+            if (_settingsFactory().LenientMode)
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    await Task.Delay(UnitIncrement, cancellationToken);
+                }
+            }
+            else
+            {
+                await _stateMachine.FireAsync(TimerTrigger.Continue);
+            }
+        }
 
+        private async Task RunRelaxedAsync(CancellationToken cancellationToken)
+        {
             var delay = _settingsFactory().ShortBreakDuration;
             var elapsed = TimeSpan.Zero;
-            while (elapsed <= delay)
+            while (elapsed <= delay && !cancellationToken.IsCancellationRequested)
             {
                 _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, delay));
 
-                await Task.Delay(UnitIncrement);
+                await Task.Delay(UnitIncrement, cancellationToken);
                 elapsed = elapsed.Add(UnitIncrement);
             }
 
-            _stateMachine.Fire(TimerTrigger.Timeout);
+            if (elapsed >= delay)
+            {
+                await _stateMachine.FireAsync(TimerTrigger.Timeout);
+            }
         }
 
-        private async Task EnterStoppedAsync()
+        private async Task RunRefreshedAsync(CancellationToken cancellationToken)
         {
-            await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Stopped, _focusCounter));
+            if (_settingsFactory().LenientMode)
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    await Task.Delay(UnitIncrement, cancellationToken);
+                }
+            }
+            else
+            {
+                await _stateMachine.FireAsync(TimerTrigger.Continue);
+            }
+        }
 
+        private async Task RunStoppedAsync(CancellationToken cancellationToken)
+        {
             var delay = _settingsFactory().LongBreakDuration;
             var elapsed = TimeSpan.Zero;
-            while (elapsed <= delay)
+            while (elapsed <= delay && !cancellationToken.IsCancellationRequested)
             {
                 _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, delay));
 
-                await Task.Delay(UnitIncrement);
+                await Task.Delay(UnitIncrement, cancellationToken);
                 elapsed = elapsed.Add(UnitIncrement);
             }
 
-            _stateMachine.Fire(TimerTrigger.Timeout);
+            if (elapsed >= delay)
+            {
+                await _stateMachine.FireAsync(TimerTrigger.Timeout);
+            }
         }
     }
 }

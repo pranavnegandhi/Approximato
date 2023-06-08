@@ -7,6 +7,7 @@
         Focus,
         Interrupt,
         Reset,
-        Timeout,
+        Resume,
+        Timeout
     }
 }
