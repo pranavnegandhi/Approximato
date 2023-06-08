@@ -417,7 +417,7 @@ namespace Notadesigner.Tom.App
                 {
                     /// What to do when refreshed?
                     _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = true;
+                    _interruptMenu.Enabled = false;
                     _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = true;
                     _abandonMenu.Enabled = true;
@@ -445,7 +445,7 @@ namespace Notadesigner.Tom.App
                 {
                     /// What to do when all pomodoros are completed?
                     _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = true;
+                    _interruptMenu.Enabled = false;
                     _resumeMenu.Enabled = false;
                     _continueMenu.Enabled = true;
                     _abandonMenu.Enabled = true;
