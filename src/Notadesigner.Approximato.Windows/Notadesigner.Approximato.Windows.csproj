@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CircularProgressBar\CircularProgressBar.csproj" />
-    <ProjectReference Include="..\Notadesigner.Tom.Core\Notadesigner.Tom.Core.csproj" />
+    <ProjectReference Include="..\Notadesigner.Approximato.Core\Notadesigner.Approximato.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

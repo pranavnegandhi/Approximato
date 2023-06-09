@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormAnimation", "WinForm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Windows", "Notadesigner.Approximato.Windows\Notadesigner.Approximato.Windows.csproj", "{2109654E-D07A-4059-B71B-A0955D343502}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Core", "Notadesigner.Tom.Core\Notadesigner.Tom.Core.csproj", "{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Core", "Notadesigner.Approximato.Core\Notadesigner.Approximato.Core.csproj", "{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
