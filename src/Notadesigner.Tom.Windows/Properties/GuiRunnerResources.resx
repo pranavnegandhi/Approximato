@@ -142,4 +142,22 @@
   <data name="Tick" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tick.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="TimerStateAbandoned" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TimerStateAbandoned.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TimerStateFocused" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TimerStateFocused.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TimerStateInterrupted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TimerStateInterrupted.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TimerStateRefreshed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TimerStateRefreshed.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TimerStateRelaxed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TimerStateRelaxed.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TimerStateStopped" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TimerStateStopped.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

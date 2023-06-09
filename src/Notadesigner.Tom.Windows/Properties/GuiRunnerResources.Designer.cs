@@ -133,5 +133,65 @@ namespace Notadesigner.Tom.App.Properties {
                 return ResourceManager.GetStream("Tick", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TimerStateAbandoned {
+            get {
+                object obj = ResourceManager.GetObject("TimerStateAbandoned", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TimerStateFocused {
+            get {
+                object obj = ResourceManager.GetObject("TimerStateFocused", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TimerStateInterrupted {
+            get {
+                object obj = ResourceManager.GetObject("TimerStateInterrupted", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TimerStateRefreshed {
+            get {
+                object obj = ResourceManager.GetObject("TimerStateRefreshed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TimerStateRelaxed {
+            get {
+                object obj = ResourceManager.GetObject("TimerStateRelaxed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TimerStateStopped {
+            get {
+                object obj = ResourceManager.GetObject("TimerStateStopped", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

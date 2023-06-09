@@ -120,6 +120,7 @@ namespace Notadesigner.Tom.App
 
             binding = new Binding(nameof(App.MainForm.TimerState), this, nameof(TimerState), false);
             MainForm.DataBindings.Add(binding);
+            TimerState = TimerState.Begin;
 
             _tickPlayer = new(GuiRunnerResources.Tick);
             _enterSound = new(GuiRunnerResources.Ding);
