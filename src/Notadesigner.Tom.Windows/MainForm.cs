@@ -9,6 +9,18 @@ namespace Notadesigner.Tom.App
 
         private readonly CircularProgressBar.CircularProgressBar _breakProgressBar = ProgressBarFactory.Create(SystemColors.GradientActiveCaption, new Size(100, 100));
 
+        private readonly IReadOnlyDictionary<TimerState, Image> TimerStateIcons = new Dictionary<TimerState, Image>()
+        {
+            { TimerState.Abandoned, GuiRunnerResources.TimerStateAbandoned },
+            { TimerState.End, GuiRunnerResources.TimerStateStopped },
+            { TimerState.Finished, GuiRunnerResources.TimerStateRelaxed },
+            { TimerState.Focused, GuiRunnerResources.TimerStateFocused },
+            { TimerState.Interrupted, GuiRunnerResources.TimerStateInterrupted },
+            { TimerState.Refreshed, GuiRunnerResources.TimerStateRefreshed },
+            { TimerState.Relaxed, GuiRunnerResources.TimerStateRelaxed },
+            { TimerState.Stopped, GuiRunnerResources.TimerStateStopped }
+        };
+
         private CircularProgressBar.CircularProgressBar? _activeProgressBar;
 
         private TimeSpan _elapsedDuration = TimeSpan.Zero;
@@ -29,7 +41,6 @@ namespace Notadesigner.Tom.App
             progressBarsContainer.Controls.Add(_breakProgressBar);
 
             _activeProgressBar = _workProgressBar;
-            SetTimerState(TimerState.Begin);
 
             VisibleChanged += (s, e) =>
             {
@@ -179,6 +190,9 @@ namespace Notadesigner.Tom.App
                     _activeProgressBar = _workProgressBar;
                     ElapsedDuration = TimeSpan.Zero;
                     TotalDuration = TimeSpan.Zero;
+
+                    _breakProgressBar.Text = "__:__ / __:__";
+                    _breakProgressBar.Value = 0;
                     break;
 
                 case TimerState.Interrupted:
@@ -199,11 +213,31 @@ namespace Notadesigner.Tom.App
                 case TimerState.End:
                     break;
             }
+
+            if (TimerStateIcons.TryGetValue(value, out var stateIcon))
+            {
+                currentStateStatusLabel.Image = stateIcon;
+            }
+            else
+            {
+                currentStateStatusLabel.Image = null;
+            }
         }
 
         private void SetRoundCounter(int value)
         {
-            currentPhaseStatusLabel.Text = $"Round {value} of {GuiRunnerSettings.Default.MaximumRounds}";
+            string message;
+
+            if (value == 0)
+            {
+                message = string.Empty;
+            }
+            else
+            {
+                message = $"Round {value} of {GuiRunnerSettings.Default.MaximumRounds}";
+            }
+
+            currentPhaseStatusLabel.Text = message;
         }
     }
 }
