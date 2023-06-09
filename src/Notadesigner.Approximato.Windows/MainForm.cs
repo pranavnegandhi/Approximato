@@ -1,7 +1,7 @@
-using Notadesigner.Tom.App.Properties;
-using Notadesigner.Tom.Core;
+using Notadesigner.Approximato.Core;
+using Notadesigner.Approximato.Windows.Properties;
 
-namespace Notadesigner.Tom.App
+namespace Notadesigner.Approximato.Windows
 {
     public partial class MainForm : Form
     {

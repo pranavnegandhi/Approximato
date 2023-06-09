@@ -1,12 +1,12 @@
-﻿using Notadesigner.Tom.App.Properties;
-using Notadesigner.Tom.Core;
+﻿using Notadesigner.Approximato.Core;
+using Notadesigner.Approximato.Windows.Properties;
 using Stateless;
 using System.ComponentModel;
 using System.Media;
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 
-namespace Notadesigner.Tom.App
+namespace Notadesigner.Approximato.Windows
 {
     public class GuiRunnerContext : ApplicationContext, INotifyPropertyChanged
     {
@@ -109,16 +109,16 @@ namespace Notadesigner.Tom.App
             exitMenu.Click += ExitMenuClickHandler;
             _contextMenu.Items.Add(exitMenu);
 
-            var binding = new Binding(nameof(App.MainForm.ElapsedDuration), this, nameof(ElapsedDuration), false);
+            var binding = new Binding(nameof(Windows.MainForm.ElapsedDuration), this, nameof(ElapsedDuration), false);
             MainForm.DataBindings.Add(binding);
 
-            binding = new Binding(nameof(App.MainForm.TotalDuration), this, nameof(TotalDuration), false);
+            binding = new Binding(nameof(Windows.MainForm.TotalDuration), this, nameof(TotalDuration), false);
             MainForm.DataBindings.Add(binding);
 
-            binding = new Binding(nameof(App.MainForm.FocusCounter), this, nameof(FocusCounter), false);
+            binding = new Binding(nameof(Windows.MainForm.FocusCounter), this, nameof(FocusCounter), false);
             MainForm.DataBindings.Add(binding);
 
-            binding = new Binding(nameof(App.MainForm.TimerState), this, nameof(TimerState), false);
+            binding = new Binding(nameof(Windows.MainForm.TimerState), this, nameof(TimerState), false);
             MainForm.DataBindings.Add(binding);
             TimerState = TimerState.Begin;
 

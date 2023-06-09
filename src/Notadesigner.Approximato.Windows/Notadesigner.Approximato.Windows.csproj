@@ -10,8 +10,8 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>Notadesigner.Tom.App</RootNamespace>
-    <AssemblyName>Tom</AssemblyName>
+    <RootNamespace>Notadesigner.Approximato.Windows</RootNamespace>
+    <AssemblyName>Approximato.Windows</AssemblyName>
     <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CircularProgressBar\CircularProgressBar.csproj" />
-    <ProjectReference Include="..\Notadesigner.Tom.Core\Notadesigner.Tom.Core.csproj" />
+    <ProjectReference Include="..\Notadesigner.Approximato.Core\Notadesigner.Approximato.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

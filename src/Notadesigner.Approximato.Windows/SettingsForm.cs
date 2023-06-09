@@ -1,10 +1,10 @@
-﻿using Notadesigner.Tom.App.Properties;
+﻿using Notadesigner.Approximato.Windows.Properties;
 using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Notadesigner.Tom.App
+namespace Notadesigner.Approximato.Windows
 {
     public partial class SettingsForm : Form
     {
