@@ -1,13 +1,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Notadesigner.Tom.App.Properties;
+using Notadesigner.Approximato.Windows.Properties;
 using Notadesigner.Tom.Core;
 using Serilog;
 using System.Threading.Channels;
 using WindowsFormsLifetime;
 
-namespace Notadesigner.Tom.App
+namespace Notadesigner.Approximato.Windows
 {
     internal static class Program
     {

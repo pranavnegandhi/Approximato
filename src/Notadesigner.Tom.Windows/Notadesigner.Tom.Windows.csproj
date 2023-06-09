@@ -10,8 +10,8 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>Notadesigner.Tom.App</RootNamespace>
-    <AssemblyName>Tom</AssemblyName>
+    <RootNamespace>Notadesigner.Approximato.Windows</RootNamespace>
+    <AssemblyName>Approximato.Windows</AssemblyName>
     <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
   </PropertyGroup>
 

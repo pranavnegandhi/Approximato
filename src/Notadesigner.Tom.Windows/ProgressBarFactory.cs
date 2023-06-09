@@ -1,4 +1,4 @@
-﻿namespace Notadesigner.Tom.App
+﻿namespace Notadesigner.Approximato.Windows
 {
     public static class ProgressBarFactory
     {
