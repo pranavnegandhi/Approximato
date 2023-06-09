@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Notadesigner.Approximato.Core;
 using Notadesigner.Approximato.Windows.Properties;
-using Notadesigner.Tom.Core;
 using Serilog;
 using System.Threading.Channels;
 using WindowsFormsLifetime;

@@ -1,5 +1,5 @@
+using Notadesigner.Approximato.Core;
 using Notadesigner.Approximato.Windows.Properties;
-using Notadesigner.Tom.Core;
 
 namespace Notadesigner.Approximato.Windows
 {

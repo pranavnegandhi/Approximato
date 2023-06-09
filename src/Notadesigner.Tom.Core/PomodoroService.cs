@@ -2,7 +2,7 @@
 using Stateless;
 using System.Threading.Channels;
 
-namespace Notadesigner.Tom.Core
+namespace Notadesigner.Approximato.Core
 {
     public class PomodoroService : BackgroundService
     {

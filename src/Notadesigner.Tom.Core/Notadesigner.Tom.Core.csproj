@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>Notadesigner.Tom.Core</RootNamespace>
+    <RootNamespace>Notadesigner.Approximato.Core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

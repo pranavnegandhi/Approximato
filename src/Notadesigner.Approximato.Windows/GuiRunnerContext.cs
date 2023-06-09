@@ -1,5 +1,5 @@
-﻿using Notadesigner.Approximato.Windows.Properties;
-using Notadesigner.Tom.Core;
+﻿using Notadesigner.Approximato.Core;
+using Notadesigner.Approximato.Windows.Properties;
 using Stateless;
 using System.ComponentModel;
 using System.Media;

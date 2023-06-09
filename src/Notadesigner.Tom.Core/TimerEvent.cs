@@ -1,4 +1,4 @@
-﻿namespace Notadesigner.Tom.Core
+﻿namespace Notadesigner.Approximato.Core
 {
     public readonly struct TimerEvent
     {

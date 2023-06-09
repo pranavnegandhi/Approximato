@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CircularProgressBar", "Circ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormAnimation", "WinFormAnimation\WinFormAnimation.csproj", "{554AF8D8-EEAA-4585-9A6B-69C9E5338DA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Windows", "Notadesigner.Tom.Windows\Notadesigner.Tom.Windows.csproj", "{2109654E-D07A-4059-B71B-A0955D343502}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Windows", "Notadesigner.Approximato.Windows\Notadesigner.Approximato.Windows.csproj", "{2109654E-D07A-4059-B71B-A0955D343502}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Core", "Notadesigner.Tom.Core\Notadesigner.Tom.Core.csproj", "{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}"
 EndProject
