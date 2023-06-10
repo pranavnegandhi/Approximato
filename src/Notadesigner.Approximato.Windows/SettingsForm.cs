@@ -42,7 +42,10 @@ namespace Notadesigner.Approximato.Windows
             var infoText = $"{titleAttribute?.Title ?? string.Empty}{Environment.NewLine}" +
                 $"{assembly.GetName().Version}{Environment.NewLine}" +
                 $"{companyAttribute?.Company ?? string.Empty}{Environment.NewLine}" +
-                $"{copyrightAttribute?.Copyright ?? string.Empty}";
+                $"{copyrightAttribute?.Copyright ?? string.Empty}{Environment.NewLine}{Environment.NewLine}" +
+                $"Select icons made by Freepik from www.flaticon.com{Environment.NewLine}" +
+                $"Select icons made by Pixel perfect from www.icon54.com{Environment.NewLine}";
+
             AboutInfoLabel.Text = infoText;
 
             MaximumRoundsInput.DataSource = AvailableMaximumRounds;
