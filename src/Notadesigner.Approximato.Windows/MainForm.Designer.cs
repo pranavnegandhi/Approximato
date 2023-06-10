@@ -74,13 +74,12 @@
             // 
             currentStateStatusLabel.ImageScaling = ToolStripItemImageScaling.None;
             currentStateStatusLabel.Name = "currentStateStatusLabel";
-            currentStateStatusLabel.Size = new Size(16, 17);
+            currentStateStatusLabel.Size = new Size(0, 17);
             // 
             // currentPhaseStatusLabel
             // 
             currentPhaseStatusLabel.Name = "currentPhaseStatusLabel";
-            currentPhaseStatusLabel.Size = new Size(80, 17);
-            currentPhaseStatusLabel.Text = "";
+            currentPhaseStatusLabel.Size = new Size(0, 17);
             // 
             // MainForm
             // 
@@ -94,7 +93,7 @@
             Name = "MainForm";
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
-            Text = "Tom";
+            Text = "Approximato";
             TopMost = true;
             mainLayoutPanel.ResumeLayout(false);
             mainLayoutPanel.PerformLayout();
