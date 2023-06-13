@@ -1,6 +1,6 @@
 # Approximato - Time Manager for Windows
 
-Approximato is a time manager for Windows based on the Pomodoro Technique by Francesco Cirillo.
+Approximato is a time manager for those people who work better with a bit of elbow room in their workday. Strict adherence to the Pomodoro technique can be detrimental if you run out of focus time when you're within touching distance of completing a task. Or if you're in the flow for a task and would like to keep going on and postponing the break until later. Approximato keeps to the general on-off cycle of a Pomodoro, while allowing grace periods in between being focused and relaxed. This extra time is tracked separately from the focus period, and can be useful in estimating future tasks, or in identifying peak productivity times in a day.
 
 ## The Technique
 
