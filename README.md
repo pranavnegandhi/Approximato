@@ -12,7 +12,7 @@ The graphic below illustrates the steps that have to be executed for this techni
 
 The timer is implemented as a state machine, built on top of the Stateless library.
 
-http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/pranavnegandhi/Approximato/pranavnegandhi-patch-1/state-machine-diagram.pu
+![Timer State Machine](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/pranavnegandhi/Approximato/pranavnegandhi-patch-1/state-machine-diagram.pu)
 
 
 
