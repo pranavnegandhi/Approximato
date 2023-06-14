@@ -109,6 +109,12 @@ namespace Notadesigner.Approximato.Core
                 })
                 .OnEntryFromAsync(TimerTrigger.Resume, async () =>
                 {
+                    /// Dispose the cancellationTokenSource
+                    /// as it is no longer needed
+                    _activeCts?.Cancel();
+                    _activeCts?.Dispose();
+                    _activeCts = null;
+
                     await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, _focusCounter)); /// Don't increment focusCounter when resuming an interrupted session
 
                     _activeCts = new();
@@ -141,6 +147,9 @@ namespace Notadesigner.Approximato.Core
                     _activeCts = null;
 
                     await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Interrupted, _focusCounter));
+
+                    _activeCts = new();
+                    var _ = RunInterruptedAsync(_activeCts.Token);
                 })
                 .Permit(TimerTrigger.Resume, TimerState.Focused);
 
@@ -211,6 +220,18 @@ namespace Notadesigner.Approximato.Core
             if (elapsed >= delay)
             {
                 await _stateMachine.FireAsync(TimerTrigger.Timeout);
+            }
+        }
+
+        private async Task RunInterruptedAsync(CancellationToken cancellationToken)
+        {
+            var elapsed = TimeSpan.Zero;
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, TimeSpan.FromMinutes(59)));
+
+                await Task.Delay(UnitIncrement, cancellationToken);
+                elapsed = elapsed.Add(UnitIncrement);
             }
         }
 

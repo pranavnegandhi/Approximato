@@ -196,6 +196,9 @@ namespace Notadesigner.Approximato.Windows
                     break;
 
                 case TimerState.Interrupted:
+                    _activeProgressBar = _workProgressBar;
+                    ElapsedDuration = TimeSpan.Zero;
+                    TotalDuration = TimeSpan.FromMinutes(59);
                     break;
 
                 case TimerState.Finished:
