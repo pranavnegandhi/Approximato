@@ -18,6 +18,8 @@ namespace Notadesigner.Approximato.Core
 
         private readonly Channel<UIEvent> _serviceChannel;
 
+        private TimeSpan _elapsedDuration = TimeSpan.Zero;
+
         private int _focusCounter = 0;
 
         private CancellationTokenSource? _activeCts;
@@ -219,6 +221,7 @@ namespace Notadesigner.Approximato.Core
 
             if (elapsed >= delay)
             {
+                _elapsedDuration = elapsed;
                 await _stateMachine.FireAsync(TimerTrigger.Timeout);
             }
         }
@@ -239,9 +242,14 @@ namespace Notadesigner.Approximato.Core
         {
             if (_settingsFactory().LenientMode)
             {
+                var total = _settingsFactory().FocusDuration;
+                var elapsed = _elapsedDuration;
                 while (!cancellationToken.IsCancellationRequested)
                 {
+                    _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, total));
+
                     await Task.Delay(UnitIncrement, cancellationToken);
+                    elapsed = elapsed.Add(UnitIncrement);
                 }
             }
             else

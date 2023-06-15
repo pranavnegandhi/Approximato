@@ -147,22 +147,21 @@ namespace Notadesigner.Approximato.Windows
         private void SetElapsedDuration(TimeSpan value)
         {
             if (_activeProgressBar is null ||
-                !_activeProgressBar.IsHandleCreated ||
-                value > _totalDuration)
+                !_activeProgressBar.IsHandleCreated)
             {
                 return;
             }
 
             _elapsedDuration = value;
-            _activeProgressBar.Value = Convert.ToInt32(value.TotalSeconds);
+            var elapsedSeconds = Math.Min(_elapsedDuration.TotalSeconds, _totalDuration.TotalSeconds);
+            _activeProgressBar.Value = Convert.ToInt32(elapsedSeconds);
             _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss} / {_totalDuration:mm\\:ss}";
         }
 
         private void SetTotalDuration(TimeSpan value)
         {
             if (_activeProgressBar is null ||
-                !_activeProgressBar.IsHandleCreated ||
-                value < _elapsedDuration)
+                !_activeProgressBar.IsHandleCreated)
             {
                 return;
             }
@@ -202,6 +201,9 @@ namespace Notadesigner.Approximato.Windows
                     break;
 
                 case TimerState.Finished:
+                    _activeProgressBar = _workProgressBar;
+                    break;
+
                 case TimerState.Refreshed:
                     _activeProgressBar = null;
                     break;
