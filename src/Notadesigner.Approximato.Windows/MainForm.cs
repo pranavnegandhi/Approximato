@@ -205,7 +205,7 @@ namespace Notadesigner.Approximato.Windows
                     break;
 
                 case TimerState.Refreshed:
-                    _activeProgressBar = null;
+                    _activeProgressBar = _breakProgressBar;
                     break;
 
                 case TimerState.Relaxed:

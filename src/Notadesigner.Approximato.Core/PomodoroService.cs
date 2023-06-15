@@ -160,7 +160,6 @@ namespace Notadesigner.Approximato.Core
                 {
                     /// Dispose the cancellationTokenSource
                     /// as it is no longer needed
-                    _activeCts?.Cancel();
                     _activeCts?.Dispose();
                     _activeCts = null;
 
@@ -272,6 +271,7 @@ namespace Notadesigner.Approximato.Core
 
             if (elapsed >= delay)
             {
+                _elapsedDuration = elapsed;
                 await _stateMachine.FireAsync(TimerTrigger.Timeout);
             }
         }
@@ -280,9 +280,14 @@ namespace Notadesigner.Approximato.Core
         {
             if (_settingsFactory().LenientMode)
             {
+                var total = _settingsFactory().ShortBreakDuration;
+                var elapsed = _elapsedDuration;
                 while (!cancellationToken.IsCancellationRequested)
                 {
+                    _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, total));
+
                     await Task.Delay(UnitIncrement, cancellationToken);
+                    elapsed = elapsed.Add(UnitIncrement);
                 }
             }
             else
