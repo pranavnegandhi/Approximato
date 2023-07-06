@@ -278,22 +278,7 @@ namespace Notadesigner.Approximato.Core
 
         private async Task RunRefreshedAsync(CancellationToken cancellationToken)
         {
-            if (_settingsFactory().LenientMode)
-            {
-                var total = _settingsFactory().ShortBreakDuration;
-                var elapsed = _elapsedDuration;
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, total));
-
-                    await Task.Delay(UnitIncrement, cancellationToken);
-                    elapsed = elapsed.Add(UnitIncrement);
-                }
-            }
-            else
-            {
-                await _stateMachine.FireAsync(TimerTrigger.Continue);
-            }
+            await _stateMachine.FireAsync(TimerTrigger.Continue);
         }
 
         private async Task RunStoppedAsync(CancellationToken cancellationToken)
