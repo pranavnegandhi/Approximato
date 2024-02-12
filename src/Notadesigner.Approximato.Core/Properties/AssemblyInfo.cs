@@ -15,12 +15,12 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
 
 [assembly: Guid("1b1a39bc-5791-43a7-9eb9-4dcfbadaab9f")]
-[assembly: AssemblyTitle("Tom – Time Manager Core")]
-[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyTitle("Approximato Core – Time Manager for Windows")]
+[assembly: AssemblyVersion("1.2.1.0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("notadesigner.com")]
-[assembly: AssemblyProduct("Tom – Time Manager")]
+[assembly: AssemblyProduct("Approximato Core – Time Manager")]
 [assembly: AssemblyCopyright("Copyright © Pranav Negandhi")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")] 
