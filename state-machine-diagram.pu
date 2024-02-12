@@ -1,0 +1,35 @@
+@startuml
+!theme amiga
+
+[*] -down-> Begin
+Begin :
+Focused :
+Finished : counter++
+Interrupted :
+Relaxed : Short break
+Refreshed :
+Stopped : Long break
+Abandoned :
+End :
+
+Begin -down-> Focused : Focus
+Focused -left-> Interrupted : Interrupt
+Focused -down-> Finished : Timeout
+Finished -right-> Relaxed : [counter < 3]\rContinue
+Finished -left-> Stopped : [counter >= 3]\rContinue
+Focused -down-> Abandoned : Abandon
+Finished --> Abandoned : Abandon
+
+Interrupted -> Focused : Resume
+
+Relaxed -right-> Refreshed : Timeout
+Relaxed --> Abandoned : Abandon
+Refreshed -down-> Abandoned : Abandon
+Refreshed -up-> Focused : Continue
+
+Stopped -down-> Abandoned : Abandon
+Stopped -up-> End : Timeout
+
+End -up-> Begin : Reset
+Abandoned -up-> Begin : Reset
+@enduml
