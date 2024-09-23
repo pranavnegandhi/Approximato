@@ -1,17 +1,16 @@
-﻿using Microsoft.Extensions.Hosting;
-using Notadesigner.Approximato.Messaging.Contracts;
+﻿using Notadesigner.Approximato.Messaging.Contracts;
 using Stateless;
 using System.Threading.Channels;
 
 namespace Notadesigner.Approximato.Core
 {
-    public class PomodoroService : BackgroundService, IEventHandler<UIEvent>
+    public class StateHost : IEventHandler<UIEvent>
     {
         public event EventHandler<UIEvent>? EventReceived;
 
         private static readonly TimeSpan UnitIncrement = TimeSpan.FromSeconds(1);
 
-        private readonly Func<PomodoroServiceSettings> _settingsFactory;
+        private readonly Func<StateHostSettings> _settingsFactory;
 
         private readonly StateMachine<TimerState, TimerTrigger> _stateMachine = new(TimerState.Begin);
 
@@ -25,7 +24,7 @@ namespace Notadesigner.Approximato.Core
 
         private CancellationTokenSource? _activeCts;
 
-        public PomodoroService(Func<PomodoroServiceSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel)
+        public StateHost(Func<StateHostSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel)
         {
             _settingsFactory = settingsFactory;
             _transitionChannel = transitionChannel;
@@ -36,14 +35,6 @@ namespace Notadesigner.Approximato.Core
 
         public async ValueTask HandleAsync(UIEvent @event, CancellationToken token = default) =>
             await _stateMachine.FireAsync(@event.Trigger);
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
-            }
-        }
 
         private void ConfigureStates(StateMachine<TimerState, TimerTrigger> stateMachine)
         {

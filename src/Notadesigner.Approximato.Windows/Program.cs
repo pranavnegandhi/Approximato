@@ -30,18 +30,20 @@ namespace Notadesigner.Approximato.Windows
             try
             {
                 /// Attempt to initialize the service
-                Log.Information("Starting Pomodour process");
-
-                Log.Verbose("Launching {serviceName}", nameof(PomodoroService));
+                Log.Information("Starting Approximato");
                 var builder = Host.CreateDefaultBuilder(args)
                     .UseWindowsFormsLifetime<GuiRunnerContext>()
                     .ConfigureServices((_, services) =>
                     {
                         var appSettings = GuiRunnerSettings.Default;
-                        var settingsFactory = () => new PomodoroServiceSettings(appSettings.MaximumRounds, appSettings.FocusDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration, appSettings.LenientMode);
+                        StateHostSettings settingsFactory() => new(appSettings.MaximumRounds,
+                            appSettings.FocusDuration,
+                            appSettings.ShortBreakDuration,
+                            appSettings.LongBreakDuration,
+                            appSettings.LenientMode);
+
                         services.AddSingleton(settingsFactory)
-                            .AddHostedService<PomodoroService>()
-                            .AddInMemoryEvent<UIEvent, PomodoroService>()
+                            .AddInMemoryEvent<UIEvent, StateHost>()
                             .AddSingleton(provider => Channel.CreateUnbounded<TransitionEvent>())
                             .AddSingleton(provider => Channel.CreateUnbounded<TimerEvent>())
                             .AddSingleton<MainForm>()
@@ -59,11 +61,11 @@ namespace Notadesigner.Approximato.Windows
             }
             catch (ApplicationException exception)
             {
-                Log.Fatal(exception, "The service was not launched correctly.");
+                Log.Fatal(exception, "Approximato was not launched correctly.");
             }
             catch (Exception exception)
             {
-                Log.Fatal(exception, "The service failed to start.");
+                Log.Fatal(exception, "Error encountered while running Approximator.");
             }
             finally
             {
