@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Notadesigner.Approximato.Messaging.Contracts;
 using Stateless;
 using System.Threading.Channels;
 
 namespace Notadesigner.Approximato.Core
 {
-    public class PomodoroService : BackgroundService
+    public class PomodoroService : BackgroundService, IEventHandler<UIEvent>
     {
+        public event EventHandler<UIEvent>? EventReceived;
+
         private static readonly TimeSpan UnitIncrement = TimeSpan.FromSeconds(1);
 
         private readonly Func<PomodoroServiceSettings> _settingsFactory;
@@ -16,32 +19,29 @@ namespace Notadesigner.Approximato.Core
 
         private readonly Channel<TimerEvent> _timerChannel;
 
-        private readonly Channel<UIEvent> _serviceChannel;
-
         private TimeSpan _elapsedDuration = TimeSpan.Zero;
 
         private int _focusCounter = 0;
 
         private CancellationTokenSource? _activeCts;
 
-        public PomodoroService(Func<PomodoroServiceSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel, Channel<UIEvent> serviceChannel)
+        public PomodoroService(Func<PomodoroServiceSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel)
         {
             _settingsFactory = settingsFactory;
             _transitionChannel = transitionChannel;
             _timerChannel = timerChannel;
-            _serviceChannel = serviceChannel;
 
             ConfigureStates(_stateMachine);
         }
 
+        public async ValueTask HandleAsync(UIEvent @event, CancellationToken token = default) =>
+            await _stateMachine.FireAsync(@event.Trigger);
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (await _serviceChannel.Reader.WaitToReadAsync(stoppingToken))
+            while (!stoppingToken.IsCancellationRequested)
             {
-                stoppingToken.ThrowIfCancellationRequested();
-
-                var @event = await _serviceChannel.Reader.ReadAsync();
-                await _stateMachine.FireAsync(@event.Trigger);
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
         }
 

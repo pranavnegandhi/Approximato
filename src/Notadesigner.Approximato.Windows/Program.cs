@@ -2,6 +2,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Notadesigner.Approximato.Core;
+using Notadesigner.Approximato.Messaging.Contracts;
+using Notadesigner.Approximato.Messaging.ServiceRegistration;
 using Notadesigner.Approximato.Windows.Properties;
 using Serilog;
 using System.Threading.Channels;
@@ -39,15 +41,17 @@ namespace Notadesigner.Approximato.Windows
                         var settingsFactory = () => new PomodoroServiceSettings(appSettings.MaximumRounds, appSettings.FocusDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration, appSettings.LenientMode);
                         services.AddSingleton(settingsFactory)
                             .AddHostedService<PomodoroService>()
+                            .AddInMemoryEvent<UIEvent, PomodoroService>()
                             .AddSingleton(provider => Channel.CreateUnbounded<TransitionEvent>())
                             .AddSingleton(provider => Channel.CreateUnbounded<TimerEvent>())
-                            .AddSingleton(provider => Channel.CreateUnbounded<UIEvent>())
                             .AddSingleton<MainForm>()
                             .AddSingleton<SettingsForm>()
                             .AddSingleton<GuiRunnerContext>();
                     })
                     .UseSerilog();
+
                 var host = builder.Build();
+                host.Services.StartConsumers();
 
                 ApplicationConfiguration.Initialize();
 
