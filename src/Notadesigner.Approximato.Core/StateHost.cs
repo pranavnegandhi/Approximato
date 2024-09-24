@@ -98,7 +98,7 @@ namespace Notadesigner.Approximato.Core
             stateMachine.Configure(TimerState.Focused)
                 .OnEntryFromAsync(TimerTrigger.Focus, async () =>
                 {
-                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Focused, _focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Focused, ++_focusCounter));
                     await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
@@ -112,6 +112,7 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
+                    /// Don't increment focusCounter when resuming an interrupted session
                     var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Focused, _focusCounter));
                     await _transitionproducer.PublishAsync(@event);
 
@@ -145,7 +146,6 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    /// Don't increment focusCounter when resuming an interrupted session
                     var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Interrupted, _focusCounter));
                     await _transitionproducer.PublishAsync(@event);
 
