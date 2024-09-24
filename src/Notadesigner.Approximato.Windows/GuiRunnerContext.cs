@@ -5,17 +5,12 @@ using Stateless;
 using System.ComponentModel;
 using System.Media;
 using System.Runtime.CompilerServices;
-using System.Threading.Channels;
 
 namespace Notadesigner.Approximato.Windows
 {
     public class GuiRunnerContext : ApplicationContext, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        private readonly Channel<TransitionEvent> _transitionChannel;
-
-        private readonly Channel<TimerEvent> _timerChannel;
 
         private readonly IProducer<UIEvent> _uiEventProducer;
 
@@ -53,7 +48,11 @@ namespace Notadesigner.Approximato.Windows
 
         private readonly StateMachine<TimerState, TimerTrigger> _stateMachine;
 
-        public GuiRunnerContext(Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel, IProducer<UIEvent> uiEventProducer, MainForm mainForm, SettingsForm settingsForm)
+        public GuiRunnerContext(IProducer<UIEvent> uiEventProducer,
+            IEventHandler<TransitionEvent> transitionHandler,
+            IEventHandler<TimerEvent> timerHandler,
+            MainForm mainForm,
+            SettingsForm settingsForm)
         {
             _stateMachine = new StateMachine<TimerState, TimerTrigger>(TimerState.Begin);
             ConfigureStates(_stateMachine);
@@ -65,9 +64,9 @@ namespace Notadesigner.Approximato.Windows
                 Visible = true
             };
 
-            _transitionChannel = transitionChannel;
-            _timerChannel = timerChannel;
             _uiEventProducer = uiEventProducer;
+            transitionHandler.EventReceived += TransitionEventReceivedHandler;
+            timerHandler.EventReceived += TimerEventReceivedHandler;
 
             MainForm = mainForm;
             MainForm.FormClosing += FormClosingHandler;
@@ -130,9 +129,6 @@ namespace Notadesigner.Approximato.Windows
             _notifyIcon.MouseClick += NotifyIconMouseClickHandler;
 
             _stateMachine.Fire(TimerTrigger.Reset);
-
-            var _ = UpdateTransitionAsync();
-            var _1 = UpdateTimerAsync();
         }
 
         public TimeSpan TotalDuration
@@ -300,24 +296,16 @@ namespace Notadesigner.Approximato.Windows
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private async Task UpdateTransitionAsync()
+        private void TransitionEventReceivedHandler(object? sender, TransitionEvent @event)
         {
-            while (await _transitionChannel.Reader.WaitToReadAsync())
-            {
-                var @event = await _transitionChannel.Reader.ReadAsync();
-                FocusCounter = @event.FocusCounter;
-                TimerState = @event.TimerState;
-            }
+            FocusCounter = @event.FocusCounter;
+            TimerState = @event.TimerState;
         }
 
-        private async Task UpdateTimerAsync()
+        private void TimerEventReceivedHandler(object? sender, TimerEvent @event)
         {
-            while (await _timerChannel.Reader.WaitToReadAsync())
-            {
-                var @event2 = await _timerChannel.Reader.ReadAsync();
-                ElapsedDuration = @event2.Elapsed;
-                TotalDuration = @event2.TotalDuration;
-            }
+            ElapsedDuration = @event.Elapsed;
+            TotalDuration = @event.TotalDuration;
         }
 
         private void ConfigureStates(StateMachine<TimerState, TimerTrigger> stateMachine)

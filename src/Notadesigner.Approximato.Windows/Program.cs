@@ -2,7 +2,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Notadesigner.Approximato.Core;
-using Notadesigner.Approximato.Messaging.Contracts;
 using Notadesigner.Approximato.Messaging.ServiceRegistration;
 using Notadesigner.Approximato.Windows.Properties;
 using Serilog;
@@ -44,8 +43,8 @@ namespace Notadesigner.Approximato.Windows
 
                         services.AddSingleton(settingsFactory)
                             .AddInMemoryEvent<UIEvent, StateHost>()
-                            .AddSingleton(provider => Channel.CreateUnbounded<TransitionEvent>())
-                            .AddSingleton(provider => Channel.CreateUnbounded<TimerEvent>())
+                            .AddInMemoryEvent<TransitionEvent, GuiTransitionEventHandler>()
+                            .AddInMemoryEvent<TimerEvent, GuiTimerEventHandler>()
                             .AddSingleton<MainForm>()
                             .AddSingleton<SettingsForm>()
                             .AddSingleton<GuiRunnerContext>();

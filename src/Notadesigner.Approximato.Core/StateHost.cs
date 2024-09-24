@@ -1,6 +1,5 @@
 ﻿using Notadesigner.Approximato.Messaging.Contracts;
 using Stateless;
-using System.Threading.Channels;
 
 namespace Notadesigner.Approximato.Core
 {
@@ -14,9 +13,9 @@ namespace Notadesigner.Approximato.Core
 
         private readonly StateMachine<TimerState, TimerTrigger> _stateMachine = new(TimerState.Begin);
 
-        private readonly Channel<TransitionEvent> _transitionChannel;
+        private readonly IProducer<TransitionEvent> _transitionproducer;
 
-        private readonly Channel<TimerEvent> _timerChannel;
+        private readonly IProducer<TimerEvent> _timerProducer;
 
         private TimeSpan _elapsedDuration = TimeSpan.Zero;
 
@@ -24,11 +23,11 @@ namespace Notadesigner.Approximato.Core
 
         private CancellationTokenSource? _activeCts;
 
-        public StateHost(Func<StateHostSettings> settingsFactory, Channel<TransitionEvent> transitionChannel, Channel<TimerEvent> timerChannel)
+        public StateHost(Func<StateHostSettings> settingsFactory, IProducer<TransitionEvent> transitionProducer, IProducer<TimerEvent> timerProducer)
         {
             _settingsFactory = settingsFactory;
-            _transitionChannel = transitionChannel;
-            _timerChannel = timerChannel;
+            _transitionproducer = transitionProducer;
+            _timerProducer = timerProducer;
 
             ConfigureStates(_stateMachine);
         }
@@ -50,15 +49,17 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Abandoned, _focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Abandoned, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
                 })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
             stateMachine.Configure(TimerState.Begin)
-                .OnEntry(() =>
+                .OnEntryAsync(async () =>
                 {
                     _focusCounter = 0;
-                    _transitionChannel.Writer.TryWrite(new TransitionEvent(TimerState.Begin, _focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Begin, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
                 })
                 .Permit(TimerTrigger.Focus, TimerState.Focused);
 
@@ -71,7 +72,8 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.End, _focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.End, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
                 })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
@@ -83,7 +85,8 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Finished, _focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Finished, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
                     var _ = RunFinishedAsync(_activeCts.Token);
@@ -95,7 +98,8 @@ namespace Notadesigner.Approximato.Core
             stateMachine.Configure(TimerState.Focused)
                 .OnEntryFromAsync(TimerTrigger.Focus, async () =>
                 {
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Focused, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
                     var _ = RunFocusedAsync(_activeCts.Token);
@@ -108,7 +112,8 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, _focusCounter)); /// Don't increment focusCounter when resuming an interrupted session
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Focused, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
                     var _ = RunFocusedAsync(_activeCts.Token);
@@ -121,7 +126,8 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Focused, ++_focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Focused, ++_focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
                     var _ = RunFocusedAsync(_activeCts.Token);
@@ -139,7 +145,9 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Interrupted, _focusCounter));
+                    /// Don't increment focusCounter when resuming an interrupted session
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Interrupted, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
                     var _ = RunInterruptedAsync(_activeCts.Token);
@@ -154,7 +162,8 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Refreshed, _focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Refreshed, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
                     var _ = RunRefreshedAsync(_activeCts.Token);
@@ -171,7 +180,8 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Relaxed, _focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Relaxed, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
                     var _ = RunRelaxedAsync(_activeCts.Token);
@@ -188,7 +198,8 @@ namespace Notadesigner.Approximato.Core
                     _activeCts?.Dispose();
                     _activeCts = null;
 
-                    await _transitionChannel.Writer.WriteAsync(new TransitionEvent(TimerState.Stopped, _focusCounter));
+                    var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Stopped, _focusCounter));
+                    await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
                     var _ = RunStoppedAsync(_activeCts.Token);
@@ -203,7 +214,8 @@ namespace Notadesigner.Approximato.Core
             var elapsed = TimeSpan.Zero;
             while (elapsed <= delay && !cancellationToken.IsCancellationRequested)
             {
-                _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, delay));
+                var @event = new Event<TimerEvent>(new TimerEvent(elapsed, delay));
+                await _timerProducer.PublishAsync(@event, cancellationToken);
 
                 await Task.Delay(UnitIncrement, cancellationToken);
                 elapsed = elapsed.Add(UnitIncrement);
@@ -221,7 +233,8 @@ namespace Notadesigner.Approximato.Core
             var elapsed = TimeSpan.Zero;
             while (!cancellationToken.IsCancellationRequested)
             {
-                _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, TimeSpan.FromMinutes(59)));
+                var @event = new Event<TimerEvent>(new TimerEvent(elapsed, TimeSpan.FromMinutes(59)));
+                await _timerProducer.PublishAsync(@event, cancellationToken);
 
                 await Task.Delay(UnitIncrement, cancellationToken);
                 elapsed = elapsed.Add(UnitIncrement);
@@ -236,7 +249,8 @@ namespace Notadesigner.Approximato.Core
                 var elapsed = _elapsedDuration;
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, total));
+                    var @event = new Event<TimerEvent>(new TimerEvent(elapsed, total));
+                    await _timerProducer.PublishAsync(@event, cancellationToken);
 
                     await Task.Delay(UnitIncrement, cancellationToken);
                     elapsed = elapsed.Add(UnitIncrement);
@@ -254,7 +268,8 @@ namespace Notadesigner.Approximato.Core
             var elapsed = TimeSpan.Zero;
             while (elapsed <= delay && !cancellationToken.IsCancellationRequested)
             {
-                _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, delay));
+                var @event = new Event<TimerEvent>(new TimerEvent(elapsed, delay));
+                await _timerProducer.PublishAsync(@event, cancellationToken);
 
                 await Task.Delay(UnitIncrement, cancellationToken);
                 elapsed = elapsed.Add(UnitIncrement);
@@ -278,7 +293,8 @@ namespace Notadesigner.Approximato.Core
             var elapsed = TimeSpan.Zero;
             while (elapsed <= delay && !cancellationToken.IsCancellationRequested)
             {
-                _timerChannel.Writer.TryWrite(new TimerEvent(elapsed, delay));
+                var @event = new Event<TimerEvent>(new TimerEvent(elapsed, delay));
+                await _timerProducer.PublishAsync(@event, cancellationToken);
 
                 await Task.Delay(UnitIncrement, cancellationToken);
                 elapsed = elapsed.Add(UnitIncrement);
