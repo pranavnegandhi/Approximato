@@ -17,7 +17,8 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("5e6f1b4b-7ac3-4d90-a3f1-e4e972e960f4")]
 [assembly: AssemblyTitle("Approximato Messaging – Time Manager for Windows")]
-[assembly: AssemblyVersion("1.2.1.0")]
+[assembly: AssemblyVersion("1.3.0.0")]
+[assembly: AssemblyInformationalVersion("1.3.0.0 alpha")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("notadesigner.com")]

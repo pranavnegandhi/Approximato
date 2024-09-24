@@ -17,7 +17,8 @@ using System.Runtime.Versioning;
 
 [assembly: Guid("15D06A35-6722-4A2E-9D78-CF5A97BA10F6")]
 [assembly: AssemblyTitle("Approximato – Time Manager for Windows")]
-[assembly: AssemblyVersion("1.2.1.0")]
+[assembly: AssemblyVersion("1.3.0.0")]
+[assembly: AssemblyInformationalVersion("1.3.0.0 alpha")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("notadesigner.com")]
