@@ -46,7 +46,7 @@ namespace Notadesigner.Approximato.Windows
             {
                 if (Visible)
                 {
-                    var rect = Screen.PrimaryScreen.WorkingArea;
+                    var rect = Screen.PrimaryScreen?.WorkingArea ?? new(0, 0, 100, 100);
                     Location = new Point(rect.Right - Width, rect.Bottom - Height);
                 }
             };

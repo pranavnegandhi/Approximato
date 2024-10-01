@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CircularProgressBar", "Circ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormAnimation", "WinFormAnimation\WinFormAnimation.csproj", "{554AF8D8-EEAA-4585-9A6B-69C9E5338DA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Windows", "Notadesigner.Approximato.Windows\Notadesigner.Approximato.Windows.csproj", "{2109654E-D07A-4059-B71B-A0955D343502}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Approximato.Windows", "Notadesigner.Approximato.Windows\Notadesigner.Approximato.Windows.csproj", "{2109654E-D07A-4059-B71B-A0955D343502}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Tom.Core", "Notadesigner.Approximato.Core\Notadesigner.Approximato.Core.csproj", "{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Approximato.Core", "Notadesigner.Approximato.Core\Notadesigner.Approximato.Core.csproj", "{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notadesigner.Approximato.Messaging", "Notadesigner.Approximato.Messaging\Notadesigner.Approximato.Messaging.csproj", "{6FB14C7E-B93B-4478-A433-7EC5F8872B61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D3EF989-1CA8-40A2-9BA7-62ACFF1216FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FB14C7E-B93B-4478-A433-7EC5F8872B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FB14C7E-B93B-4478-A433-7EC5F8872B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FB14C7E-B93B-4478-A433-7EC5F8872B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FB14C7E-B93B-4478-A433-7EC5F8872B61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

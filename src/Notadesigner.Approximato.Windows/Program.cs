@@ -2,9 +2,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Notadesigner.Approximato.Core;
+using Notadesigner.Approximato.Messaging.ServiceRegistration;
 using Notadesigner.Approximato.Windows.Properties;
 using Serilog;
-using System.Threading.Channels;
 using WindowsFormsLifetime;
 
 namespace Notadesigner.Approximato.Windows
@@ -28,26 +28,14 @@ namespace Notadesigner.Approximato.Windows
             try
             {
                 /// Attempt to initialize the service
-                Log.Information("Starting Pomodour process");
-
-                Log.Verbose("Launching {serviceName}", nameof(PomodoroService));
+                Log.Information("Starting Approximato");
                 var builder = Host.CreateDefaultBuilder(args)
                     .UseWindowsFormsLifetime<GuiRunnerContext>()
-                    .ConfigureServices((_, services) =>
-                    {
-                        var appSettings = GuiRunnerSettings.Default;
-                        var settingsFactory = () => new PomodoroServiceSettings(appSettings.MaximumRounds, appSettings.FocusDuration, appSettings.ShortBreakDuration, appSettings.LongBreakDuration, appSettings.LenientMode);
-                        services.AddSingleton(settingsFactory)
-                            .AddHostedService<PomodoroService>()
-                            .AddSingleton(provider => Channel.CreateUnbounded<TransitionEvent>())
-                            .AddSingleton(provider => Channel.CreateUnbounded<TimerEvent>())
-                            .AddSingleton(provider => Channel.CreateUnbounded<UIEvent>())
-                            .AddSingleton<MainForm>()
-                            .AddSingleton<SettingsForm>()
-                            .AddSingleton<GuiRunnerContext>();
-                    })
+                    .ConfigureServices(ConfigureServicesDelegate)
                     .UseSerilog();
+
                 var host = builder.Build();
+                await host.Services.StartConsumers();
 
                 ApplicationConfiguration.Initialize();
 
@@ -55,16 +43,36 @@ namespace Notadesigner.Approximato.Windows
             }
             catch (ApplicationException exception)
             {
-                Log.Fatal(exception, "The service was not launched correctly.");
+                Log.Fatal(exception, "Approximato was not launched correctly.");
             }
             catch (Exception exception)
             {
-                Log.Fatal(exception, "The service failed to start.");
+                Log.Fatal(exception, "Error encountered while running Approximato.");
             }
             finally
             {
                 Log.CloseAndFlush();
             }
+        }
+
+        private static void ConfigureServicesDelegate(HostBuilderContext context, IServiceCollection collection)
+        {
+            var appSettings = GuiRunnerSettings.Default;
+            StateHostSettings settingsFactory() => new(appSettings.MaximumRounds,
+                appSettings.FocusDuration,
+                appSettings.ShortBreakDuration,
+                appSettings.LongBreakDuration,
+                appSettings.LenientMode);
+
+            collection.AddSingleton(settingsFactory)
+                .AddSingleton<MainForm>()
+                .AddSingleton<SettingsForm>()
+                .CreateEvent<UIEvent>()
+                .AddEventHandler<UIEvent, StateHost>()
+                .CreateEvent<TransitionEvent>()
+                .AddEventHandler<TransitionEvent, GuiTransitionEventHandler>("guiTransition")
+                .CreateEvent<TimerEvent>()
+                .AddEventHandler<TimerEvent, GuiTimerEventHandler>();
         }
     }
 }
