@@ -1,4 +1,5 @@
-﻿using Notadesigner.Approximato.Core;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Notadesigner.Approximato.Core;
 using Notadesigner.Approximato.Messaging.Contracts;
 using Notadesigner.Approximato.Windows.Properties;
 using Stateless;
@@ -49,8 +50,8 @@ namespace Notadesigner.Approximato.Windows
         private readonly StateMachine<TimerState, TimerTrigger> _stateMachine;
 
         public GuiRunnerContext(IProducer<UIEvent> uiEventProducer,
-            IEventHandler<TransitionEvent> transitionHandler,
-            IEventHandler<TimerEvent> timerHandler,
+            [FromKeyedServices("guiTransition")] IEventHandler<TransitionEvent> transitionHandler,
+            [FromKeyedServices("guiTimer")] IEventHandler<TimerEvent> timerHandler,
             MainForm mainForm,
             SettingsForm settingsForm)
         {

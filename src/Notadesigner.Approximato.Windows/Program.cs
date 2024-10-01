@@ -5,7 +5,6 @@ using Notadesigner.Approximato.Core;
 using Notadesigner.Approximato.Messaging.ServiceRegistration;
 using Notadesigner.Approximato.Windows.Properties;
 using Serilog;
-using System.Threading.Channels;
 using WindowsFormsLifetime;
 
 namespace Notadesigner.Approximato.Windows
@@ -32,27 +31,11 @@ namespace Notadesigner.Approximato.Windows
                 Log.Information("Starting Approximato");
                 var builder = Host.CreateDefaultBuilder(args)
                     .UseWindowsFormsLifetime<GuiRunnerContext>()
-                    .ConfigureServices((_, services) =>
-                    {
-                        var appSettings = GuiRunnerSettings.Default;
-                        StateHostSettings settingsFactory() => new(appSettings.MaximumRounds,
-                            appSettings.FocusDuration,
-                            appSettings.ShortBreakDuration,
-                            appSettings.LongBreakDuration,
-                            appSettings.LenientMode);
-
-                        services.AddSingleton(settingsFactory)
-                            .AddInMemoryEvent<UIEvent, StateHost>()
-                            .AddInMemoryEvent<TransitionEvent, GuiTransitionEventHandler>()
-                            .AddInMemoryEvent<TimerEvent, GuiTimerEventHandler>()
-                            .AddSingleton<MainForm>()
-                            .AddSingleton<SettingsForm>()
-                            .AddSingleton<GuiRunnerContext>();
-                    })
+                    .ConfigureServices(ConfigureServicesDelegate)
                     .UseSerilog();
 
                 var host = builder.Build();
-                host.Services.StartConsumers();
+                await host.Services.StartConsumers();
 
                 ApplicationConfiguration.Initialize();
 
@@ -64,12 +47,32 @@ namespace Notadesigner.Approximato.Windows
             }
             catch (Exception exception)
             {
-                Log.Fatal(exception, "Error encountered while running Approximator.");
+                Log.Fatal(exception, "Error encountered while running Approximato.");
             }
             finally
             {
                 Log.CloseAndFlush();
             }
+        }
+
+        private static void ConfigureServicesDelegate(HostBuilderContext context, IServiceCollection collection)
+        {
+            var appSettings = GuiRunnerSettings.Default;
+            StateHostSettings settingsFactory() => new(appSettings.MaximumRounds,
+                appSettings.FocusDuration,
+                appSettings.ShortBreakDuration,
+                appSettings.LongBreakDuration,
+                appSettings.LenientMode);
+
+            collection.AddSingleton(settingsFactory)
+                .AddSingleton<MainForm>()
+                .AddSingleton<SettingsForm>()
+                .CreateEvent<UIEvent>()
+                .AddEventHandler<UIEvent, StateHost>()
+                .CreateEvent<TransitionEvent>()
+                .AddEventHandler<TransitionEvent, GuiTransitionEventHandler>("guiTransition")
+                .CreateEvent<TimerEvent>()
+                .AddEventHandler<TimerEvent, GuiTimerEventHandler>();
         }
     }
 }

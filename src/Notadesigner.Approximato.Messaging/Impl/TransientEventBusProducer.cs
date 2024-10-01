@@ -3,7 +3,7 @@ using System.Threading.Channels;
 
 namespace Notadesigner.Approximato.Messaging.Impl
 {
-    internal sealed class InMemoryEventBusProducer<T>(ChannelWriter<Event<T>> bus) : IProducer<T>
+    internal sealed class TransientBusEventProducer<T>(ChannelWriter<Event<T>> bus) : IProducer<T>
     {
         private readonly ChannelWriter<Event<T>> _bus = bus;
 

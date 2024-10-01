@@ -1,17 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Notadesigner.Approximato.Messaging.Contracts;
+﻿using Notadesigner.Approximato.Messaging.Contracts;
 using Serilog;
 using System.Threading.Channels;
 
 namespace Notadesigner.Approximato.Messaging.Impl
 {
-    internal sealed class InMemoryEventBusConsumer<T>(ChannelReader<Event<T>> bus, IServiceProvider serviceProvider) : IConsumer<T>
+    internal sealed class TransientBusEventConsumer<T>(ChannelReader<Event<T>> bus, IEnumerable<IEventHandler<T>>? handlers, IEventContextAccessor<T>? contextAccessor) : IConsumer<T>
     {
         private readonly ChannelReader<Event<T>> _bus = bus;
 
-        private readonly ILogger _logger = Log.ForContext<InMemoryEventBusConsumer<T>>();
+        private readonly ILogger _logger = Log.ForContext<TransientBusEventConsumer<T>>();
 
-        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly IEnumerable<IEventHandler<T>> _handlers = handlers ?? [];
 
         private CancellationTokenSource? _stoppingCts;
 
@@ -26,21 +25,14 @@ namespace Notadesigner.Approximato.Messaging.Impl
         {
             EnsureStoppingTokenCreated();
 
-            var handlers = _serviceProvider.GetServices<IEventHandler<T>>();
-            var contextAccessor = _serviceProvider.GetRequiredService<IEventContextAccessor<T>>();
-
-            if (!handlers.Any())
+            if (!_handlers.Any())
             {
                 _logger.Debug("No handlers defined for {@EventType}", typeof(T).Name);
 
                 return ValueTask.CompletedTask;
             }
 
-            _ = Task.Run(async () =>
-            {
-                await StartProcessingAsync(handlers, contextAccessor).ConfigureAwait(false);
-            }, _stoppingCts!.Token)
-                .ConfigureAwait(false);
+            _ = Task.Factory.StartNew(StartProcessingAsync, TaskCreationOptions.LongRunning).ConfigureAwait(false);
 
             return ValueTask.CompletedTask;
         }
@@ -60,7 +52,7 @@ namespace Notadesigner.Approximato.Messaging.Impl
             _stoppingCts = new();
         }
 
-        private async Task StartProcessingAsync(IEnumerable<IEventHandler<T>> handlers, IEventContextAccessor<T> contextAccessor)
+        private async Task StartProcessingAsync()
         {
             var iterator = _bus.ReadAllAsync(_stoppingCts!.Token)
                 .WithCancellation(_stoppingCts.Token)
@@ -73,16 +65,16 @@ namespace Notadesigner.Approximato.Messaging.Impl
                     break;
                 }
 
-                await Parallel.ForEachAsync(handlers,
+                await Parallel.ForEachAsync(_handlers,
                     _stoppingCts.Token,
                     async (handler, scopedToken) => await ExecuteHandlerAsync(handler, task, contextAccessor, scopedToken).ConfigureAwait(false))
                     .ConfigureAwait(false);
             }
         }
 
-        private ValueTask ExecuteHandlerAsync(IEventHandler<T> handler, Event<T> task, IEventContextAccessor<T> contextAccessor, CancellationToken cancellationToken)
+        private static ValueTask ExecuteHandlerAsync(IEventHandler<T> handler, Event<T> task, IEventContextAccessor<T>? contextAccessor = default, CancellationToken cancellationToken = default)
         {
-            contextAccessor.Set(task); // set metadata and begin scope
+            contextAccessor?.Set(task); // set metadata and begin scope
 
             _ = Task.Run(async () => await handler.HandleAsync(task.Data, cancellationToken), cancellationToken)
                 .ConfigureAwait(false);

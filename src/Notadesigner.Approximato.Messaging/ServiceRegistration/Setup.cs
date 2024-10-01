@@ -7,8 +7,7 @@ namespace Notadesigner.Approximato.Messaging.ServiceRegistration
 {
     public static class Setup
     {
-        public static IServiceCollection AddInMemoryEvent<T, THandler>(this IServiceCollection services)
-            where THandler : class, IEventHandler<T>
+        public static IServiceCollection CreateEvent<T>(this IServiceCollection services)
         {
             var options = new UnboundedChannelOptions()
             {
@@ -18,24 +17,45 @@ namespace Notadesigner.Approximato.Messaging.ServiceRegistration
             };
             var bus = Channel.CreateUnbounded<Event<T>>(options);
 
-            services.AddScoped<IEventHandler<T>, THandler>();
+            services.AddSingleton<IProducer<T>>(_ => new TransientBusEventProducer<T>(bus.Writer));
 
-            services.AddSingleton<IProducer<T>>(_ => new InMemoryEventBusProducer<T>(bus.Writer));
-            InMemoryEventBusConsumer<T> consumerFactory(IServiceProvider provider) => new(bus.Reader, provider);
+            IConsumer<T>? consumer = default;
+            IConsumer<T> consumerFactory(IServiceProvider provider)
+            {
+                if (consumer is not null)
+                {
+                    return consumer;
+                }
 
-            services.AddSingleton<IConsumer>((Func<IServiceProvider, InMemoryEventBusConsumer<T>>)consumerFactory);
-            services.AddSingleton<IConsumer<T>>((Func<IServiceProvider, InMemoryEventBusConsumer<T>>)consumerFactory);
+                var handlers = provider.GetServices<IEventHandler<T>>();
+                var contextAccessor = provider.GetRequiredService<IEventContextAccessor<T>>();
+
+                consumer = new TransientBusEventConsumer<T>(bus.Reader, handlers, contextAccessor);
+
+                return consumer;
+            }
+
+            services.AddScoped<IConsumer>(consumerFactory);
+            services.AddSingleton(consumerFactory);
             services.AddSingleton<IEventContextAccessor<T>, EventContextAccessor<T>>();
 
             return services;
         }
 
-        public static IServiceProvider StartConsumers(this IServiceProvider services)
+        public static IServiceCollection AddEventHandler<T, THandler>(this IServiceCollection services, string key)
+            where THandler : class, IEventHandler<T> =>
+            services.AddKeyedAndDefaultScoped<IEventHandler<T>, THandler>(key);
+
+        public static IServiceCollection AddEventHandler<T, THandler>(this IServiceCollection services)
+            where THandler : class, IEventHandler<T> =>
+            services.AddScoped<IEventHandler<T>, THandler>();
+
+        public static async Task<IServiceProvider> StartConsumers(this IServiceProvider services)
         {
             var consumers = services.GetServices<IConsumer>();
             foreach (var consumer in consumers)
             {
-                _ = Task.Factory.StartNew(() => consumer.StartAsync(), TaskCreationOptions.LongRunning);
+                await consumer.StartAsync();
             }
 
             return services;
