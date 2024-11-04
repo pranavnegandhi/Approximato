@@ -207,7 +207,18 @@ namespace Notadesigner.Approximato.Windows
                             break;
 
                         case TimerState.Focused:
-                            _stateMachine.Fire(oldTimerState == TimerState.Interrupted ? TimerTrigger.Resume : TimerTrigger.Focus);
+                            if (oldTimerState == TimerState.Begin)
+                            {
+                                _stateMachine.Fire(TimerTrigger.Focus);
+                            }
+                            else if (oldTimerState == TimerState.Interrupted)
+                            {
+                                _stateMachine.Fire(TimerTrigger.Resume);
+                            }
+                            else if (oldTimerState == TimerState.Refreshed)
+                            {
+                                _stateMachine.Fire(TimerTrigger.Continue);
+                            }
                             break;
 
                         case TimerState.Interrupted:
@@ -422,7 +433,7 @@ namespace Notadesigner.Approximato.Windows
                     _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .Permit(TimerTrigger.Focus, TimerState.Focused);
+                .Permit(TimerTrigger.Continue, TimerState.Focused);
 
             stateMachine.Configure(TimerState.Relaxed)
                 .OnEntry(() =>
