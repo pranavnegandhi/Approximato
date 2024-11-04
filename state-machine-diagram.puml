@@ -2,25 +2,28 @@
 !theme amiga
 
 [*] -down-> Begin
-Begin :
-Focused :
-Finished : counter++
-Interrupted :
-Relaxed : Short break
-Refreshed :
-Stopped : Long break
-Abandoned :
-End :
+state Begin #Gray
+state Focused #red {
+}
+
+state Finished #Gray : counter++
+state Interrupted #ForestGreen
+state Relaxed #Green : Short break
+state Refreshed #Gray
+state Stopped #DarkGreen : Long break
+state Abandoned #Gray
+state End #Gray
 
 Begin -down-> Focused : Focus
-Focused -left-> Interrupted : Interrupt
+Focused -right-> Interrupted : Interrupt
 Focused -down-> Finished : Timeout
+Focused -down-> Abandoned : Abandon
+
 Finished -right-> Relaxed : [counter < 3]\rContinue
 Finished -left-> Stopped : [counter >= 3]\rContinue
-Focused -down-> Abandoned : Abandon
 Finished --> Abandoned : Abandon
 
-Interrupted -> Focused : Resume
+Interrupted --> Focused : Resume
 
 Relaxed -right-> Refreshed : Timeout
 Relaxed --> Abandoned : Abandon
