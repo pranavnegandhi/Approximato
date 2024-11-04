@@ -360,7 +360,7 @@ namespace Notadesigner.Approximato.Windows
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = false;
                     _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = true;
+                    _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
                 })
@@ -382,7 +382,7 @@ namespace Notadesigner.Approximato.Windows
                     var message = GuiRunnerResources.FocusedEnterNotification;
                     _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
 
-                    var _ = Task.Run(() => _enterSound.PlaySync())
+                    _ = Task.Run(() => _enterSound.PlaySync())
                         .ContinueWith(state => _tickPlayer.PlayLooping());
                 })
                 .OnExit(() =>
@@ -414,7 +414,7 @@ namespace Notadesigner.Approximato.Windows
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = false;
                     _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = true;
+                    _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
 
@@ -445,7 +445,7 @@ namespace Notadesigner.Approximato.Windows
                     _startMenu.Enabled = false;
                     _interruptMenu.Enabled = false;
                     _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = true;
+                    _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
 
