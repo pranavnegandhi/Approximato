@@ -49,6 +49,8 @@ namespace Notadesigner.Approximato.Windows
 
         private readonly StateMachine<TimerState, TimerTrigger> _stateMachine;
 
+        private readonly object _stateMachineLock = new();
+
         public GuiRunnerContext(IProducer<UIEvent> uiEventProducer,
             [FromKeyedServices("guiTransition")] IEventHandler<TransitionEvent> transitionHandler,
             [FromKeyedServices("guiTimer")] IEventHandler<TimerEvent> timerHandler,
@@ -185,54 +187,57 @@ namespace Notadesigner.Approximato.Windows
             {
                 if (value != _timerState)
                 {
-                    var oldTimerState = _timerState;
-                    _timerState = value;
-
-                    switch (_timerState)
+                    lock (_stateMachineLock)
                     {
-                        case TimerState.Abandoned:
-                            _stateMachine.Fire(TimerTrigger.Abandon);
-                            break;
+                        var oldTimerState = _timerState;
+                        _timerState = value;
 
-                        case TimerState.Begin:
-                            _stateMachine.Fire(TimerTrigger.Reset);
-                            break;
+                        switch (_timerState)
+                        {
+                            case TimerState.Abandoned:
+                                _stateMachine.Fire(TimerTrigger.Abandon);
+                                break;
 
-                        case TimerState.End:
-                            _stateMachine.Fire(TimerTrigger.Timeout);
-                            break;
+                            case TimerState.Begin:
+                                _stateMachine.Fire(TimerTrigger.Reset);
+                                break;
 
-                        case TimerState.Finished:
-                            _stateMachine.Fire(TimerTrigger.Timeout);
-                            break;
+                            case TimerState.End:
+                                _stateMachine.Fire(TimerTrigger.Timeout);
+                                break;
 
-                        case TimerState.Focused:
-                            if (oldTimerState == TimerState.Begin)
-                            {
-                                _stateMachine.Fire(TimerTrigger.Focus);
-                            }
-                            else if (oldTimerState == TimerState.Interrupted)
-                            {
-                                _stateMachine.Fire(TimerTrigger.Resume);
-                            }
-                            else if (oldTimerState == TimerState.Refreshed)
-                            {
+                            case TimerState.Finished:
+                                _stateMachine.Fire(TimerTrigger.Timeout);
+                                break;
+
+                            case TimerState.Focused:
+                                if (oldTimerState == TimerState.Begin)
+                                {
+                                    _stateMachine.Fire(TimerTrigger.Focus);
+                                }
+                                else if (oldTimerState == TimerState.Interrupted)
+                                {
+                                    _stateMachine.Fire(TimerTrigger.Resume);
+                                }
+                                else if (oldTimerState == TimerState.Refreshed)
+                                {
+                                    _stateMachine.Fire(TimerTrigger.Continue);
+                                }
+                                break;
+
+                            case TimerState.Interrupted:
+                                _stateMachine.Fire(TimerTrigger.Interrupt);
+                                break;
+
+                            case TimerState.Refreshed:
+                                _stateMachine.Fire(TimerTrigger.Timeout);
+                                break;
+
+                            case TimerState.Relaxed:
+                            case TimerState.Stopped:
                                 _stateMachine.Fire(TimerTrigger.Continue);
-                            }
-                            break;
-
-                        case TimerState.Interrupted:
-                            _stateMachine.Fire(TimerTrigger.Interrupt);
-                            break;
-
-                        case TimerState.Refreshed:
-                            _stateMachine.Fire(TimerTrigger.Timeout);
-                            break;
-
-                        case TimerState.Relaxed:
-                        case TimerState.Stopped:
-                            _stateMachine.Fire(TimerTrigger.Continue);
-                            break;
+                                break;
+                        }
                     }
 
                     OnPropertyChanged();
