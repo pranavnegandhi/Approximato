@@ -1,78 +1,88 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Notadesigner.Approximato.Core;
+using Notadesigner.Approximato.Data;
 using Notadesigner.Approximato.Messaging.ServiceRegistration;
 using Notadesigner.Approximato.Windows.Properties;
 using Serilog;
 using WindowsFormsLifetime;
 
-namespace Notadesigner.Approximato.Windows
+namespace Notadesigner.Approximato.Windows;
+
+internal static class Program
 {
-    internal static class Program
+    /// <summary>
+    ///  The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    public static async Task Main(string[] args)
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        public static async Task Main(string[] args)
+        /// Initialize the application logging framework
+        var configurationBuilder = new ConfigurationBuilder()
+            .AddJsonFile(AppDomain.CurrentDomain.BaseDirectory + "appsettings.json");
+        var configuration = configurationBuilder.Build();
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
+
+        try
         {
-            /// Initialize the application logging framework
-            var configurationBuilder = new ConfigurationBuilder()
-                .AddJsonFile(AppDomain.CurrentDomain.BaseDirectory + "appsettings.json");
-            var configuration = configurationBuilder.Build();
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
+            /// Attempt to initialize the service
+            Log.Information("Starting Approximato");
+            var builder = Host.CreateDefaultBuilder(args)
+                .UseWindowsFormsLifetime<GuiRunnerContext>()
+                .ConfigureServices(ConfigureServicesDelegate)
+                .UseSerilog();
 
-            try
-            {
-                /// Attempt to initialize the service
-                Log.Information("Starting Approximato");
-                var builder = Host.CreateDefaultBuilder(args)
-                    .UseWindowsFormsLifetime<GuiRunnerContext>()
-                    .ConfigureServices(ConfigureServicesDelegate)
-                    .UseSerilog();
+            var host = builder.Build();
+            await host.Services.StartConsumers();
 
-                var host = builder.Build();
-                await host.Services.StartConsumers();
+            ApplicationConfiguration.Initialize();
 
-                ApplicationConfiguration.Initialize();
-
-                await host.RunAsync();
-            }
-            catch (ApplicationException exception)
-            {
-                Log.Fatal(exception, "Approximato was not launched correctly.");
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception, "Error encountered while running Approximato.");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            await host.RunAsync();
         }
-
-        private static void ConfigureServicesDelegate(HostBuilderContext context, IServiceCollection collection)
+        catch (ApplicationException exception)
         {
-            var appSettings = GuiRunnerSettings.Default;
-            StateHostSettings settingsFactory() => new(appSettings.MaximumRounds,
-                appSettings.FocusDuration,
-                appSettings.ShortBreakDuration,
-                appSettings.LongBreakDuration,
-                appSettings.LenientMode);
-
-            collection.AddSingleton(settingsFactory)
-                .AddSingleton<MainForm>()
-                .AddSingleton<SettingsForm>()
-                .CreateEvent<UIEvent>()
-                .AddEventHandler<UIEvent, StateHost>()
-                .CreateEvent<TransitionEvent>()
-                .AddEventHandler<TransitionEvent, GuiTransitionEventHandler>("guiTransition")
-                .CreateEvent<TimerEvent>()
-                .AddEventHandler<TimerEvent, GuiTimerEventHandler>();
+            Log.Fatal(exception, "Approximato was not launched correctly.");
         }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception, "Error encountered while running Approximato.");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+    }
+
+    private static void ConfigureServicesDelegate(HostBuilderContext context, IServiceCollection collection)
+    {
+        var appSettings = GuiRunnerSettings.Default;
+        StateHostSettings settingsFactory() => new(appSettings.MaximumRounds,
+            appSettings.FocusDuration,
+            appSettings.ShortBreakDuration,
+            appSettings.LongBreakDuration,
+            appSettings.LenientMode);
+
+        collection.AddSingleton(settingsFactory)
+            .AddSingleton<MainForm>()
+            .AddSingleton<SettingsForm>();
+
+        collection.CreateEvent<UIEvent>()
+            .AddEventHandler<UIEvent, StateHost>()
+            .CreateEvent<TransitionEvent>()
+            .AddEventHandler<TransitionEvent, GuiTransitionEventHandler>("guiTransition")
+            .AddEventHandler<TransitionEvent, DbTransitionEventHandler>()
+            .CreateEvent<TimerEvent>()
+            .AddEventHandler<TimerEvent, GuiTimerEventHandler>("guiTimer");
+
+        collection.AddScoped<TransitionStorageService>()
+            .AddDbContext<ApproximatoDbContext>(options =>
+            {
+                var connectionString = context.Configuration.GetConnectionString("PrimaryStorage");
+                options.UseSqlite(connectionString);
+            }, ServiceLifetime.Transient);
     }
 }
