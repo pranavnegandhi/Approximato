@@ -30,6 +30,7 @@ namespace Notadesigner.Approximato.Core
             _timerProducer = timerProducer;
 
             ConfigureStates(_stateMachine);
+            _stateMachine.FireAsync(TimerTrigger.Reset);
         }
 
         public async ValueTask HandleAsync(UIEvent @event, CancellationToken token = default) =>
@@ -61,7 +62,8 @@ namespace Notadesigner.Approximato.Core
                     var @event = new Event<TransitionEvent>(new TransitionEvent(TimerState.Begin, _focusCounter));
                     await _transitionproducer.PublishAsync(@event);
                 })
-                .Permit(TimerTrigger.Focus, TimerState.Focused);
+                .Permit(TimerTrigger.Focus, TimerState.Focused)
+                .PermitReentry(TimerTrigger.Reset); /// Explicitly allowed to easily set state on application startup
 
             stateMachine.Configure(TimerState.End)
                 .OnEntryAsync(async () =>
@@ -166,7 +168,7 @@ namespace Notadesigner.Approximato.Core
                     await _transitionproducer.PublishAsync(@event);
 
                     _activeCts = new();
-                    var _ = RunRefreshedAsync(_activeCts.Token);
+                    await _stateMachine.FireAsync(TimerTrigger.Continue);
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Continue, TimerState.Focused);
@@ -280,11 +282,6 @@ namespace Notadesigner.Approximato.Core
                 _elapsedDuration = elapsed;
                 await _stateMachine.FireAsync(TimerTrigger.Timeout);
             }
-        }
-
-        private async Task RunRefreshedAsync(CancellationToken cancellationToken)
-        {
-            await _stateMachine.FireAsync(TimerTrigger.Continue);
         }
 
         private async Task RunStoppedAsync(CancellationToken cancellationToken)
