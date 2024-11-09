@@ -18,7 +18,7 @@ namespace Notadesigner.Approximato.Windows
             { TimerState.Stopped, GuiRunnerResources.TimerStateStopped }
         };
 
-        private TextProgressBar _activeProgressBar = ProgressBarFactory.Create(SystemColors.Highlight);
+        private readonly TextProgressBar _activeProgressBar = ProgressBarFactory.Create(SystemColors.Highlight);
 
         private TimeSpan _elapsedDuration = TimeSpan.Zero;
 
@@ -149,7 +149,7 @@ namespace Notadesigner.Approximato.Windows
             _elapsedDuration = value;
             var elapsedSeconds = Math.Min(_elapsedDuration.TotalSeconds, _totalDuration.TotalSeconds);
             _activeProgressBar.Value = Convert.ToInt32(elapsedSeconds);
-            _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss} / {_totalDuration:mm\\:ss}";
+            _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss}";
         }
 
         private void SetTotalDuration(TimeSpan value)
@@ -162,7 +162,7 @@ namespace Notadesigner.Approximato.Windows
 
             _totalDuration = value;
             _activeProgressBar.Maximum = Convert.ToInt32(value.TotalSeconds);
-            _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss} / {_totalDuration:mm\\:ss}";
+            _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss}";
         }
 
         private void SetTimerState(TimerState value)
@@ -171,7 +171,7 @@ namespace Notadesigner.Approximato.Windows
             {
                 case TimerState.Begin:
                 case TimerState.Abandoned:
-                    _activeProgressBar.Text = "__:__ / __:__";
+                    _activeProgressBar.Text = "__:__";
                     break;
 
                 case TimerState.Focused:
