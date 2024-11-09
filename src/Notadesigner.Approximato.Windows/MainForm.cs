@@ -1,14 +1,11 @@
 using Notadesigner.Approximato.Core;
+using Notadesigner.Approximato.Windows.Controls;
 using Notadesigner.Approximato.Windows.Properties;
 
 namespace Notadesigner.Approximato.Windows
 {
     public partial class MainForm : Form
     {
-        private readonly CircularProgressBar.CircularProgressBar _workProgressBar = ProgressBarFactory.Create(SystemColors.Highlight, new Size(120, 120));
-
-        private readonly CircularProgressBar.CircularProgressBar _breakProgressBar = ProgressBarFactory.Create(SystemColors.GradientActiveCaption, new Size(100, 100));
-
         private readonly IReadOnlyDictionary<TimerState, Image> TimerStateIcons = new Dictionary<TimerState, Image>()
         {
             { TimerState.Abandoned, GuiRunnerResources.TimerStateAbandoned },
@@ -21,7 +18,7 @@ namespace Notadesigner.Approximato.Windows
             { TimerState.Stopped, GuiRunnerResources.TimerStateStopped }
         };
 
-        private CircularProgressBar.CircularProgressBar? _activeProgressBar;
+        private readonly TextProgressBar _activeProgressBar = ProgressBarFactory.Create(SystemColors.Highlight);
 
         private TimeSpan _elapsedDuration = TimeSpan.Zero;
 
@@ -37,17 +34,14 @@ namespace Notadesigner.Approximato.Windows
 
             Icon = GuiRunnerResources.MainIcon;
 
-            progressBarsContainer.Controls.Add(_workProgressBar);
-            progressBarsContainer.Controls.Add(_breakProgressBar);
-
-            _activeProgressBar = _workProgressBar;
+            progressBarsContainer.Controls.Add(_activeProgressBar);
 
             VisibleChanged += (s, e) =>
             {
                 if (Visible)
                 {
                     var rect = Screen.PrimaryScreen?.WorkingArea ?? new(0, 0, 100, 100);
-                    Location = new Point(rect.Right - Width, rect.Bottom - Height);
+                    Location = new Point(rect.Right - Width - Width, rect.Top);
                 }
             };
         }
@@ -155,7 +149,7 @@ namespace Notadesigner.Approximato.Windows
             _elapsedDuration = value;
             var elapsedSeconds = Math.Min(_elapsedDuration.TotalSeconds, _totalDuration.TotalSeconds);
             _activeProgressBar.Value = Convert.ToInt32(elapsedSeconds);
-            _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss} / {_totalDuration:mm\\:ss}";
+            _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss}";
         }
 
         private void SetTotalDuration(TimeSpan value)
@@ -168,7 +162,7 @@ namespace Notadesigner.Approximato.Windows
 
             _totalDuration = value;
             _activeProgressBar.Maximum = Convert.ToInt32(value.TotalSeconds);
-            _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss} / {_totalDuration:mm\\:ss}";
+            _activeProgressBar.Text = $"{_elapsedDuration:mm\\:ss}";
         }
 
         private void SetTimerState(TimerState value)
@@ -177,42 +171,32 @@ namespace Notadesigner.Approximato.Windows
             {
                 case TimerState.Begin:
                 case TimerState.Abandoned:
-                    _activeProgressBar = null;
-                    _workProgressBar.Text = "__:__ / __:__";
-                    _workProgressBar.Value = 0;
-
-                    _breakProgressBar.Text = "__:__ / __:__";
-                    _breakProgressBar.Value = 0;
+                    _activeProgressBar.Text = "__:__";
                     break;
 
                 case TimerState.Focused:
-                    _activeProgressBar = _workProgressBar;
                     ElapsedDuration = TimeSpan.Zero;
                     TotalDuration = TimeSpan.Zero;
-
-                    _breakProgressBar.Text = "__:__ / __:__";
-                    _breakProgressBar.Value = 0;
+                    _activeProgressBar.ForeColor = SystemColors.Highlight;
                     break;
 
                 case TimerState.Interrupted:
-                    _activeProgressBar = _workProgressBar;
                     ElapsedDuration = TimeSpan.Zero;
                     TotalDuration = TimeSpan.FromMinutes(59);
+                    _activeProgressBar.ForeColor = SystemColors.ControlDarkDark;
                     break;
 
                 case TimerState.Finished:
-                    _activeProgressBar = _workProgressBar;
                     break;
 
                 case TimerState.Refreshed:
-                    _activeProgressBar = _breakProgressBar;
                     break;
 
                 case TimerState.Relaxed:
                 case TimerState.Stopped:
-                    _activeProgressBar = _breakProgressBar;
                     ElapsedDuration = TimeSpan.Zero;
                     TotalDuration = TimeSpan.Zero;
+                    _activeProgressBar.ForeColor = SystemColors.GradientActiveCaption;
                     break;
 
                 case TimerState.End:
