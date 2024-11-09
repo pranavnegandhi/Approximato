@@ -159,6 +159,21 @@ namespace Notadesigner.Approximato.Windows
                 {
                     _elapsedDuration = value;
 
+                    string tooltip;
+                    if (_elapsedDuration.TotalMinutes < 1)
+                    {
+                        tooltip = GuiRunnerResources.LessThanOneMinuteElapsedToolTip;
+                    }
+                    else if (_elapsedDuration.TotalMinutes > 1 && _elapsedDuration.TotalMinutes < 2)
+                    {
+                        tooltip = GuiRunnerResources.OneMinuteElapsedToolTip;
+                    }
+                    else
+                    {
+                        tooltip = string.Format(GuiRunnerResources.MoreThanOneMinuteElapsedToolTipTemplate, _elapsedDuration.TotalMinutes);
+                    }
+                    _notifyIcon.Text = tooltip;
+
                     OnPropertyChanged();
                 }
             }
@@ -339,6 +354,7 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = false;
                     _resetMenu.Enabled = true;
+                    _notifyIcon.Text = GuiRunnerResources.AbandonedToolTip;
                 })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
@@ -352,6 +368,7 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = false;
                     _resetMenu.Enabled = false;
+                    _notifyIcon.Text = GuiRunnerResources.BeginToolTip;
                 })
                 .Permit(TimerTrigger.Focus, TimerState.Focused)
                 .PermitReentry(TimerTrigger.Reset); /// Explicitly allowed to easily set UI state on application startup
@@ -366,6 +383,7 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = false;
                     _resetMenu.Enabled = true;
+                    _notifyIcon.Text = GuiRunnerResources.EndToolTip;
                 })
                 .Permit(TimerTrigger.Reset, TimerState.Begin);
 
@@ -379,6 +397,7 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
+                    _notifyIcon.Text = null;
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .PermitIf(TimerTrigger.Continue, TimerState.Stopped, () => TimerState == TimerState.Stopped)
@@ -394,12 +413,13 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
+                    _notifyIcon.Text = null;
 
                     var message = GuiRunnerResources.FocusedEnterNotification;
                     _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
 
-                    _ = Task.Run(() => _enterSound.PlaySync())
-                        .ContinueWith(state => _tickPlayer.PlayLooping());
+                    _enterSound.PlaySync();
+                    _tickPlayer.PlayLooping();
                 })
                 .OnExit(() =>
                 {
@@ -420,6 +440,7 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = false;
                     _resetMenu.Enabled = false;
+                    _notifyIcon.Text = null;
                 })
                 .Permit(TimerTrigger.Resume, TimerState.Focused);
 
@@ -433,6 +454,7 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
+                    _notifyIcon.Text = null;
 
                     var message = GuiRunnerResources.RefreshedEnterNotification;
                     _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
@@ -450,6 +472,7 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = false;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
+                    _notifyIcon.Text = null;
                 })
                 .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
                 .Permit(TimerTrigger.Timeout, TimerState.Refreshed);
@@ -464,6 +487,7 @@ namespace Notadesigner.Approximato.Windows
                     _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
                     _abandonMenu.Enabled = true;
                     _resetMenu.Enabled = false;
+                    _notifyIcon.Text = null;
 
                     var message = GuiRunnerResources.StoppedEnterNotification;
                     _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);

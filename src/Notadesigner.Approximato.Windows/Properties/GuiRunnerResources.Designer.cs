@@ -61,12 +61,30 @@ namespace Notadesigner.Approximato.Windows.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset to begin again.
+        /// </summary>
+        internal static string AbandonedToolTip {
+            get {
+                return ResourceManager.GetString("AbandonedToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap AppLogo_32_48 {
             get {
                 object obj = ResourceManager.GetObject("AppLogo_32_48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready.
+        /// </summary>
+        internal static string BeginToolTip {
+            get {
+                return ResourceManager.GetString("BeginToolTip", resourceCulture);
             }
         }
         
@@ -89,11 +107,29 @@ namespace Notadesigner.Approximato.Windows.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done. Reset to begin again..
+        /// </summary>
+        internal static string EndToolTip {
+            get {
+                return ResourceManager.GetString("EndToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starting a focus session..
         /// </summary>
         internal static string FocusedEnterNotification {
             get {
                 return ResourceManager.GetString("FocusedEnterNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Less than a minute elapsed.
+        /// </summary>
+        internal static string LessThanOneMinuteElapsedToolTip {
+            get {
+                return ResourceManager.GetString("LessThanOneMinuteElapsedToolTip", resourceCulture);
             }
         }
         
@@ -104,6 +140,24 @@ namespace Notadesigner.Approximato.Windows.Properties {
             get {
                 object obj = ResourceManager.GetObject("MainIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} minutes elapsed.
+        /// </summary>
+        internal static string MoreThanOneMinuteElapsedToolTipTemplate {
+            get {
+                return ResourceManager.GetString("MoreThanOneMinuteElapsedToolTipTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One minute elapsed.
+        /// </summary>
+        internal static string OneMinuteElapsedToolTip {
+            get {
+                return ResourceManager.GetString("OneMinuteElapsedToolTip", resourceCulture);
             }
         }
         

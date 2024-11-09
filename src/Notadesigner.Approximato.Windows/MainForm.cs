@@ -170,6 +170,11 @@ namespace Notadesigner.Approximato.Windows
             switch (value)
             {
                 case TimerState.Begin:
+                    ElapsedDuration = TimeSpan.Zero;
+                    TotalDuration = TimeSpan.Zero;
+                    _activeProgressBar.Text = "__:__";
+                    break;
+
                 case TimerState.Abandoned:
                     _activeProgressBar.Text = "__:__";
                     break;
