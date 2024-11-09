@@ -49,7 +49,7 @@
             mainLayoutPanel.RowCount = 2;
             mainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             mainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
-            mainLayoutPanel.Size = new Size(236, 151);
+            mainLayoutPanel.Size = new Size(236, 101);
             mainLayoutPanel.TabIndex = 4;
             // 
             // progressBarsContainer
@@ -57,15 +57,15 @@
             progressBarsContainer.Dock = DockStyle.Fill;
             progressBarsContainer.Location = new Point(3, 3);
             progressBarsContainer.Name = "progressBarsContainer";
-            progressBarsContainer.Size = new Size(236, 123);
+            progressBarsContainer.Size = new Size(236, 101);
             progressBarsContainer.TabIndex = 4;
             // 
             // mainStatusStrip
             // 
             mainStatusStrip.Items.AddRange(new ToolStripItem[] { currentStateStatusLabel, currentPhaseStatusLabel });
-            mainStatusStrip.Location = new Point(0, 129);
+            mainStatusStrip.Location = new Point(0, 79);
             mainStatusStrip.Name = "mainStatusStrip";
-            mainStatusStrip.Size = new Size(242, 22);
+            mainStatusStrip.Size = new Size(236, 22);
             mainStatusStrip.SizingGrip = false;
             mainStatusStrip.TabIndex = 1;
             mainStatusStrip.Text = "mainStatusStrip";
@@ -85,7 +85,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(236, 151);
+            ClientSize = new Size(236, 101);
             Controls.Add(mainLayoutPanel);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
