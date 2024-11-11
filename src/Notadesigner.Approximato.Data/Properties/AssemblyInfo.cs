@@ -16,7 +16,8 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("09e7d5cc-9a10-4ae3-a37e-435cad138f68")]
 [assembly: AssemblyTitle("Approximato Data – Time Manager for Windows")]
-[assembly: AssemblyVersion("1.2.1.0")]
+[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyInformationalVersion("1.4.0.0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("notadesigner.com")]

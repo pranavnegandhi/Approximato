@@ -16,8 +16,8 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("1b1a39bc-5791-43a7-9eb9-4dcfbadaab9f")]
 [assembly: AssemblyTitle("Approximato Core – Time Manager for Windows")]
-[assembly: AssemblyVersion("1.3.0.0")]
-[assembly: AssemblyInformationalVersion("1.3.0.0 alpha")]
+[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyInformationalVersion("1.4.0.0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("notadesigner.com")]
