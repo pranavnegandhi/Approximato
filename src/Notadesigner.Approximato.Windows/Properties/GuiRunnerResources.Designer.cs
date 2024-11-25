@@ -144,7 +144,7 @@ namespace Notadesigner.Approximato.Windows.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} minutes elapsed.
+        ///   Looks up a localized string similar to {0:F0} minutes elapsed.
         /// </summary>
         internal static string MoreThanOneMinuteElapsedToolTipTemplate {
             get {
