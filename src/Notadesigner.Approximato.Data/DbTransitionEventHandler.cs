@@ -41,10 +41,8 @@ public class DbTransitionEventHandler : IEventHandler<TransitionEvent>
                 break;
 
             case TimerState.End:
-                await _stateMachine.FireAsync(TimerTrigger.Timeout);
-                break;
-
             case TimerState.Finished:
+            case TimerState.Refreshed:
                 await _stateMachine.FireAsync(TimerTrigger.Timeout);
                 break;
 
@@ -65,10 +63,6 @@ public class DbTransitionEventHandler : IEventHandler<TransitionEvent>
 
             case TimerState.Interrupted:
                 await _stateMachine.FireAsync(TimerTrigger.Interrupt);
-                break;
-
-            case TimerState.Refreshed:
-                await _stateMachine.FireAsync(TimerTrigger.Timeout);
                 break;
 
             case TimerState.Relaxed:
