@@ -2,7 +2,6 @@
 using Notadesigner.Approximato.Core;
 using Notadesigner.Approximato.Messaging.Contracts;
 using Notadesigner.Approximato.Windows.Properties;
-using Stateless;
 using System.ComponentModel;
 using System.Media;
 using System.Runtime.CompilerServices;
@@ -47,19 +46,12 @@ namespace Notadesigner.Approximato.Windows
 
         private readonly SoundPlayer _exitSound;
 
-        private readonly StateMachine<TimerState, TimerTrigger> _stateMachine;
-
-        private readonly object _stateMachineLock = new();
-
         public GuiRunnerContext(IProducer<UIEvent> uiEventProducer,
             [FromKeyedServices("guiTransition")] IEventHandler<TransitionEvent> transitionHandler,
             [FromKeyedServices("guiTimer")] IEventHandler<TimerEvent> timerHandler,
             MainForm mainForm,
             SettingsForm settingsForm)
         {
-            _stateMachine = new StateMachine<TimerState, TimerTrigger>(TimerState.Begin);
-            ConfigureStates(_stateMachine);
-
             _notifyIcon = new NotifyIcon
             {
                 ContextMenuStrip = _contextMenu,
@@ -68,7 +60,18 @@ namespace Notadesigner.Approximato.Windows
             };
 
             _uiEventProducer = uiEventProducer;
-            transitionHandler.EventReceived += TransitionEventReceivedHandler;
+            var handler = (GuiTransitionEventHandler)transitionHandler;
+            handler.Abandoned += AbandonedEventHandler;
+            handler.Begin += BeginEventHandler;
+            handler.End += EndEventHandler;
+            handler.Finished += FinishedEventHandler;
+            handler.FocusedEntry += FocusedEventHandler;
+            handler.FocusedExit += FocusedExitEventHandler;
+            handler.Interrupted += InterruptedEventHandler;
+            handler.Refreshed += RefreshedEventHandler;
+            handler.Relaxed += RelaxedEventHandler;
+            handler.Stopped += StoppedEventHandler;
+
             timerHandler.EventReceived += TimerEventReceivedHandler;
 
             MainForm = mainForm;
@@ -130,8 +133,151 @@ namespace Notadesigner.Approximato.Windows
             _exitSound = new(GuiRunnerResources.DingDing);
 
             _notifyIcon.MouseClick += NotifyIconMouseClickHandler;
+            BeginEventHandler(null, 0);
+        }
 
-            _stateMachine.Fire(TimerTrigger.Reset);
+        private void AbandonedEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.Abandoned;
+            FocusCounter = e;
+            /// What to do when the pomodoro is abandoned?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = false;
+            _resumeMenu.Enabled = false;
+            _continueMenu.Enabled = false;
+            _abandonMenu.Enabled = false;
+            _resetMenu.Enabled = true;
+            _notifyIcon.Text = GuiRunnerResources.AbandonedToolTip;
+        }
+
+        private void BeginEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.Begin;
+            FocusCounter = e;
+            /// What to do before the pomodoro begins?
+            _startMenu.Enabled = true;
+            _interruptMenu.Enabled = false;
+            _resumeMenu.Enabled = false;
+            _continueMenu.Enabled = false;
+            _abandonMenu.Enabled = false;
+            _resetMenu.Enabled = false;
+            _notifyIcon.Text = GuiRunnerResources.BeginToolTip;
+        }
+
+        private void EndEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.End;
+            FocusCounter = e;
+            /// What to do when the pomodoro ends?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = false;
+            _resumeMenu.Enabled = false;
+            _continueMenu.Enabled = false;
+            _abandonMenu.Enabled = false;
+            _resetMenu.Enabled = true;
+            _notifyIcon.Text = GuiRunnerResources.EndToolTip;
+        }
+
+        private void FinishedEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.Finished;
+            FocusCounter = e;
+            /// What to do when a focus is finished?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = false;
+            _resumeMenu.Enabled = false;
+            _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
+            _abandonMenu.Enabled = true;
+            _resetMenu.Enabled = false;
+            _notifyIcon.Text = null;
+        }
+
+        private void FocusedEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.Focused;
+            FocusCounter = e;
+            /// What to do when entering a focus?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = true;
+            _resumeMenu.Enabled = false;
+            _continueMenu.Enabled = false;
+            _abandonMenu.Enabled = true;
+            _resetMenu.Enabled = false;
+            _notifyIcon.Text = null;
+
+            var message = GuiRunnerResources.FocusedEnterNotification;
+            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+
+            _enterSound.PlaySync();
+            _tickPlayer.PlayLooping();
+        }
+
+        private void FocusedExitEventHandler(object? _, EventArgs _1)
+        {
+            _tickPlayer.Stop();
+            _exitSound.PlaySync();
+        }
+
+        private void InterruptedEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.Interrupted;
+            FocusCounter = e;
+            /// What to do when the pomodoro is interrupted?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = false;
+            _resumeMenu.Enabled = true;
+            _continueMenu.Enabled = false;
+            _abandonMenu.Enabled = false;
+            _resetMenu.Enabled = false;
+            _notifyIcon.Text = null;
+        }
+
+        private void RefreshedEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.Refreshed;
+            FocusCounter = e;
+            /// What to do when refreshed?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = false;
+            _resumeMenu.Enabled = false;
+            _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
+            _abandonMenu.Enabled = true;
+            _resetMenu.Enabled = false;
+            _notifyIcon.Text = null;
+
+            var message = GuiRunnerResources.RefreshedEnterNotification;
+            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
+        }
+
+        private void RelaxedEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.Relaxed;
+            FocusCounter = e;
+            /// What to do when relaxed?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = false;
+            _resumeMenu.Enabled = false;
+            _continueMenu.Enabled = false;
+            _abandonMenu.Enabled = true;
+            _resetMenu.Enabled = false;
+            _notifyIcon.Text = null;
+        }
+
+        private void StoppedEventHandler(object? _, int e)
+        {
+            TimerState = TimerState.Relaxed;
+            FocusCounter = e;
+            /// What to do when all pomodoros are completed?
+            _startMenu.Enabled = false;
+            _interruptMenu.Enabled = false;
+            _resumeMenu.Enabled = false;
+            _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
+            _abandonMenu.Enabled = true;
+            _resetMenu.Enabled = false;
+            _notifyIcon.Text = null;
+
+            var message = GuiRunnerResources.StoppedEnterNotification;
+            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
         }
 
         public TimeSpan TotalDuration
@@ -202,59 +348,7 @@ namespace Notadesigner.Approximato.Windows
             {
                 if (value != _timerState)
                 {
-                    lock (_stateMachineLock)
-                    {
-                        var oldTimerState = _timerState;
-                        _timerState = value;
-
-                        switch (_timerState)
-                        {
-                            case TimerState.Abandoned:
-                                _stateMachine.Fire(TimerTrigger.Abandon);
-                                break;
-
-                            case TimerState.Begin:
-                                _stateMachine.Fire(TimerTrigger.Reset);
-                                break;
-
-                            case TimerState.End:
-                                _stateMachine.Fire(TimerTrigger.Timeout);
-                                break;
-
-                            case TimerState.Finished:
-                                _stateMachine.Fire(TimerTrigger.Timeout);
-                                break;
-
-                            case TimerState.Focused:
-                                if (oldTimerState == TimerState.Begin)
-                                {
-                                    _stateMachine.Fire(TimerTrigger.Focus);
-                                }
-                                else if (oldTimerState == TimerState.Interrupted)
-                                {
-                                    _stateMachine.Fire(TimerTrigger.Resume);
-                                }
-                                else if (oldTimerState == TimerState.Refreshed)
-                                {
-                                    _stateMachine.Fire(TimerTrigger.Continue);
-                                }
-                                break;
-
-                            case TimerState.Interrupted:
-                                _stateMachine.Fire(TimerTrigger.Interrupt);
-                                break;
-
-                            case TimerState.Refreshed:
-                                _stateMachine.Fire(TimerTrigger.Timeout);
-                                break;
-
-                            case TimerState.Relaxed:
-                            case TimerState.Stopped:
-                                _stateMachine.Fire(TimerTrigger.Continue);
-                                break;
-                        }
-                    }
-
+                    _timerState = value;
                     OnPropertyChanged();
                 }
             }
@@ -328,172 +422,10 @@ namespace Notadesigner.Approximato.Windows
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void TransitionEventReceivedHandler(object? sender, TransitionEvent @event)
-        {
-            FocusCounter = @event.FocusCounter;
-            TimerState = @event.TimerState;
-        }
-
         private void TimerEventReceivedHandler(object? sender, TimerEvent @event)
         {
             ElapsedDuration = @event.Elapsed;
             TotalDuration = @event.TotalDuration;
-        }
-
-        private void ConfigureStates(StateMachine<TimerState, TimerTrigger> stateMachine)
-        {
-            stateMachine.OnUnhandledTrigger((state, trigger) => { });
-
-            stateMachine.Configure(TimerState.Abandoned)
-                .OnEntry(() =>
-                {
-                    /// What to do when the pomodoro is abandoned?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = false;
-                    _resetMenu.Enabled = true;
-                    _notifyIcon.Text = GuiRunnerResources.AbandonedToolTip;
-                })
-                .Permit(TimerTrigger.Reset, TimerState.Begin);
-
-            stateMachine.Configure(TimerState.Begin)
-                .OnEntry(() =>
-                {
-                    /// What to do before the pomodoro begins?
-                    _startMenu.Enabled = true;
-                    _interruptMenu.Enabled = false;
-                    _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = false;
-                    _resetMenu.Enabled = false;
-                    _notifyIcon.Text = GuiRunnerResources.BeginToolTip;
-                })
-                .Permit(TimerTrigger.Focus, TimerState.Focused)
-                .PermitReentry(TimerTrigger.Reset); /// Explicitly allowed to easily set UI state on application startup
-
-            stateMachine.Configure(TimerState.End)
-                .OnEntry(() =>
-                {
-                    /// What to do when the pomodoro ends?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = false;
-                    _resetMenu.Enabled = true;
-                    _notifyIcon.Text = GuiRunnerResources.EndToolTip;
-                })
-                .Permit(TimerTrigger.Reset, TimerState.Begin);
-
-            stateMachine.Configure(TimerState.Finished)
-                .OnEntry(() =>
-                {
-                    /// What to do when a focus is finished?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
-                    _abandonMenu.Enabled = true;
-                    _resetMenu.Enabled = false;
-                    _notifyIcon.Text = null;
-                })
-                .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .PermitIf(TimerTrigger.Continue, TimerState.Stopped, () => TimerState == TimerState.Stopped)
-                .PermitIf(TimerTrigger.Continue, TimerState.Relaxed, () => TimerState == TimerState.Relaxed);
-
-            stateMachine.Configure(TimerState.Focused)
-                .OnEntry(() =>
-                {
-                    /// What to do when entering a focus?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = true;
-                    _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = true;
-                    _resetMenu.Enabled = false;
-                    _notifyIcon.Text = null;
-
-                    var message = GuiRunnerResources.FocusedEnterNotification;
-                    _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
-
-                    _enterSound.PlaySync();
-                    _tickPlayer.PlayLooping();
-                })
-                .OnExit(() =>
-                {
-                    _tickPlayer.Stop();
-                    _exitSound.PlaySync();
-                })
-                .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .Permit(TimerTrigger.Interrupt, TimerState.Interrupted)
-                .Permit(TimerTrigger.Timeout, TimerState.Finished);
-
-            stateMachine.Configure(TimerState.Interrupted)
-                .OnEntry(() =>
-                {
-                    /// What to do when the pomodoro is interrupted?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _resumeMenu.Enabled = true;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = false;
-                    _resetMenu.Enabled = false;
-                    _notifyIcon.Text = null;
-                })
-                .Permit(TimerTrigger.Resume, TimerState.Focused);
-
-            stateMachine.Configure(TimerState.Refreshed)
-                .OnEntry(() =>
-                {
-                    /// What to do when refreshed?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
-                    _abandonMenu.Enabled = true;
-                    _resetMenu.Enabled = false;
-                    _notifyIcon.Text = null;
-
-                    var message = GuiRunnerResources.RefreshedEnterNotification;
-                    _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
-                })
-                .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .Permit(TimerTrigger.Continue, TimerState.Focused);
-
-            stateMachine.Configure(TimerState.Relaxed)
-                .OnEntry(() =>
-                {
-                    /// What to do when relaxed?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = false;
-                    _abandonMenu.Enabled = true;
-                    _resetMenu.Enabled = false;
-                    _notifyIcon.Text = null;
-                })
-                .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .Permit(TimerTrigger.Timeout, TimerState.Refreshed);
-
-            stateMachine.Configure(TimerState.Stopped)
-                .OnEntry(() =>
-                {
-                    /// What to do when all pomodoros are completed?
-                    _startMenu.Enabled = false;
-                    _interruptMenu.Enabled = false;
-                    _resumeMenu.Enabled = false;
-                    _continueMenu.Enabled = GuiRunnerSettings.Default.LenientMode;
-                    _abandonMenu.Enabled = true;
-                    _resetMenu.Enabled = false;
-                    _notifyIcon.Text = null;
-
-                    var message = GuiRunnerResources.StoppedEnterNotification;
-                    _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
-                })
-                .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
-                .Permit(TimerTrigger.Timeout, TimerState.End);
         }
     }
 }

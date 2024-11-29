@@ -191,9 +191,8 @@ namespace Notadesigner.Approximato.Windows
                     _activeProgressBar.ForeColor = SystemColors.ControlDarkDark;
                     break;
 
+                case TimerState.End:
                 case TimerState.Finished:
-                    break;
-
                 case TimerState.Refreshed:
                     break;
 
@@ -202,9 +201,6 @@ namespace Notadesigner.Approximato.Windows
                     ElapsedDuration = TimeSpan.Zero;
                     TotalDuration = TimeSpan.Zero;
                     _activeProgressBar.ForeColor = SystemColors.GradientActiveCaption;
-                    break;
-
-                case TimerState.End:
                     break;
             }
 
