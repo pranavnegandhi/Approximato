@@ -43,7 +43,6 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
 
     async ValueTask IEventHandler<TransitionEvent>.HandleAsync(TransitionEvent @event, CancellationToken cancellationToken)
     {
-        await _stateMachineSemaphore.WaitAsync(cancellationToken);
         _timerState = @event.TimerState;
         _focusCounter = @event.FocusCounter;
 
