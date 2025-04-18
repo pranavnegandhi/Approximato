@@ -171,6 +171,15 @@ namespace Notadesigner.Approximato.Windows.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time for a short break..
+        /// </summary>
+        internal static string RelaxedEnterNotification {
+            get {
+                return ResourceManager.GetString("RelaxedEnterNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done! Take a long break..
         /// </summary>
         internal static string StoppedEnterNotification {

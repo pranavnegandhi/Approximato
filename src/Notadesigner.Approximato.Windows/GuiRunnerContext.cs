@@ -261,6 +261,9 @@ namespace Notadesigner.Approximato.Windows
             _abandonMenu.Enabled = true;
             _resetMenu.Enabled = false;
             _notifyIcon.Text = null;
+
+            var message = GuiRunnerResources.RelaxedEnterNotification;
+            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
         }
 
         private void StoppedEventHandler(object? _, int e)
