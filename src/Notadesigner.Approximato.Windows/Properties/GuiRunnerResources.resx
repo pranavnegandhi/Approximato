@@ -154,6 +154,9 @@
   <data name="RefreshedEnterNotification" xml:space="preserve">
     <value>Break completed.</value>
   </data>
+  <data name="RelaxedEnterNotification" xml:space="preserve">
+    <value>Time for a short break.</value>
+  </data>
   <data name="StoppedEnterNotification" xml:space="preserve">
     <value>Done! Take a long break.</value>
   </data>

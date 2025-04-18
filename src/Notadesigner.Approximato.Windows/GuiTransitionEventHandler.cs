@@ -1,7 +1,6 @@
 ﻿using Notadesigner.Approximato.Core;
 using Notadesigner.Approximato.Messaging.Contracts;
 using Stateless;
-using WindowsFormsLifetime;
 
 namespace Notadesigner.Approximato.Windows;
 
@@ -14,8 +13,6 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
     private int _focusCounter;
 
     private readonly StateMachine<TimerState, TimerTrigger> _stateMachine = new(TimerState.Begin);
-
-    private readonly SemaphoreSlim _stateMachineSemaphore = new(1);
 
     internal event EventHandler<int>? Abandoned;
 
@@ -91,7 +88,6 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
                 await _stateMachine.FireAsync(TimerTrigger.Continue);
                 break;
         }
-        _stateMachineSemaphore.Release();
     }
 
     private void ConfigureStates(StateMachine<TimerState, TimerTrigger> stateMachine)
@@ -134,7 +130,7 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .Permit(TimerTrigger.Continue, TimerState.Focused);
 
         stateMachine.Configure(TimerState.Relaxed)
-            .OnEntry(() => Stopped?.Invoke(this, _focusCounter))
+            .OnEntry(() => Relaxed?.Invoke(this, _focusCounter))
             .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
             .Permit(TimerTrigger.Timeout, TimerState.Refreshed);
 
