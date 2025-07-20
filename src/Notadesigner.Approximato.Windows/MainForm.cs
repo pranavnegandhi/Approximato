@@ -33,6 +33,7 @@ namespace Notadesigner.Approximato.Windows
             InitializeComponent();
 
             Icon = GuiRunnerResources.MainIcon;
+            Text = GuiRunnerResources.ProductName;
 
             progressBarsContainer.Controls.Add(_activeProgressBar);
 

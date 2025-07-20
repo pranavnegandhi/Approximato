@@ -93,7 +93,6 @@
             Name = "MainForm";
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
-            Text = "Approximato";
             TopMost = true;
             mainLayoutPanel.ResumeLayout(false);
             mainLayoutPanel.PerformLayout();
