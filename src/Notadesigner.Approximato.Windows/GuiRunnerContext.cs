@@ -154,6 +154,7 @@ namespace Notadesigner.Approximato.Windows
         {
             TimerState = TimerState.Begin;
             FocusCounter = e;
+            ElapsedDuration = TimeSpan.Zero;
             /// What to do before the pomodoro begins?
             _startMenu.Enabled = true;
             _interruptMenu.Enabled = false;
