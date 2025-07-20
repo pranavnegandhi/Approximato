@@ -8,5 +8,7 @@
         }
 
         public TimerTrigger Trigger { get; init; }
+
+        public override string ToString() => $"{Trigger}";
     }
 }
