@@ -15,6 +15,8 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
 
     private readonly StateMachine<TimerState, TimerTrigger> _stateMachine;
 
+    private readonly SemaphoreSlim _stateMachineLock = new SemaphoreSlim(1, 1);
+
     internal event EventHandler<int>? Abandoned;
 
     internal event EventHandler<int>? Begin;
@@ -46,55 +48,64 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
 
     async ValueTask IEventHandler<TransitionEvent>.HandleAsync(TransitionEvent @event, CancellationToken cancellationToken)
     {
-        _timerState = @event.TimerState;
-        _focusCounter = @event.FocusCounter;
+        await _stateMachineLock.WaitAsync(cancellationToken);
 
-        _logger.Debug("{Module}::{Handler} | {Source} -{FocusCounter}-> {Destination}",
-                    nameof(GuiTransitionEventHandler),
-                    nameof(IEventHandler<TransitionEvent>.HandleAsync),
-                    _stateMachine.State,
-                    _focusCounter,
-                    _timerState);
-
-        switch (@event.TimerState)
+        try
         {
-            case TimerState.Abandoned:
-                await _stateMachine.FireAsync(TimerTrigger.Abandon);
-                break;
+            _timerState = @event.TimerState;
+            _focusCounter = @event.FocusCounter;
 
-            case TimerState.Begin:
-                await _stateMachine.FireAsync(TimerTrigger.Reset);
-                break;
+            _logger.Debug("{Module}::{Handler} | {Source} -{FocusCounter}-> {Destination}",
+                        nameof(GuiTransitionEventHandler),
+                        nameof(IEventHandler<TransitionEvent>.HandleAsync),
+                        _stateMachine.State,
+                        _focusCounter,
+                        _timerState);
 
-            case TimerState.End:
-            case TimerState.Finished:
-            case TimerState.Refreshed:
-                await _stateMachine.FireAsync(TimerTrigger.Timeout);
-                break;
+            switch (@event.TimerState)
+            {
+                case TimerState.Abandoned:
+                    await _stateMachine.FireAsync(TimerTrigger.Abandon);
+                    break;
 
-            case TimerState.Focused:
-                if (_stateMachine.State == TimerState.Begin)
-                {
-                    await _stateMachine.FireAsync(TimerTrigger.Focus);
-                }
-                else if (_stateMachine.State == TimerState.Interrupted)
-                {
-                    await _stateMachine.FireAsync(TimerTrigger.Resume);
-                }
-                else if (_stateMachine.State == TimerState.Refreshed)
-                {
+                case TimerState.Begin:
+                    await _stateMachine.FireAsync(TimerTrigger.Reset);
+                    break;
+
+                case TimerState.End:
+                case TimerState.Finished:
+                case TimerState.Refreshed:
+                    await _stateMachine.FireAsync(TimerTrigger.Timeout);
+                    break;
+
+                case TimerState.Focused:
+                    if (_stateMachine.State == TimerState.Begin)
+                    {
+                        await _stateMachine.FireAsync(TimerTrigger.Focus);
+                    }
+                    else if (_stateMachine.State == TimerState.Interrupted)
+                    {
+                        await _stateMachine.FireAsync(TimerTrigger.Resume);
+                    }
+                    else if (_stateMachine.State == TimerState.Refreshed)
+                    {
+                        await _stateMachine.FireAsync(TimerTrigger.Continue);
+                    }
+                    break;
+
+                case TimerState.Interrupted:
+                    await _stateMachine.FireAsync(TimerTrigger.Interrupt);
+                    break;
+
+                case TimerState.Relaxed:
+                case TimerState.Stopped:
                     await _stateMachine.FireAsync(TimerTrigger.Continue);
-                }
-                break;
-
-            case TimerState.Interrupted:
-                await _stateMachine.FireAsync(TimerTrigger.Interrupt);
-                break;
-
-            case TimerState.Relaxed:
-            case TimerState.Stopped:
-                await _stateMachine.FireAsync(TimerTrigger.Continue);
-                break;
+                    break;
+            }
+        }
+        finally
+        {
+            _stateMachineLock.Release();
         }
     }
 
