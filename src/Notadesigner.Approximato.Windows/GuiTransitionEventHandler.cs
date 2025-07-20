@@ -1,5 +1,6 @@
 ﻿using Notadesigner.Approximato.Core;
 using Notadesigner.Approximato.Messaging.Contracts;
+using Serilog;
 using Stateless;
 
 namespace Notadesigner.Approximato.Windows;
@@ -12,7 +13,9 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
 
     private int _focusCounter;
 
-    private readonly StateMachine<TimerState, TimerTrigger> _stateMachine = new(TimerState.Begin);
+    private readonly StateMachine<TimerState, TimerTrigger> _stateMachine;
+
+    private readonly SemaphoreSlim _stateMachineLock = new SemaphoreSlim(1, 1);
 
     internal event EventHandler<int>? Abandoned;
 
@@ -34,6 +37,8 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
 
     internal event EventHandler<int>? Stopped;
 
+    private readonly ILogger _logger = Log.ForContext<GuiTransitionEventHandler>();
+
     public GuiTransitionEventHandler()
     {
         _stateMachine = new StateMachine<TimerState, TimerTrigger>(TimerState.Begin);
@@ -43,98 +48,215 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
 
     async ValueTask IEventHandler<TransitionEvent>.HandleAsync(TransitionEvent @event, CancellationToken cancellationToken)
     {
-        _timerState = @event.TimerState;
-        _focusCounter = @event.FocusCounter;
+        await _stateMachineLock.WaitAsync(cancellationToken);
 
-        switch (@event.TimerState)
+        try
         {
-            case TimerState.Abandoned:
-                await _stateMachine.FireAsync(TimerTrigger.Abandon);
-                break;
+            _timerState = @event.TimerState;
+            _focusCounter = @event.FocusCounter;
 
-            case TimerState.Begin:
-                await _stateMachine.FireAsync(TimerTrigger.Reset);
-                break;
+            _logger.Debug("{Module}::{Handler} | {Source} -{FocusCounter}-> {Destination}",
+                        nameof(GuiTransitionEventHandler),
+                        nameof(IEventHandler<TransitionEvent>.HandleAsync),
+                        _stateMachine.State,
+                        _focusCounter,
+                        _timerState);
 
-            case TimerState.End:
-            case TimerState.Finished:
-            case TimerState.Refreshed:
-                await Task.Delay(TimeSpan.FromMilliseconds(500), cancellationToken);
-                await _stateMachine.FireAsync(TimerTrigger.Timeout);
-                break;
+            switch (@event.TimerState)
+            {
+                case TimerState.Abandoned:
+                    await _stateMachine.FireAsync(TimerTrigger.Abandon);
+                    break;
 
-            case TimerState.Focused:
-                if (_stateMachine.State == TimerState.Begin)
-                {
-                    await _stateMachine.FireAsync(TimerTrigger.Focus);
-                }
-                else if (_stateMachine.State == TimerState.Interrupted)
-                {
-                    await _stateMachine.FireAsync(TimerTrigger.Resume);
-                }
-                else if (_stateMachine.State == TimerState.Refreshed)
-                {
+                case TimerState.Begin:
+                    await _stateMachine.FireAsync(TimerTrigger.Reset);
+                    break;
+
+                case TimerState.End:
+                case TimerState.Finished:
+                case TimerState.Refreshed:
+                    await _stateMachine.FireAsync(TimerTrigger.Timeout);
+                    break;
+
+                case TimerState.Focused:
+                    if (_stateMachine.State == TimerState.Begin)
+                    {
+                        await _stateMachine.FireAsync(TimerTrigger.Focus);
+                    }
+                    else if (_stateMachine.State == TimerState.Interrupted)
+                    {
+                        await _stateMachine.FireAsync(TimerTrigger.Resume);
+                    }
+                    else if (_stateMachine.State == TimerState.Refreshed)
+                    {
+                        await _stateMachine.FireAsync(TimerTrigger.Continue);
+                    }
+                    break;
+
+                case TimerState.Interrupted:
+                    await _stateMachine.FireAsync(TimerTrigger.Interrupt);
+                    break;
+
+                case TimerState.Relaxed:
+                case TimerState.Stopped:
                     await _stateMachine.FireAsync(TimerTrigger.Continue);
-                }
-                break;
-
-            case TimerState.Interrupted:
-                await _stateMachine.FireAsync(TimerTrigger.Interrupt);
-                break;
-
-            case TimerState.Relaxed:
-            case TimerState.Stopped:
-                await _stateMachine.FireAsync(TimerTrigger.Continue);
-                break;
+                    break;
+            }
+        }
+        finally
+        {
+            _stateMachineLock.Release();
         }
     }
 
     private void ConfigureStates(StateMachine<TimerState, TimerTrigger> stateMachine)
     {
-        stateMachine.OnUnhandledTrigger((state, trigger) => { });
+        stateMachine.OnUnhandledTrigger((state, trigger) => _logger.Error("{Module} | {Source} -failed-> {Destination} on {Trigger}",
+            nameof(GuiTransitionEventHandler),
+            stateMachine.State,
+            state,
+            trigger));
 
         stateMachine.Configure(TimerState.Abandoned)
             .OnEntry(() => Abandoned?.Invoke(this, _focusCounter))
+            .OnExitAsync(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
+                    transition.Destination);
+
+                return Task.CompletedTask;
+            })
             .Permit(TimerTrigger.Reset, TimerState.Begin);
 
         stateMachine.Configure(TimerState.Begin)
             .OnEntry(() => Begin?.Invoke(this, _focusCounter))
+            .OnExit(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExit),
+                    transition.Destination);
+            })
             .Permit(TimerTrigger.Focus, TimerState.Focused)
             .PermitReentry(TimerTrigger.Reset); /// Explicitly allowed to easily set UI state on application startup
 
         stateMachine.Configure(TimerState.End)
             .OnEntry(() => End?.Invoke(this, _focusCounter))
+            .OnExitAsync(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
+                    transition.Destination);
+
+                return Task.CompletedTask;
+            })
             .Permit(TimerTrigger.Reset, TimerState.Begin);
 
         stateMachine.Configure(TimerState.Finished)
             .OnEntry(() => Finished?.Invoke(this, _focusCounter))
+            .OnExitAsync(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
+                    transition.Destination);
+
+                return Task.CompletedTask;
+            })
             .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
             .PermitIf(TimerTrigger.Continue, TimerState.Stopped, () => _timerState == TimerState.Stopped)
             .PermitIf(TimerTrigger.Continue, TimerState.Relaxed, () => _timerState == TimerState.Relaxed);
 
         stateMachine.Configure(TimerState.Focused)
             .OnEntry(() => FocusedEntry?.Invoke(this, _focusCounter))
-            .OnExit(() => FocusedExit?.Invoke(this, EventArgs.Empty))
+            .OnExitAsync(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
+                    transition.Destination);
+                FocusedExit?.Invoke(this, EventArgs.Empty);
+
+                return Task.CompletedTask;
+            })
             .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
             .Permit(TimerTrigger.Interrupt, TimerState.Interrupted)
             .Permit(TimerTrigger.Timeout, TimerState.Finished);
 
         stateMachine.Configure(TimerState.Interrupted)
             .OnEntry(() => Interrupted?.Invoke(this, _focusCounter))
+            .OnExitAsync(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
+                    transition.Destination);
+
+                return Task.CompletedTask;
+            })
             .Permit(TimerTrigger.Resume, TimerState.Focused);
 
         stateMachine.Configure(TimerState.Refreshed)
-            .OnEntry(() => Refreshed?.Invoke(this, _focusCounter))
+            .OnEntryAsync((transition) =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnEntryAsync),
+                    transition.Destination);
+                Refreshed?.Invoke(this, _focusCounter);
+
+                return Task.CompletedTask;
+            })
+            .OnExitAsync(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
+                    transition.Destination);
+
+                return Task.CompletedTask;
+            })
             .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
             .Permit(TimerTrigger.Continue, TimerState.Focused);
 
         stateMachine.Configure(TimerState.Relaxed)
             .OnEntry(() => Relaxed?.Invoke(this, _focusCounter))
+            .OnExitAsync(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
+                    transition.Destination);
+
+                return Task.CompletedTask;
+            })
             .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
             .Permit(TimerTrigger.Timeout, TimerState.Refreshed);
 
         stateMachine.Configure(TimerState.Stopped)
             .OnEntry(() => Stopped?.Invoke(this, _focusCounter))
+            .OnExitAsync(transition =>
+            {
+                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                    nameof(GuiTransitionEventHandler),
+                    transition.Source,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExit),
+                    transition.Destination);
+
+                return Task.CompletedTask;
+            })
             .Permit(TimerTrigger.Abandon, TimerState.Abandoned)
             .Permit(TimerTrigger.Timeout, TimerState.End);
     }
