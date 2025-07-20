@@ -171,24 +171,15 @@ namespace Notadesigner.Approximato.Windows
             switch (value)
             {
                 case TimerState.Begin:
-                    ElapsedDuration = TimeSpan.Zero;
-                    TotalDuration = TimeSpan.Zero;
-                    _activeProgressBar.Text = "__:__";
-                    break;
-
                 case TimerState.Abandoned:
                     _activeProgressBar.Text = "__:__";
                     break;
 
                 case TimerState.Focused:
-                    ElapsedDuration = TimeSpan.Zero;
-                    TotalDuration = TimeSpan.Zero;
                     _activeProgressBar.ForeColor = SystemColors.Highlight;
                     break;
 
                 case TimerState.Interrupted:
-                    ElapsedDuration = TimeSpan.Zero;
-                    TotalDuration = TimeSpan.FromMinutes(59);
                     _activeProgressBar.ForeColor = SystemColors.ControlDarkDark;
                     break;
 
@@ -199,8 +190,6 @@ namespace Notadesigner.Approximato.Windows
 
                 case TimerState.Relaxed:
                 case TimerState.Stopped:
-                    ElapsedDuration = TimeSpan.Zero;
-                    TotalDuration = TimeSpan.Zero;
                     _activeProgressBar.ForeColor = SystemColors.GradientActiveCaption;
                     break;
             }
