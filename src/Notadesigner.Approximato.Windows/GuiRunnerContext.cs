@@ -382,7 +382,7 @@ namespace Notadesigner.Approximato.Windows
 
         private async void AbandonMenuClickHandlerAsync(object? sender, EventArgs e)
         {
-            var result = MessageBox.Show("Abandon the Pomodoro?", "Tom", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show("Abandon the Pomodoro?", GuiRunnerResources.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
@@ -408,7 +408,7 @@ namespace Notadesigner.Approximato.Windows
 
             if (TimerState != TimerState.Begin)
             {
-                result = MessageBox.Show("Halt Pomodoro and exit?", "Tom", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                result = MessageBox.Show("Halt Pomodoro and exit?", GuiRunnerResources.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
 
             if (result == DialogResult.Yes)

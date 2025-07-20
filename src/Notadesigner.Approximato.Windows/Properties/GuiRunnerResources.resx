@@ -148,6 +148,9 @@
   <data name="OneMinuteElapsedToolTip" xml:space="preserve">
     <value>One minute elapsed</value>
   </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>Approximato</value>
+  </data>
   <data name="RefreshedEnterNotification" xml:space="preserve">
     <value>Break completed.</value>
   </data>

@@ -153,6 +153,15 @@ namespace Notadesigner.Approximato.Windows.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approximato.
+        /// </summary>
+        internal static string ProductName {
+            get {
+                return ResourceManager.GetString("ProductName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Break completed..
         /// </summary>
         internal static string RefreshedEnterNotification {
