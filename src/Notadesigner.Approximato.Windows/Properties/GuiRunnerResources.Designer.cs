@@ -116,15 +116,6 @@ namespace Notadesigner.Approximato.Windows.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Starting a focus session..
-        /// </summary>
-        internal static string FocusedEnterNotification {
-            get {
-                return ResourceManager.GetString("FocusedEnterNotification", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Less than a minute elapsed.
         /// </summary>
         internal static string LessThanOneMinuteElapsedToolTip {

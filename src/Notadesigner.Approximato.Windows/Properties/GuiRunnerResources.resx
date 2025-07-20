@@ -136,9 +136,6 @@
   <data name="EndToolTip" xml:space="preserve">
     <value>Done. Reset to begin again.</value>
   </data>
-  <data name="FocusedEnterNotification" xml:space="preserve">
-    <value>Starting a focus session.</value>
-  </data>
   <data name="LessThanOneMinuteElapsedToolTip" xml:space="preserve">
     <value>Less than a minute elapsed</value>
   </data>

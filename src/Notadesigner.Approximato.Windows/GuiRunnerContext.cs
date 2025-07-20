@@ -205,9 +205,6 @@ namespace Notadesigner.Approximato.Windows
             _resetMenu.Enabled = false;
             _notifyIcon.Text = null;
 
-            var message = GuiRunnerResources.FocusedEnterNotification;
-            _notifyIcon.ShowBalloonTip(500, string.Empty, message, ToolTipIcon.None);
-
             _enterSound.PlaySync();
             _tickPlayer.PlayLooping();
         }
