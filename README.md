@@ -1,6 +1,6 @@
 # Approximato
 
-## 🕓 Optimise Your Time
+### 🕓 Optimise Your Time
 
 * Boost time awareness
 * Track task hours
