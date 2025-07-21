@@ -1,27 +1,29 @@
 # Approximato
 
-🕓 Use your time wisely
+## 🕓 Optimise Your Time
 
-* Increase time awareness
-* Track hours spent on a task
-* Improve estimation heuristics
-* Identify productive periods
-* 100% offline operation
+* Boost time awareness
+* Track task hours
+* Refine effort estimates
+* Pinpoint productive periods
+* Works 100% offline
 
-Approximato uses the Pomodoro technique 🍅 to track time, allowing some leniency to take unscheduled breaks or extending working periods if needed (like when you're within touching distance of completing a task). Overtime is tracked separately from the focus period, and can be useful in estimating future tasks, or in identifying periods of high-productivity periods during the day.
+Approximato enhances the Pomodoro Technique 🍅 by offering flexibility. It allows unscheduled breaks and extending work periods when you are close to finishing a task. Overtime is tracked separately, providing valuable data for future estimations and identifying most productive moments in the day.
 
-The application user interface is made up of 2 countdown timers and a context menu. The larger timer is used to display the time elapsed during a focus period, while the smaller one is used to indicate time elapsed during a break.
+The application user interface is made up of a **countdown timer** and a **context menu**. The colour of the timer changes to indicate whether it is in **focus** or **relaxed state**.
 
-To begin a new Pomodoro, right click on the application icon in the Notification tray and click on Start. The application is pre-programmed with 4 focus sessions of 25 minutes, each followed by a 5 minute break. The last break is 15 minutes long by default. When a focus session is completed, the application transitions into a break. An alarm bell is rung and a notification message is shown to indicate this state change. When the break completes, the application transitions back into a new focus period. The alarm bell is rung twice along with a notification message. After the fourth focus period, the application is transitioned into a longer break. This is similar to how the standard Pomodoro technique is usually implemented.
+To start a new Pomodoro, **right click on the application icon in the Notification tray and select "Start"**. The application comes pre-programmed with **four 25-minute focus sessions**, each followed by a **5-minute break**. The final break is **15 minutes** long.
 
-Approximato adds some flexibility to this process.
+When a focus session ends, the application automatically transitions to a break, signalling with an **alarm bell** and a **notification message**. Once the break finishes, you will transition back to a new focus period, marked by **two alarm bells** and a notification. After your fourth focus period, the application enters a longer break, mirroring the standard Pomodoro technique.
 
-* Focus periods can be interrupted. ⚠️
-* Interruptions are tracked. 🔍
-* Focus periods can be resumed after an interruption. Resuming resets the clock for that focus period. ⏰
-* The transition between focus and breaks can be automatic or manual. ⚙️
-* Use Lenient mode for inifinite focus periods when you're in the zone. 🤫
-* A Pomodoro can be abandoned entirely. ❌
+Approximato adds key flexibility to the standard Pomodoro process:
+
+* **Interruptible Focus**: You can pause focus periods whenever needed. ⚠️
+* **Tracked Interruptions**: All interruptions are logged for your review. 🔍
+* **Resumable Sessions**: Resume a focus period after an interruption, with its timer resetting. ⏰
+* **Flexible Transitions**: Choose between automatic or manual transitions for focus and break periods. ⚙️
+* **Infinite Focus**: Stay in the zone with unlimited focus time when using Lenient mode. 🤫
+* **Abandon Pomodoro**: You have the option to abandon a Pomodoro cycle entirely. ❌
 
 # Screenshots
 
