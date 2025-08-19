@@ -55,12 +55,11 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             _timerState = @event.TimerState;
             _focusCounter = @event.FocusCounter;
 
-            _logger.Debug("{Module}::{Handler} | {Source} -{FocusCounter}-> {Destination}",
-                        nameof(GuiTransitionEventHandler),
+            _logger.Debug("{Module}::{Handler} | {From}, {@Event}",
+                        typeof(GuiTransitionEventHandler).FullName,
                         nameof(IEventHandler<TransitionEvent>.HandleAsync),
                         _stateMachine.State,
-                        _focusCounter,
-                        _timerState);
+                        @event);
 
             switch (@event.TimerState)
             {
@@ -111,7 +110,7 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
 
     private void ConfigureStates(StateMachine<TimerState, TimerTrigger> stateMachine)
     {
-        stateMachine.OnUnhandledTrigger((state, trigger) => _logger.Error("{Module} | {Source} -failed-> {Destination} on {Trigger}",
+        stateMachine.OnUnhandledTrigger((state, trigger) => _logger.Error("{Module} | {From} -failed-> {To} on {Trigger}",
             nameof(GuiTransitionEventHandler),
             stateMachine.State,
             state,
@@ -121,11 +120,10 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .OnEntry(() => Abandoned?.Invoke(this, _focusCounter))
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination);
+                    transition,
+                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync));
 
                 return Task.CompletedTask;
             })
@@ -135,11 +133,9 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .OnEntry(() => Begin?.Invoke(this, _focusCounter))
             .OnExit(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExit),
-                    transition.Destination);
+                    transition);
             })
             .Permit(TimerTrigger.Focus, TimerState.Focused)
             .PermitReentry(TimerTrigger.Reset); /// Explicitly allowed to easily set UI state on application startup
@@ -148,11 +144,9 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .OnEntry(() => End?.Invoke(this, _focusCounter))
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination);
+                    transition);
 
                 return Task.CompletedTask;
             })
@@ -162,11 +156,9 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .OnEntry(() => Finished?.Invoke(this, _focusCounter))
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination);
+                    transition);
 
                 return Task.CompletedTask;
             })
@@ -178,11 +170,9 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .OnEntry(() => FocusedEntry?.Invoke(this, _focusCounter))
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination);
+                    transition);
                 FocusedExit?.Invoke(this, EventArgs.Empty);
 
                 return Task.CompletedTask;
@@ -195,11 +185,9 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .OnEntry(() => Interrupted?.Invoke(this, _focusCounter))
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination);
+                    transition);
 
                 return Task.CompletedTask;
             })
@@ -208,22 +196,18 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
         stateMachine.Configure(TimerState.Refreshed)
             .OnEntryAsync((transition) =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnEntryAsync),
-                    transition.Destination);
+                    transition);
                 Refreshed?.Invoke(this, _focusCounter);
 
                 return Task.CompletedTask;
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination);
+                    transition);
 
                 return Task.CompletedTask;
             })
@@ -234,11 +218,9 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .OnEntry(() => Relaxed?.Invoke(this, _focusCounter))
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination);
+                    transition);
 
                 return Task.CompletedTask;
             })
@@ -249,11 +231,9 @@ public class GuiTransitionEventHandler : IEventHandler<TransitionEvent>
             .OnEntry(() => Stopped?.Invoke(this, _focusCounter))
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination}",
+                _logger.Debug("{Module} | {@Transition}",
                     nameof(GuiTransitionEventHandler),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExit),
-                    transition.Destination);
+                    transition);
 
                 return Task.CompletedTask;
             })

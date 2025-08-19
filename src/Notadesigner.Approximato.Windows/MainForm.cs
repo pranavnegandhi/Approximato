@@ -1,6 +1,7 @@
 using Notadesigner.Approximato.Core;
 using Notadesigner.Approximato.Windows.Controls;
 using Notadesigner.Approximato.Windows.Properties;
+using Serilog;
 
 namespace Notadesigner.Approximato.Windows
 {
@@ -27,6 +28,8 @@ namespace Notadesigner.Approximato.Windows
         private int _focusCounter = 0;
 
         private TimerState _timerState = TimerState.Begin;
+
+        private readonly ILogger _logger = Log.ForContext<MainForm>();
 
         public MainForm()
         {
@@ -192,6 +195,15 @@ namespace Notadesigner.Approximato.Windows
                 case TimerState.Stopped:
                     _activeProgressBar.ForeColor = SystemColors.GradientActiveCaption;
                     break;
+            }
+
+            if (value == TimerState.Focused ||
+                value == TimerState.Relaxed ||
+                value == TimerState.Finished)
+            {
+                _ = TimerStateIcons.TryGetValue(value, out var _);
+                
+                _logger.Debug("Swapping icon resource to {To}", value);
             }
 
             if (TimerStateIcons.TryGetValue(value, out var stateIcon))

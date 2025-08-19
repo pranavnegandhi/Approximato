@@ -58,11 +58,9 @@ public class StateHost : IEventHandler<UIEvent>
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination} {Counter}",
+                _logger.Debug("{Module} | {@Transition} {Counter}",
                     nameof(StateHost),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination,
+                    transition,
                     _focusCounter);
 
                 return Task.CompletedTask;
@@ -78,11 +76,9 @@ public class StateHost : IEventHandler<UIEvent>
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination} {Counter}",
+                _logger.Debug("{Module} | {@Transition} {Counter}",
                     nameof(StateHost),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination,
+                    transition,
                     _focusCounter);
 
                 return Task.CompletedTask;
@@ -104,11 +100,9 @@ public class StateHost : IEventHandler<UIEvent>
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination} {Counter}",
+                _logger.Debug("{Module} | {@Transition} {Counter}",
                     nameof(StateHost),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination,
+                    transition,
                     _focusCounter);
 
                 return Task.CompletedTask;
@@ -131,11 +125,9 @@ public class StateHost : IEventHandler<UIEvent>
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination} {Counter}",
+                _logger.Debug("{Module} | {@Transition} {Counter}",
                     nameof(StateHost),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination,
+                    transition,
                     _focusCounter);
 
                 return Task.CompletedTask;
@@ -184,11 +176,9 @@ public class StateHost : IEventHandler<UIEvent>
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination} {Counter}",
+                _logger.Debug("{Module} | {@Transition} {Counter}",
                     nameof(StateHost),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination,
+                    transition,
                     _focusCounter);
 
                 return Task.CompletedTask;
@@ -230,11 +220,9 @@ public class StateHost : IEventHandler<UIEvent>
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination} {Counter}",
+                _logger.Debug("{Module} | {@Transition} {Counter}",
                     nameof(StateHost),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination,
+                    transition,
                     _focusCounter);
 
                 return Task.CompletedTask;
@@ -259,11 +247,9 @@ public class StateHost : IEventHandler<UIEvent>
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination} {Counter}",
+                _logger.Debug("{Module} | {@Transition} {Counter}",
                     nameof(StateHost),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination,
+                    transition,
                     _focusCounter);
 
                 return Task.CompletedTask;
@@ -288,11 +274,9 @@ public class StateHost : IEventHandler<UIEvent>
             })
             .OnExitAsync(transition =>
             {
-                _logger.Debug("{Module} | {Source} -{Transition}-> {Destination} {Counter}",
+                _logger.Debug("{Module} | {@Transition} {Counter}",
                     nameof(StateHost),
-                    transition.Source,
-                    nameof(StateMachine<TimerState, TimerTrigger>.StateConfiguration.OnExitAsync),
-                    transition.Destination,
+                    transition,
                     _focusCounter);
 
                 return Task.CompletedTask;
