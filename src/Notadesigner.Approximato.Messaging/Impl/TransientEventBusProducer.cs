@@ -19,9 +19,9 @@ namespace Notadesigner.Approximato.Messaging.Impl
 
         public async ValueTask PublishAsync(Event<T> @event, CancellationToken cancellationToken = default)
         {
-            _logger.Debug("{Module} | Published {Event}",
+            _logger.Debug("{Module} | Published {@Event}",
                 nameof(TransientBusEventProducer<T>),
-                @event.Data?.ToString(),
+                @event.Data,
                 @event.GetType());
 
             await _bus.WriteAsync(@event, cancellationToken).ConfigureAwait(false);

@@ -66,9 +66,9 @@ namespace Notadesigner.Approximato.Messaging.Impl
                     break;
                 }
 
-                _logger.Debug("{Module} | Received {Event}",
+                _logger.Debug("{Module} | Received {@Event}",
                     nameof(TransientBusEventConsumer<T>),
-                    task.Data?.ToString());
+                    task.Data);
 
                 await Parallel.ForEachAsync(_handlers,
                     _stoppingCts.Token,
@@ -79,9 +79,9 @@ namespace Notadesigner.Approximato.Messaging.Impl
 
         private ValueTask ExecuteHandlerAsync(IEventHandler<T> handler, Event<T> task, IEventContextAccessor<T>? contextAccessor = default, CancellationToken cancellationToken = default)
         {
-            _logger.Debug("{Module} | Dispatching {Event}",
+            _logger.Debug("{Module} | Dispatching {@Event}",
                 nameof(TransientBusEventConsumer<T>),
-                task.Data?.ToString());
+                task.Data);
 
             contextAccessor?.Set(task); // set metadata and begin scope
 
